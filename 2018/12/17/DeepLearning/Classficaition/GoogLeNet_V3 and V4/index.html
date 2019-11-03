@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Classfication," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;GooLeNetV3和GooLeNetV4主要是在GooLeNetV1和BatchNorm基础上进行的改动。通过V3论文的标题:Rethinking the Inception Architecture for Computer Vision,我们也可以清楚的知道V3其主要对Inception进行改进。而V4的论文中除了Inception的应">
+<meta name="keywords" content="Classfication">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GoogLeNet_V3 and V4">
+<meta property="og:url" content="http://yoursite.com/2018/12/17/DeepLearning/Classficaition/GoogLeNet_V3 and V4/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;GooLeNetV3和GooLeNetV4主要是在GooLeNetV1和BatchNorm基础上进行的改动。通过V3论文的标题:Rethinking the Inception Architecture for Computer Vision,我们也可以清楚的知道V3其主要对Inception进行改进。而V4的论文中除了Inception的应">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V3/3x3_instead_5x5.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V3/Inception5.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V3/非对称卷积.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V3/Inception6.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/17/DeepLearning/Classficaition/images/DeepLearning/Classfication/GoogLeNet_V3/Inception7.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V3/网格尺寸减小方案.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V3/并行网格尺寸减小.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V3/感受野的影响.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/InceptionV4.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/stem.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/Inception-A.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/Reduction-A.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/Inception-B.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/Reduction-B.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/Inception-C.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/Inception-resnet.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/Inception-resnet-A.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/train_time.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V4/val_acc.png">
+<meta property="og:updated_time" content="2019-10-14T11:58:25.319Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GoogLeNet_V3 and V4">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;GooLeNetV3和GooLeNetV4主要是在GooLeNetV1和BatchNorm基础上进行的改动。通过V3论文的标题:Rethinking the Inception Architecture for Computer Vision,我们也可以清楚的知道V3其主要对Inception进行改进。而V4的论文中除了Inception的应">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V3/3x3_instead_5x5.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/17/DeepLearning/Classficaition/GoogLeNet_V3 and V4/"/>
+
+
+
+
+
+  <title>GoogLeNet_V3 and V4 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/17/DeepLearning/Classficaition/GoogLeNet_V3 and V4/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GoogLeNet_V3 and V4</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-17T19:00:55+08:00">
+                2018-12-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;GooLeNetV3和GooLeNetV4主要是在<a href="https://jaryhuang.github.io/2018/10/22/GoogLeNet_V1/" target="_blank" rel="noopener"><strong>GooLeNetV1</strong></a>和<a href="https://jaryhuang.github.io/2018/11/02/BatchNorm%20And%20GooLeNetV2/" target="_blank" rel="noopener"><strong>BatchNorm</strong></a>基础上进行的改动。通过V3论文的标题:Rethinking the Inception Architecture for Computer Vision,我们也可以清楚的知道V3其主要对Inception进行改进。而V4的论文中除了Inception的应用,也把残差块引入了进来。由于篇幅原因,将这两个版本一起写。<br><a id="more"></a></p>
+<h2 id="2-GooLeNetV3"><a href="#2-GooLeNetV3" class="headerlink" title="2.GooLeNetV3"></a>2.GooLeNetV3</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;作者发现Inception块结构复杂,很难对Inception块进行扩展。微小的改动都会引起结果的立即变化。因此很多人说GooLeNet这个网络太“刻意”了。基于改进的困难性,作者在文中提出了一些网络框架的理论设计准则:这些准则虽然有待试验验证,但作者建议尽量不要偏离这些准则:<br>&nbsp;&nbsp; <strong>1.不要急剧压缩特征:</strong> 信息流在前向传播的过程中不能经过高度的压缩层,否则会引起表达的瓶颈：在训练过程中,feature map的宽和高基本都会逐渐变小,但是不能一下子变小,否则将会丢失很多信息。而输出维度channal一般会逐渐的增多,否则网络会很难训练。但是特征维度channal并不代表信息的多少,只是一个粗略的估计手段。<br>&nbsp;&nbsp; <strong>2.增加卷积激活块:</strong> 高维的特征对网络的表征更有利。通过增加卷积网络中每个块的激活函数,这样会使网络训练的更快。个人的理解：多增加神经网络的激活层,相当于促进了其非线性化,使得网络表征往更高纬度走。<br>&nbsp;&nbsp; <strong>3.低纬度下可以空间聚合:</strong> 空间聚合可以在较低的维度上嵌入完成,而表征的能力没有太大或者任何的损失。假设相邻的单元之间的强相关,那么在降维期间信息损失的很小,于是这些信号的压缩会使得学习更快且精度不会损失多少,所以在GoogLeNet网络中先进行7x7。<br>&nbsp;&nbsp; <strong>4.平衡网络深度和宽度:</strong> 平衡网络的深度和宽度,深度增加了尽量减少宽度。</p>
+<h3 id="2-1使用大过滤器尺寸分解卷积"><a href="#2-1使用大过滤器尺寸分解卷积" class="headerlink" title="2.1使用大过滤器尺寸分解卷积"></a>2.1使用大过滤器尺寸分解卷积</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;如何在保证精度的情况下提高计算效率是深度学习的一个研究的重点。首要研究的就是如何减少参数,Inception块是一个全卷积网络,所以从卷积下功夫了。<br>&nbsp;&nbsp; <strong>1)将因子分解为较小的卷积:</strong> 7x7,5x5的卷积层被3x3的卷积层所替代。这个跟vgg中一样,具体为何能够替代以及等效,在之前我做出了解释,具体可参照写的<a href="https://jaryhuang.github.io/2018/09/01/VggNet/" target="_blank" rel="noopener"><strong>VggNet</strong></a>,我解释的是在线性情况下,非线性激活对其是否有影响呢？<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V3/3x3_instead_5x5.png" alt="3x3 instead 5x5">从实验可看,卷积因子分解不仅减少了参数,同时精度上还有了一定的提升。所以,对于原先的Inception块,作者做了如下的改进：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V3/Inception5.png" alt="小卷积Inception"><br>&nbsp;&nbsp; <strong>2)非对称卷积的空间分解:</strong> 什么是非对称卷积的空间分解?以下图为例,使用一个3x1的卷积后跟着一个1x3的卷积滑动相当于跟3x3具有相同的感受野,而对于这一转变可以减少33%的参数量。<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V3/非对称卷积.png" alt="非对称卷积">理论上所有的nxn卷积都可以转变为nx1后加1xn的模式:非对称卷积Inception形式<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V3/Inception6.png" alt="非对称卷积Inception形式">但是,作者在实践中发现,非对称卷积在早期的feature map中工作不是很好,在feature map尺寸为[m,m],m大约为12~20的时候效果很好,特别是取1x7与7x1的结合。在最后,作者对于feature map为8x8的特征提取采用如下的Inception块：<img src="、../../../images/DeepLearning/Classfication/GoogLeNet_V3/Inception7.png" alt="粗糙Inception"></p>
+<h3 id="2-2辅助分类器的用处"><a href="#2-2辅助分类器的用处" class="headerlink" title="2.2辅助分类器的用处"></a>2.2辅助分类器的用处</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;带有辅助层训练的模型在训练前期的时候并没有什么提升,但是到了训练后期在精度上有了一定的提升,且有挺好的效果。本人在<a href="https://jaryhuang.github.io/2018/10/22/GoogLeNet_V1/" target="_blank" rel="noopener"><strong>GooLeNetV1的3.1中</strong></a>在cifar-10数据集上进行了实验,确实如作者所说。之前的解释是觉得这些侧边的辅助训练成有助于演变低级特征。但是作者通过移除了多个辅助层中的靠近低层的辅助分类器发现,低层的辅助分类器对结果无影响。因此,作者判断辅助分类层应该不是来演化低级特征的。但是也没有理论解释辅助层的作用,作者猜测可能是相当于一个正则化效果。通过的是一个弱的证据：<strong><em>在辅助训练层的加入了dropout层或者BatchNorm层之后效果更好。</em></strong></p>
+<h3 id="2-3-有效的减小网格尺寸"><a href="#2-3-有效的减小网格尺寸" class="headerlink" title="2.3 有效的减小网格尺寸"></a>2.3 有效的减小网格尺寸</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;网络从低层到高层,主要是减少feature map,增加channal。最常用的模式是利用conv(1x1)+pooling,例如:[k,d,d]的feature map,要变成[2k,d/2,d/2],有以下两种方式:<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V3/网格尺寸减小方案.png" alt="网格尺寸减小方案">&nbsp;&nbsp;1)右图中采用的是Inception+pool的形式,主要问题是计算的参数量比较大。<br>&nbsp;&nbsp;2)左图pool+Inception模式,参数量有效的减少了,但是首先进行了池化,可能会使得部分数据丢失,失去了表征的代表性。这两种方式都是串行的,作者考虑了一种并行的方式,既然减少一些参数量,又能不失去表征的代表性：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V3/并行网格尺寸减小.png" alt="并行网格尺寸减小"></p>
+<h3 id="2-4-标签平滑"><a href="#2-4-标签平滑" class="headerlink" title="2.4 标签平滑"></a>2.4 标签平滑</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;标签平滑,作者花了整整一页的篇幅讲这件事。首先来了解下我们的交叉熵(cross entropy):<script type="math/tex">\ell=-\sum_{k=1}^{K}\log(p(k))q(k)</script>其中：$p(k|x) = \frac{\exp\left(z_{k}\right)}{\sum_{i= 1}^{K}\exp\left(z_{i}\right)}$是网络输出计算结果,而q(k)是onehot后的标签向量。</p>
+<pre><code>First, it may result in over-fitting: if the model learns to assign full 
+probability to the groundtruth label for each training example, it is not 
+guaranteed to generalize. 
+Second, it encourages the differences between the largest logit and all 
+others to become large, and this, combined with the bounded gradient 
+reduces the ability of the model to 
+adapt. Intuitively, this happens because the model becomes too confident 
+about its predictions.
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;这是摘取的原文,原本的交叉熵方法容易造成过拟合,减少了模型的适应能力。原因归结为出在设定的真实标签中。onehot标签法使得各个标签值比较突出,就是0-1量,因此对于模型训练就是对每个类尽量使其拟合为1,但实际在判断属于哪个类的时候,是依据相对概率大小,因此比如概率大于0.5就已经判定为此类了,而不必将概率达到0.9或者1.这应该也就是作者提到的模型太“自信”,因此作者提出了使得标签更soft的方法,称之为LSR。主要的改动就在真实标签q(k|x)上：<script type="math/tex">q^{\prime}(k|x)=(1-\epsilon)\delta_{k,y}+\epsilon u(k)</script>其中：$\delta_{k,y}$就是onehot标签,因此最直观的表现就是原本的onehot标签中比如第一类,其原本onehot标签在第一个位置上设定为1,基于上述平滑后可能是0.99。<br>本文实验中:</p>
+<script type="math/tex; mode=display">u(k)=1/1000</script><script type="math/tex; mode=display">\epsilon = 0.1</script><h3 id="2-5-感受野大小-低分辨率"><a href="#2-5-感受野大小-低分辨率" class="headerlink" title="2.5 感受野大小(低分辨率)"></a>2.5 感受野大小(低分辨率)</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;采用更高分辨率感受野的模型往往会显著提高识别性能。作者不改变模型,测试了输入数据的不同分辨率对结果的影响,作者做了三个实验：<br>&nbsp;&nbsp;1).299×299感受野:第一层卷积采用步长为2以及池化层采用最大池化。<br>&nbsp;&nbsp;2).151×151感受野:第一层卷积采用步长为1以及池化层采用最大池化。<br>&nbsp;&nbsp;3).79×79感受野:第一层卷积采用步长为1且没有采用池化层。<br>测试结果如图：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V3/感受野的影响.png" alt="感受野的影响"></p>
+<h3 id="2-6-小结"><a href="#2-6-小结" class="headerlink" title="2.6 小结"></a>2.6 小结</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;GooLeNetV3版本中主要的贡献在于:</p>
+<ul>
+<li><strong>分解卷积</strong>:使卷积小型化、多层化,新提出<em>非对称卷积</em>比较新颖</li>
+<li><strong>辅助分类器解释</strong>:对之前提出的辅助分类器有了新的解释,虽然不是理论论证,但是通过加入Dropout或者BatchNorm的优化方法提升了精度,改进了辅助分类</li>
+<li><strong>减小feature map尺寸</strong>:提出一种并行的,计量小的缩小特征图的方法</li>
+<li><strong>标签平滑</strong>：对于交叉熵损失函数进行了改进,提出了LSR方法</li>
+</ul>
+<h2 id="3-GooLeNetV4"><a href="#3-GooLeNetV4" class="headerlink" title="3.GooLeNetV4"></a>3.GooLeNetV4</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;ResNet的提出,使得更深层神经网络的精度有了显著性的提升,因此在训练非常深网络的时候残差连接(Residual connection)被认为有内在的必要性。论文作者基于这个思考,他也在考虑加深Inception网络是否更有效？Inception结构是否可以跟Residual connection结合一下？基于这些思考,谷歌大佬们在《Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning》主要讲两个框架,一个是Inception再深入一步,推出V4版本。另外一个就是将Residual connection和GoogLeNet结合形成Inception-resnet网络。</p>
+<h3 id="3-1-InceptionV4"><a href="#3-1-InceptionV4" class="headerlink" title="3.1 InceptionV4"></a>3.1 InceptionV4</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;InceptionV4中总体没有大的改变,是对前三篇提出的一些方法进行一个架构的重组或者说是重建。所以我们对着它的架构来进行学习。<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/InceptionV4.png" alt="InceptionV4">总体架构如上图所示：[W,H]:299-&gt;35-&gt;17-&gt;8-&gt;1,[C]:3-&gt;384-&gt;1024-&gt;1538-&gt;1000。为何是这几个数字,估计只有作者能回答了。目前我还没找到思路来解释这个,希望有知道的大佬告知我一声。下面来详细了解下里面的分支结构,与InceptionV3中提出的规则做一下对应：<br><strong>1)首先是stem块</strong><img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/stem.png" alt="stem">对应着第三条规则(空间聚合可以在较低的维度上嵌入完成),刚输入的图像相邻的单元之间的相关性应该比较强,因此在第一层一般会在[W,H]上进行一个大的降维。<br>2)<strong>Inception-A块</strong>主要做的是特征提取:<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/Inception-A.png" alt="Inception-A">他在架构上没做什么改进,依旧是5x5,3x3,1x1再加个自身的average pooling层,通过多个尺度来进行特征的学习,但是它叠加了四个,所以在总体上这一块的特征提取应该更强了。在35-17的降维上：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/Reduction-A.png" alt="Reduction-A">通过conv(3x3,5x5,stride=2)以及maxpool来进行降维尺寸缩小2,这种降维方式,也是一种多尺度的降维,池化和不同的卷积组合降维的表达更加丰富。<br><strong>3)在17x17这个尺寸的图上,Inception-B</strong>:<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/Inception-B.png" alt="Inception-B">在这个结构上,其他没有大的改变,但是在卷积上采用了非对称卷积,而且1x7和7x1的一条支线上是一组,另外一条支线上是两组,也是通过不同的感受野的角度出发。<strong>在V3中也提到过,这种非对称卷积在[W,H]在12-20的时候比较好,因此作者也在降维到17x17之后才用。</strong>同样,在卷积特征提取之后,后续要进行降维,将17x17变为8x8,reduction模块的设计主要还是加入了非对称卷积上。<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/Reduction-B.png" alt="Reduction-B"><br><strong>4)降维之后,接下来继续对8x8的进行提取:</strong><img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/Inception-C.png" alt="Inception-C">在这一block上,基本将几篇论文中提出的一些框架都应用了上来。在最后,通过Avarage Pooling<br>+Dropout(0.8)来进行分类,这里引入Dropout个人觉得是网络框架非常的复杂,容易引起过拟合,因此将Dropout重新引入了进来。</p>
+<h3 id="3-2-Inception-resnet"><a href="#3-2-Inception-resnet" class="headerlink" title="3.2 Inception-resnet"></a>3.2 Inception-resnet</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Inception-resnet网络框架如图所示：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/Inception-resnet.png" alt="Inception-resnet">其主要就是Inception和残差连接(Residual connection)相结合。以Inception-resnet-A为例:<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/Inception-resnet-A.png" alt="Inception-resnet-A">这里为什么会多个1x1的conv呢,因为作者发现,当滤波器数量超过1000的时候,会出现不稳定,所以每次都利用1x1卷积来进行降维,具体细节可参考作者原文。</p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h2><h3 id="4-1-V3和V4版本的总结"><a href="#4-1-V3和V4版本的总结" class="headerlink" title="4.1 V3和V4版本的总结"></a>4.1 V3和V4版本的总结</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;上述V3和V4版本,个人感觉改进主要以V3为主,V4是将V3的想法继续应用并改进。<br><strong>V3主要提出：</strong><br>1)对网络的修改四个未经证实的建议<br>2)非对称卷积<br>3)网络尺寸减小也可以有“多尺度”的形式<br>4)标签平滑<br><strong>V4主要是：</strong><br>1)将上述提出的方法进行应用<br>2)将(Residual connection)引入到Inception中。</p>
+<h3 id="4-2-三个网络实验对比"><a href="#4-2-三个网络实验对比" class="headerlink" title="4.2 三个网络实验对比"></a>4.2 三个网络实验对比</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;将上述三个网络在cifar-10上进行实验,首先是训练时间上(单个GPU1080Ti):<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/train_time.png" alt="Train_time">从上图中我们也清晰的看出,相比之下InceptionV3训练快很多,而V4和Inception-resnet的实际训练时间相接近。再从验证精度上看：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V4/val_acc.png" alt="Val_Acc">在cifar10数据集上,V3和V4的整体表现V4略强。但是换来的是训练时间的加强。但是Inception_resnetV2更强于V4的。这也作为未来大家选择模型的时候，在模型大小和精度上做一个考量。</p>
+<h2 id="5-参考"><a href="#5-参考" class="headerlink" title="5.参考"></a>5.参考</h2><ol>
+<li>Szegedy C , Ioffe S , Vanhoucke V . Inception-v4, Inception-ResNet and the Impact of Residual Connections on Learning[J]. 2016.</li>
+<li>Szegedy C , Vanhoucke V , Ioffe S , et al. Rethinking the Inception Architecture for Computer Vision[J]. 2015.</li>
+<li>He K, Zhang X, Ren S, et al. Deep Residual Learning for Image Recognition[J]. 2015.</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Classfication/" rel="tag"># Classfication</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/02/DeepLearning/Classficaition/BatchNorm And GooLeNetV2/" rel="next" title="BatchNorm and GoogLeNet_V2">
+                <i class="fa fa-chevron-left"></i> BatchNorm and GoogLeNet_V2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/22/DeepLearning/Classficaition/Bag of Trick for Image Classification/" rel="prev" title="Bag of Tricks for Image Classfication 论文阅读笔记">
+                Bag of Tricks for Image Classfication 论文阅读笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-GooLeNetV3"><span class="nav-number">2.</span> <span class="nav-text">2.GooLeNetV3</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1使用大过滤器尺寸分解卷积"><span class="nav-number">2.1.</span> <span class="nav-text">2.1使用大过滤器尺寸分解卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2辅助分类器的用处"><span class="nav-number">2.2.</span> <span class="nav-text">2.2辅助分类器的用处</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-有效的减小网格尺寸"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 有效的减小网格尺寸</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-标签平滑"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 标签平滑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-感受野大小-低分辨率"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 感受野大小(低分辨率)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-小结"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-GooLeNetV4"><span class="nav-number">3.</span> <span class="nav-text">3.GooLeNetV4</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-InceptionV4"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 InceptionV4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Inception-resnet"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Inception-resnet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4.总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-V3和V4版本的总结"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 V3和V4版本的总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-三个网络实验对比"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 三个网络实验对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考"><span class="nav-number">5.</span> <span class="nav-text">5.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

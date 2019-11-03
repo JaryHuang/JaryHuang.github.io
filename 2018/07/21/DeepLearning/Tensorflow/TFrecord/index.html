@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Tensorflow," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.TFRecordTFRecord宏观上将是一种数据存储格式。其主要的工作是允许你将任意的数据格式的数据比如图片，标签等打包成一个文件叫TFRecord。tensorflow支持TFRecord数据格式，其能非常容易的和网络架构相匹配。当然，做过工程项目或者比赛的都清楚，数据一般的给出都是.csv的格式，读取非常方便。但是通常读取的时候，一般是一次性读出到内存。要是内存小的话，倒是可以分块读取，">
+<meta name="keywords" content="Tensorflow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TFRecord创建">
+<meta property="og:url" content="http://yoursite.com/2018/07/21/DeepLearning/Tensorflow/TFrecord/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.TFRecordTFRecord宏观上将是一种数据存储格式。其主要的工作是允许你将任意的数据格式的数据比如图片，标签等打包成一个文件叫TFRecord。tensorflow支持TFRecord数据格式，其能非常容易的和网络架构相匹配。当然，做过工程项目或者比赛的都清楚，数据一般的给出都是.csv的格式，读取非常方便。但是通常读取的时候，一般是一次性读出到内存。要是内存小的话，倒是可以分块读取，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Tensorflow/TFRecord/文件名不对python卡死.png">
+<meta property="og:updated_time" content="2019-10-15T13:41:33.781Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TFRecord创建">
+<meta name="twitter:description" content="1.TFRecordTFRecord宏观上将是一种数据存储格式。其主要的工作是允许你将任意的数据格式的数据比如图片，标签等打包成一个文件叫TFRecord。tensorflow支持TFRecord数据格式，其能非常容易的和网络架构相匹配。当然，做过工程项目或者比赛的都清楚，数据一般的给出都是.csv的格式，读取非常方便。但是通常读取的时候，一般是一次性读出到内存。要是内存小的话，倒是可以分块读取，">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/Tensorflow/TFRecord/文件名不对python卡死.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/21/DeepLearning/Tensorflow/TFrecord/"/>
+
+
+
+
+
+  <title>TFRecord创建 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/21/DeepLearning/Tensorflow/TFrecord/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TFRecord创建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-21T22:30:55+08:00">
+                2018-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-TFRecord"><a href="#1-TFRecord" class="headerlink" title="1.TFRecord"></a>1.TFRecord</h2><p>TFRecord宏观上将是一种数据存储格式。其主要的工作是允许你将任意的数据格式的数据比如图片，标签等打包成一个文件叫TFRecord。tensorflow支持TFRecord数据格式，其能非常容易的和网络架构相匹配。当然，做过工程项目或者比赛的都清楚，数据一般的给出都是.csv的格式，读取非常方便。但是通常读取的时候，一般是一次性读出到内存。要是内存小的话，倒是可以分块读取，但是其也是不能一下子全部读进来的。 对于图片数据，由于图片的文件格式，图像大小以及所存储的位置等因素在，想要在训练或者测试阶段直接使用，就显得非常麻烦了。因此，需要对数据做统一处理，那么TFRecord就是对于数据做统一管理的一个工具。<br><a id="more"></a></p>
+<h2 id="2-TFRecord重要的API"><a href="#2-TFRecord重要的API" class="headerlink" title="2.TFRecord重要的API"></a>2.TFRecord重要的API</h2><p>下面来介绍几个常用而且重要的API以及对应的函数，对于所有的请参照对应的类去进行查找。</p>
+<h3 id="2-1-tf-TFRecordWriter"><a href="#2-1-tf-TFRecordWriter" class="headerlink" title="2.1 tf.TFRecordWriter"></a>2.1 tf.TFRecordWriter</h3><p><strong>主要功能作用是将数据写入到TFRecord文件</strong> </p>
+<pre><code>__init__(path,options=None)
+作用:创建一个TFRecordWriter对象,这个对象就负责写记录到指定的文件中去了.
+参数:
+    path: TFRecords 文件路径
+    options: (可选) TFRecordOptions对象
+close()
+作用：关闭对象
+write(record)
+作用:把字符串形式的记录写到文件中去. 
+参数: 
+    record: 字符串,待写入的记录
+</code></pre><h3 id="2-2-tf-TFRecordReader"><a href="#2-2-tf-TFRecordReader" class="headerlink" title="2.2 tf.TFRecordReader"></a>2.2 tf.TFRecordReader</h3><p><strong>主要功能作用是从TFRecord中读取记录</strong></p>
+<pre><code>__init__(Name=None)
+作用:创建一个TFRecordRead对象,这个对象就负责读记录. 
+参数:无
+
+read(queue, name=None) 
+作用：返回读取的记录
+参数：
+    queue：队列的文件名
+    name:操作的名字
+返回值：
+    键值对(key,value)：value表示读取的文件
+</code></pre><h3 id="2-3-tf-train-Example"><a href="#2-3-tf-train-Example" class="headerlink" title="2.3 tf.train.Example"></a>2.3 tf.train.Example</h3><p><strong>作用：TFRecord文件中的数据都是通过tf.train.Example Protocol Buffer的格式进行存储的</strong></p>
+<pre><code>__init__(**kwargs)
+作用：这个函数是初始化函数,会生成一个Example对象,一般我们使用的时候,是传入一个tf.train.Features对象进去.
+
+SerializeToString()
+作用:把example序列化为一个字符串,在写入到TFRcorde,write方法的参数是字符串.
+</code></pre><h3 id="2-4-tf-train-Features"><a href="#2-4-tf-train-Features" class="headerlink" title="2.4 tf.train.Features"></a>2.4 tf.train.Features</h3><p><strong>注意,是features,作用：其属性为特征，就是将我们的数据转为特征后进行存储</strong></p>
+<pre><code>__init__(**kwargs) 
+作用:初始化Features对象,一般我们是传入一个字典,字典的键是一个字符串,表示名字,字典的值是一个tf.train.Feature对象.
+</code></pre><h3 id="2-5-tf-train-Feature"><a href="#2-5-tf-train-Feature" class="headerlink" title="2.5 tf.train.Feature"></a>2.5 tf.train.Feature</h3><p><strong>作用：其是上面的类输入字典的值</strong></p>
+<pre><code>bytes_list =  tf.train.BytesList(value = [XXXX])
+float_list = tf.train.FloatList(value = [XXXX])
+int64_list = tf.train.Int64List(value = [XXXX])
+</code></pre><h2 id="3-Create-TFRecord"><a href="#3-Create-TFRecord" class="headerlink" title="3.Create TFRecord"></a>3.Create TFRecord</h2><p> 由于在训练的时候，本人给出的label标签是onehot后的编码，但是在上述tf.train.Feature中其int64和float都是单个数值，因此将其变为bytes形式进行存储。</p>
+<pre><code># coding:utf-8
+import os
+import tensorflow as tf
+from PIL import Image
+import numpy as np
+import datetime
+import time
+from sklearn.preprocessing import OneHotEncoder
+enc = OneHotEncoder()
+classes = np.array(np.arange(2))
+enc.fit(classes.reshape(-1, 1))
+
+count = 0
+cwd = &#39;F:/VCAQT/data/&#39;  # 分类好的0-1文件夹的目录地址
+writer = tf.python_io.TFRecordWriter(&quot;32x32train.tfrecords&quot;)
+t1 = time.time()
+for index, name in enumerate(classes):
+    class_path = cwd + str(name) + &#39;/&#39;
+    print(class_path)
+    for img_name in os.listdir(class_path):
+        img_path = class_path + img_name
+
+        img = Image.open(img_path)
+        img = img.resize((32, 32))
+        img_raw = img.tobytes()
+
+        label_raw = enc.transform(index).toarray()
+        label_raw = label_raw.tobytes()
+
+        example = tf.train.Example(features=tf.train.Features(feature={
+            &quot;label&quot;: tf.train.Feature(bytes_list=tf.train.BytesList(value=[label_raw])),
+            #int64_list=tf.train.Int64List(value=[name])
+            &#39;img_raw&#39;: tf.train.Feature(bytes_list=tf.train.BytesList(value=[img_raw]))
+        }))
+
+        writer.write(example.SerializeToString())
+        count += 1
+        log_str = &#39;&#39;&#39;{},img_name：{},Count: {},label_name: {}&#39;&#39;&#39;.format(
+            datetime.datetime.now().strftime(&#39;%m-%d %H:%M:%S&#39;),
+            img_name,
+            count,
+            name)
+        print(log_str)
+writer.close()
+</code></pre><h2 id="4-Reader-TFRecord"><a href="#4-Reader-TFRecord" class="headerlink" title="4.Reader TFRecord"></a>4.Reader TFRecord</h2><p>这里是进行文件的读取，文件读取方面要和存储相对应，比如图片的尺寸以及存储的标签等等。</p>
+<pre><code>import tensorflow as tf
+import os
+import numpy as np
+
+def fileExist(filename):
+    if(os.path.exists(filename)):
+        return 1
+    else:
+        print(&#39;&#39;&#39;Not {} in this path&#39;&#39;&#39;.format(filename))
+        return 0
+
+def read_and_decode(filename):
+    if(fileExist(filename) == 1):
+        filename_queue = tf.train.string_input_producer([filename])
+        reader = tf.TFRecordReader()
+        _, serialized_example = reader.read(filename_queue)
+        features = tf.parse_single_example(serialized_example,
+                                       features={&#39;label&#39;: tf.FixedLenFeature([], tf.string),
+                                                 &#39;img_raw&#39;: tf.FixedLenFeature([], tf.string),
+                                                 })
+        img = tf.decode_raw(features[&#39;img_raw&#39;], tf.uint8)
+        img = tf.reshape(img, [32, 32, 3])
+        img = tf.cast(img, tf.float32) * (1. / 255) - 0.5
+        label = tf.decode_raw(features[&#39;label&#39;], tf.float64)
+        label = tf.reshape(label, [2])
+        return img, label
+    else:
+        pass
+
+if __name__ == &#39;__main__&#39;:
+    img, label = read_and_decode(&quot;32x32train.tfrecords&quot;)
+    img_batch, label_batch = tf.train.shuffle_batch([img, label], batch_size=50,
+                                                    capacity=2000, min_after_dequeue=1000)
+    init = tf.global_variables_initializer()
+    with tf.Session() as sess:
+        sess.run(init)
+        coord = tf.train.Coordinator()
+        threads = tf.train.start_queue_runners(sess=sess, coord=coord)
+        print(img.shape, label.shape)
+        for i in range(10):
+            images, labels = sess.run([img_batch, label_batch])
+        print(&quot;batch shape = &quot;, images.shape, &quot;labels = &quot;,
+              labels.shape)
+        coord.request_stop()
+        coord.join()
+</code></pre><h2 id="5-注意事项"><a href="#5-注意事项" class="headerlink" title="5.注意事项"></a>5.注意事项</h2><h3 id="5-1-在利用TFRecord进行读写的时候，如果你的文件名不对，一般程序是会卡死的"><a href="#5-1-在利用TFRecord进行读写的时候，如果你的文件名不对，一般程序是会卡死的" class="headerlink" title="5.1 在利用TFRecord进行读写的时候，如果你的文件名不对，一般程序是会卡死的"></a>5.1 在利用TFRecord进行读写的时候，如果你的文件名不对，一般程序是会卡死的</h3><p><img src="/../../../images/DeepLearning/Tensorflow/TFRecord/文件名不对python卡死.png" alt="Alt text"></p>
+<h3 id="5-2-因为我上述存的是-0-1-oneHot之后的，但是在读取的时候"><a href="#5-2-因为我上述存的是-0-1-oneHot之后的，但是在读取的时候" class="headerlink" title="5.2 因为我上述存的是[0.,1.]oneHot之后的，但是在读取的时候"></a>5.2 因为我上述存的是[0.,1.]oneHot之后的，但是在读取的时候</h3><pre><code>label = tf.decode_raw(features[&#39;label&#39;], tf.float32)
+label = tf.reshape(label, [2])
+</code></pre><p>会出现如下错误：<br>at queue_ops.cc:105 : Invalid argument: Shape mismatch in tuple component 1. Expected [2], got [4]。说明变为四项，这个跟存储有关系。原本0,1是float64的，读进来为float32之后就相当于四个数了，这个错误也记录一下。</p>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6.参考"></a>6.参考</h2><p>1.<a href="https://blog.csdn.net/xierhacker/article/details/72357651" target="_blank" rel="noopener">保存TFRecord文件</a><br>2.<a href="http://www.tensorfly.cn/tfdoc/api_docs/python/python_io.html" target="_blank" rel="noopener">Data IO (Python functions)</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Tensorflow/" rel="tag"># Tensorflow</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/13/DeepLearning/Classficaition/SE-Net/" rel="next" title="SENet">
+                <i class="fa fa-chevron-left"></i> SENet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/29/DeepLearning/Pytorch/pytorch Introduction/" rel="prev" title="pytorch入门">
+                pytorch入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-TFRecord"><span class="nav-number">1.</span> <span class="nav-text">1.TFRecord</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-TFRecord重要的API"><span class="nav-number">2.</span> <span class="nav-text">2.TFRecord重要的API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-tf-TFRecordWriter"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 tf.TFRecordWriter</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-tf-TFRecordReader"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 tf.TFRecordReader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-tf-train-Example"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 tf.train.Example</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-tf-train-Features"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 tf.train.Features</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-tf-train-Feature"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 tf.train.Feature</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Create-TFRecord"><span class="nav-number">3.</span> <span class="nav-text">3.Create TFRecord</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Reader-TFRecord"><span class="nav-number">4.</span> <span class="nav-text">4.Reader TFRecord</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-注意事项"><span class="nav-number">5.</span> <span class="nav-text">5.注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-在利用TFRecord进行读写的时候，如果你的文件名不对，一般程序是会卡死的"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 在利用TFRecord进行读写的时候，如果你的文件名不对，一般程序是会卡死的</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-因为我上述存的是-0-1-oneHot之后的，但是在读取的时候"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 因为我上述存的是[0.,1.]oneHot之后的，但是在读取的时候</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-参考"><span class="nav-number">6.</span> <span class="nav-text">6.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

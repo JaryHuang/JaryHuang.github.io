@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Pytorch," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.创建torch1.1直接初始化    #直接输入数据,用小写的tensor     torch.tensor([2.,3.2])--------tensor([1.0000, 3.2000])       #大写的Tensor,输入为shape,输出为随机的初始化结果，默认为double     torch.Tensor(2,3)--------tensor([[1.4622e+19, 4.5">
+<meta name="keywords" content="Pytorch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pytorch函数操作Tensor">
+<meta property="og:url" content="http://yoursite.com/2019/05/01/DeepLearning/Pytorch/pytorch operation in image/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.创建torch1.1直接初始化    #直接输入数据,用小写的tensor     torch.tensor([2.,3.2])--------tensor([1.0000, 3.2000])       #大写的Tensor,输入为shape,输出为随机的初始化结果，默认为double     torch.Tensor(2,3)--------tensor([[1.4622e+19, 4.5">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-15T13:18:54.361Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pytorch函数操作Tensor">
+<meta name="twitter:description" content="1.创建torch1.1直接初始化    #直接输入数据,用小写的tensor     torch.tensor([2.,3.2])--------tensor([1.0000, 3.2000])       #大写的Tensor,输入为shape,输出为随机的初始化结果，默认为double     torch.Tensor(2,3)--------tensor([[1.4622e+19, 4.5">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/01/DeepLearning/Pytorch/pytorch operation in image/"/>
+
+
+
+
+
+  <title>pytorch函数操作Tensor | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/01/DeepLearning/Pytorch/pytorch operation in image/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">pytorch函数操作Tensor</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-01T20:58:55+08:00">
+                2019-05-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-创建torch"><a href="#1-创建torch" class="headerlink" title="1.创建torch"></a>1.创建torch</h2><h3 id="1-1直接初始化"><a href="#1-1直接初始化" class="headerlink" title="1.1直接初始化"></a>1.1直接初始化</h3><pre><code>    #直接输入数据,用小写的tensor
+    torch.tensor([2.,3.2])--------tensor([1.0000, 3.2000]) 
+
+    #大写的Tensor,输入为shape,输出为随机的初始化结果，默认为double
+    torch.Tensor(2,3)--------tensor([[1.4622e+19, 4.5682e-41, 1.4622e+19],
+                                     [4.5682e-41, 6.6830e+22, 2.8231e+23]])
+
+    #empty,随机初始化,和Tensor一样，但是容易出现和上述Tensor一样值非常大
+    torch.empty(2,3)--------tensor([[-2.2838e+04,  4.5897e-41,-2.2838e+04],
+                                [ 4.5897e-41, -2.8084e+17,  2.7149e+17]])
+
+    #可以设置默认的数据类型IntTensor,FloatTensor,DoubleTensor等
+    torch.set_default_tensor_type(torch.FloatTensor)
+
+    #填充初始化,第一个参数为shape,第二个参数为填充的值
+    torch.full([2,3],7)--------tensor([[7., 7., 7.],
+                                    [7., 7., 7.]])
+
+    #arange初始化,给定起始值，终值以及步长。
+    torch.arange(0,10,2)--------tensor([0, 2, 4, 6, 8])
+
+    #linspace和logspace,给定起始值，终值以及生成的个数。
+    torch.linspace(0,10,8)--------tensor([0.0000,1.4286,2.8571,4.2857,
+                                            5.7143,7.1429,8.5714,10.0000])
+    torch.logspace(0,10,8)--------tensor([1.0000e+00,2.6827e+01,
+                                        7.1969e+02,1.9307e+04,5.1795e+05,
+                                        1.3895e+07,3.7276e+08,1.0000e+10])
+
+    #ones,zeros,eye等都输入shape
+    torch.ones(3,3)--------tensor([[1., 1., 1.],
+                                [1., 1., 1.],
+                                [1., 1., 1.]])
+</code></pre><h3 id="1-2随机初始化"><a href="#1-2随机初始化" class="headerlink" title="1.2随机初始化"></a>1.2随机初始化</h3><pre><code>    #rand(),随机初始化,输入shape,生成均匀的0,1分布的值。
+    torch.rand(3,3)--------tensor([[0.7518, 0.7011, 0.8187],
+                            [0.8910, 0.9224, 0.4854],
+                            [0.9668, 0.0404, 0.9374]])
+
+    #输入为最小值,最大值以及shape
+    torch.randint(1,10,[3,3])--------tensor([[2., 4., 4.],
+                                            [9., 3., 2.],
+                                            [4., 6., 1.]])
+
+    #randn输入为shape,主要N(0,1)的正态分布
+    torch.randn(3,3)--------tensor([[ 0.1118, -0.4003, -0.9782],
+                                    [ 0.7846,  0.7151,  0.8911],
+                                    [-2.1824,  0.6975,  1.1570]])
+
+    #randperm 输入一个整数，随机的index分布,可以用来进行随机打乱数据。
+    torch.randperm(10)--------tensor([5, 4, 8, 1, 0, 2, 3, 6, 9, 7])
+</code></pre><a id="more"></a>
+<h2 id="2-切片操作"><a href="#2-切片操作" class="headerlink" title="2.切片操作"></a>2.切片操作</h2><p>numpy中有切片操作,那么tensor也是，其余的操作跟numpy操作基本一样，这里介绍切片的几个特殊的函数。</p>
+<pre><code>    #当我们切片的时候，想要任选某几个
+    a = torch.Tensor(8,3,32,32)
+    b = a[[0,1],:,:,:]
+    c = a.index_select(0,torch.tensor([0,1]))
+
+    #b和c等价，但是要注意.index_select中第一个输入是维度，第二个是一个tensor,即
+    #要选择的列,当然b后面的三个：：：可以简写成
+    b = a[[0,1],...]
+
+    #还有一种，比如在对象检测中，我们得到了IOU阈值,我们要获得那些大于0.5的阈值怎么#办 d,e两者等价
+    maks = a.ge(0.5)
+    d = a[mask]
+    e = a.mask_select(mask)
+</code></pre><h2 id="3-Tensor的维度变换"><a href="#3-Tensor的维度变换" class="headerlink" title="3.Tensor的维度变换"></a>3.Tensor的维度变换</h2><h3 id="3-1-view和reshape"><a href="#3-1-view和reshape" class="headerlink" title="3.1 view和reshape"></a>3.1 view和reshape</h3><pre><code>    #比如将一张图片拉长，这适用于全连接层
+    a = torch.rand(8,3,32,32)
+    a.view(8,3*32*32)  
+    a.reshape(8,3*32*32)    
+</code></pre><h3 id="3-2-squeeze和unsqueeze"><a href="#3-2-squeeze和unsqueeze" class="headerlink" title="3.2 squeeze和unsqueeze"></a>3.2 squeeze和unsqueeze</h3><p>挤压和增加维度也很常见,不管是挤压还是增加维度，都是对增加一个1维度。举个例子，当我们在卷积过程中要加入偏置b,那么这里就需要用到unsqueeze了。</p>
+<pre><code>    #挤压和增加维度也很常见   
+    a = torch.rand(8,3,32,32)
+    a.unsqueeze(0)--------(1,8,3,32,32) 正的数是从前面插入
+    a.unsqueeze(-1)--------(8,3,32,32,1)负的数是从后面插入
+
+    b = torch.rand(3)
+    f = torch.rand(8,3,32,32)
+    #if use b+f first and want the b add in channel,you must
+    b = b.unsuqeeze(1).unsqueeze(2).unqueeze(0)--------[1,3,1,1]        
+
+
+    #如果b为[1,3,1,1]
+    b.squeeze()--------[3]将所有为1的维度都消掉
+    b.squeeze(0)--------[3,1,1]只消掉指定的且为1的维度
+</code></pre><h3 id="3-3-Expand和repeat"><a href="#3-3-Expand和repeat" class="headerlink" title="3.3 Expand和repeat"></a>3.3 Expand和repeat</h3><pre><code>    #维度扩展，如上述b维度变为了[1,3,1,1]之后，要想和f相加，必须进行维度扩展
+    #输入的是shape,且只有1--M这种形式，3---N不行
+    b.expand(8,3,32,32)
+    #如果b.expand(8,6,32,32)则会出现match at non-singletion diemnsion
+
+
+    #repeat的应用，输入的不是shape，而是每个维度上重复的倍数。
+    b.repeat(8,1,32,32)
+</code></pre><h3 id="3-4-transpose和permute"><a href="#3-4-transpose和permute" class="headerlink" title="3.4 transpose和permute"></a>3.4 transpose和permute</h3><pre><code>    #转置也是比较常见的操作，比如矩阵的相乘等等
+    a = torch.Tensor(8,3,32,32)
+    #transpose两两维度交换
+    b = a.transpose(1,2)--------(8,32,3,32)
+
+
+    #permute多个维度一次性交换,这在我们图像中换通道什么的操作最多了
+    c = a.permute(0,2,3,1)--------(8,32,32,3)
+</code></pre><h2 id="4-Tensor的拼接和拆分"><a href="#4-Tensor的拼接和拆分" class="headerlink" title="4.Tensor的拼接和拆分"></a>4.Tensor的拼接和拆分</h2><h3 id="4-1-cat和stack"><a href="#4-1-cat和stack" class="headerlink" title="4.1 cat和stack"></a>4.1 cat和stack</h3><pre><code>    #拼接在神经网络中也比较常见,Inception块最后都是concatente
+    a = torch.rand(4,32,32,32)
+    b = torch.rand(4,64,32,32)
+    c = torch.cat([a,b],dim = 1)--------(4,96,32,32)
+    #上述过程相当于是将两个feature map concatente了
+
+    #stack操作是增加一个新的维度来表征到底是哪一块的内容,a和b的维度必须一样
+    a = torch.rand(32,8)
+    b = torch.rand(32,8)
+    c = torch.stack([a,b],dim = 0)--------(2,32,8)
+</code></pre><h3 id="4-2-split和chunk"><a href="#4-2-split和chunk" class="headerlink" title="4.2 split和chunk"></a>4.2 split和chunk</h3><pre><code>    #split是按照长度来拆分，第一个输入的是分割的各部分长度，第二个是维度，这个可以#进行深度学习的一些channle分组操作
+    a = torch.Tensor(5,3,32,32)
+    aa,bb = a.split([2,3],dim = 0)----aa:(2,3,32,32) bb:(3, 3, 32, 32)
+
+    #chunk，输入的为分为几个组以及维度，这个可以用来进行channel的分组操作
+    a = torch.Tensor(8,64,32,32)
+    torch.chunk(a,4,dim=1)--------tuple(4) 每一个的shape为(5,16,32,32)
+</code></pre><h2 id="5-Tensor的一些基本运算"><a href="#5-Tensor的一些基本运算" class="headerlink" title="5. Tensor的一些基本运算"></a>5. Tensor的一些基本运算</h2><h3 id="5-1-add-sub-mul-div"><a href="#5-1-add-sub-mul-div" class="headerlink" title="5.1 add/sub/mul/div"></a>5.1 add/sub/mul/div</h3><pre><code>    普通的加减乘除,也可以用+-*/来代替，但是//代表整除
+</code></pre><h3 id="5-2-matmul"><a href="#5-2-matmul" class="headerlink" title="5.2 matmul"></a>5.2 matmul</h3><pre><code>    #Tensor的乘法
+    a = torch.Tensor(5,3,32,64)
+    b = torch.Tensor(5,3,32,64)
+    c = torch.matmul(a,b.permute(0,1,3,2))--------(5,3,32,32)
+</code></pre><h3 id="5-3-pow-exp-log"><a href="#5-3-pow-exp-log" class="headerlink" title="5.3 pow/exp/log"></a>5.3 pow/exp/log</h3><pre><code>    #Tensor的次方，指数以及对数
+    a = torch.full([2,2],3)-------[[3,3],[3,3]]
+    torch.pow(a,2)-------[[9,9],[9,9]]
+    torch.exp(a)--------[[20.08,20.08],[20.08,20.08]]
+    torch.log(a)--------[[1.09,1.09],[1.09,1.09]]
+</code></pre><h3 id="5-4-floor-ceil-trunc-frac-round"><a href="#5-4-floor-ceil-trunc-frac-round" class="headerlink" title="5.4 floor/ceil/trunc/frac/round"></a>5.4 floor/ceil/trunc/frac/round</h3><pre><code>    #Tensor的取整和四舍五入等
+    a = torch.tensor([[3.14,2.86],[5.55,6.876]])
+    a.floor()--------[[3,2],[5,6]]
+    a.ceil()-------[[4, 3],[6, 7]]
+    a.trunc()--------[[3,2],[5,6]]
+    a.frac()--------[[0.14, 0.86],[0.55, 0.876]]
+    a.round()--------[[3,3],[6,7]]
+</code></pre><h3 id="5-5-clamp"><a href="#5-5-clamp" class="headerlink" title="5.5 clamp"></a>5.5 clamp</h3><pre><code>    #clamp是用来限制大小的，输入第一个参数为最小值，第二个参数为最大值,这个可以应
+    #用到神经网络中去限制梯度的大小
+    a = torch.tensor([11,9],[-2,5])
+    a.clamp(0,10)--------[[10,9],[0,5]]
+</code></pre><h2 id="6参考"><a href="#6参考" class="headerlink" title="6参考"></a>6参考</h2><p>当然函数还有很多，举例子是举不完的，了解完这几个参数之后对于读代码的话应该问题会少很多，但是如果遇到具体的问题的话还是建议去看一下官方的参考文档</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/09/DeepLearning/Classficaition/DenseNet/" rel="next" title="DenseNet">
+                <i class="fa fa-chevron-left"></i> DenseNet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/05/Leetcode/leetcode_括号类问题/" rel="prev" title="LeetCode括号类问题：20,22,32">
+                LeetCode括号类问题：20,22,32 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-创建torch"><span class="nav-number">1.</span> <span class="nav-text">1.创建torch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1直接初始化"><span class="nav-number">1.1.</span> <span class="nav-text">1.1直接初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2随机初始化"><span class="nav-number">1.2.</span> <span class="nav-text">1.2随机初始化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-切片操作"><span class="nav-number">2.</span> <span class="nav-text">2.切片操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Tensor的维度变换"><span class="nav-number">3.</span> <span class="nav-text">3.Tensor的维度变换</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-view和reshape"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 view和reshape</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-squeeze和unsqueeze"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 squeeze和unsqueeze</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-Expand和repeat"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 Expand和repeat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-transpose和permute"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 transpose和permute</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Tensor的拼接和拆分"><span class="nav-number">4.</span> <span class="nav-text">4.Tensor的拼接和拆分</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-cat和stack"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 cat和stack</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-split和chunk"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 split和chunk</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Tensor的一些基本运算"><span class="nav-number">5.</span> <span class="nav-text">5. Tensor的一些基本运算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-add-sub-mul-div"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 add/sub/mul/div</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-matmul"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 matmul</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-pow-exp-log"><span class="nav-number">5.3.</span> <span class="nav-text">5.3 pow/exp/log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-floor-ceil-trunc-frac-round"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 floor/ceil/trunc/frac/round</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-clamp"><span class="nav-number">5.5.</span> <span class="nav-text">5.5 clamp</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6参考"><span class="nav-number">6.</span> <span class="nav-text">6参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

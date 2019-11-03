@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Data structure and Algorithm," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;数据结构中简单也比较常用的结构就是线性结构,本章围绕着线性表来进行学习。先提出一个问题,给你一个一元多项式：$f(x) = a_0+a_1\cdot x+…+a_{n-1}\cdot x^{n-1}+a_n\cdot x^n$,进行的主要运算是加减乘除。但当编程的时候,首要问题是要了解如何表示这个多项式。多项式的表示主要是项数$n$,系数$a">
+<meta name="keywords" content="Data structure and Algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构和算法----线性表">
+<meta property="og:url" content="http://yoursite.com/2018/10/17/Python/数据结构和算法2-线性表/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;数据结构中简单也比较常用的结构就是线性结构,本章围绕着线性表来进行学习。先提出一个问题,给你一个一元多项式：$f(x) = a_0+a_1\cdot x+…+a_{n-1}\cdot x^{n-1}+a_n\cdot x^n$,进行的主要运算是加减乘除。但当编程的时候,首要问题是要了解如何表示这个多项式。多项式的表示主要是项数$n$,系数$a">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmLlinear/SingleLink.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmLlinear/LinkListAndNormalListCompare.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/17/Python/images/DataStructure+Algorthm/linear%20list/stack.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmLlinear/Queue.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmLlinear/CircularArray.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmLlinear/LinkList.png">
+<meta property="og:updated_time" content="2019-10-14T11:03:14.312Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构和算法----线性表">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;数据结构中简单也比较常用的结构就是线性结构,本章围绕着线性表来进行学习。先提出一个问题,给你一个一元多项式：$f(x) = a_0+a_1\cdot x+…+a_{n-1}\cdot x^{n-1}+a_n\cdot x^n$,进行的主要运算是加减乘除。但当编程的时候,首要问题是要了解如何表示这个多项式。多项式的表示主要是项数$n$,系数$a">
+<meta name="twitter:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmLlinear/SingleLink.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/17/Python/数据结构和算法2-线性表/"/>
+
+
+
+
+
+  <title>数据结构和算法----线性表 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/17/Python/数据结构和算法2-线性表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据结构和算法----线性表</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-17T23:00:55+08:00">
+                2018-10-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;数据结构中简单也比较常用的结构就是线性结构,本章围绕着线性表来进行学习。先提出一个问题,给你一个一元多项式：$f(x) = a_0+a_1\cdot x+…+a_{n-1}\cdot x^{n-1}+a_n\cdot x^n$,进行的主要运算是加减乘除。但当编程的时候,首要问题是要了解如何表示这个多项式。多项式的表示主要是项数$n$,系数$a_i$和次方$i$。<br><a id="more"></a></p>
+<h3 id="1-1-顺序存储结构"><a href="#1-1-顺序存储结构" class="headerlink" title="1.1 顺序存储结构"></a>1.1 顺序存储结构</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;对于一元多项式的加减乘除计算,首先想到的就是顺序存储结构了,常用的如数组,列表等。既然称之为顺序存储结构,那么它的顺序表现在哪几个方面：<strong>1.申请的地址空间是按顺序增加的。2.元素有序排列,可根据下标访问。</strong>因此,采用数组进行存储如$f(x)=3\cdot x^4+2\cdot x+5$,数组就可以表示成$a = [5,2,0,0,3],a[i]$为系数,$i$为多项式的次方。这个问题只用了一个数组就能全部表达了,后续加减乘除都能解决。<br>&nbsp;&nbsp;&nbsp;&nbsp;看似很完美的解决了问题，但是实际上,这种存储方式造成了空间浪费。如果为$f(x)=3\cdot x^{5000}+2\cdot x+5$,这个数组长度为5001,但是其中有4998个0,这些存储没有任何意义。采用元组tuple的方式能够解决这个问题。将数据存储为如$[(3,5000),(2,1),(5,0)]$,其中元组的首项代表系数,元组的第二项代表次方,这个方法在多项式的存储中还比较常用。<br>&nbsp;&nbsp;&nbsp;&nbsp;数组和Python列表可用于实现许多不同的抽象数据类型。它们都以线性顺序存储数据,并能够轻松访问数据。<strong>但是使用数组和Python列表有几个缺点</strong>。<strong>首先</strong>,插入和删除操作通常需要移动物品以腾出空间或缩小差距。这个可能很耗时,特别是对于大型序列。<strong>第二</strong>,数组的大小是固定的,不能改变。虽然Python列表确实提供了可扩展的数组,但是扩展需要创建一个新的数组并且必须复制扩增后原始数组的元素。<strong>最后</strong>,无论数组大小如何,数组的元素都存储在连续的内存字节中,每次创建数组时,程序必须找到并分配足够大的内存块来存储整个数组。对于大型阵列,程序很难或不可能找到一块内存。对于Python列表,情况尤其如此,由于每次扩展需要,在程序执行期间会变大更大的内存块。</p>
+<h3 id="1-2链式存储结构"><a href="#1-2链式存储结构" class="headerlink" title="1.2链式存储结构"></a>1.2链式存储结构</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;除了数组来存储之外,还有链式结构来存储。链表数据结构,是一种通用结构,可用于按顺序存储数据。链表改进了数组和Python列表的构造和管理,要求更小的内存分配,并且插入和删除没有元素移位。但是它确实消除了数组和Python列表可用的直接元素访问。因此,它不适合每个数据存储问题。链表有多种：单链表是一种线性结构,其中遍历从前面开始,一次一个元素,直到结束。其他变体包括循环链接,双链接和循环双链表。<br>&nbsp;&nbsp;&nbsp;&nbsp;所以,除了数组来存储之外,还有链式结构来存储。链表中每个结点存储多项式中的一个非零项,包括系数和指数两个数据域以及指针域。</p>
+<pre><code>class PolyNode:
+    def __init__(self,coef,expon,nextnode=None):
+        self.coef = coef
+        self.expon = expon
+        self.nextnode = nextnode
+</code></pre><p><img src="/../../images/Python/DataStructureAlgorthmLlinear/SingleLink.png" alt="Single Link">存储的结构如上图所示,第一个称之为头结点(head),最后一个称之为尾结点(tail)。</p>
+<hr>
+<h2 id="2-线性表"><a href="#2-线性表" class="headerlink" title="2.线性表"></a>2.线性表</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;对于刚刚的多项式问题,让我们了解了线性表的不同存储方法。什么是线性表呢？线性表(Linear List)由 <strong>同类型的数据元素</strong>构成的 <strong>有序</strong>序列的线性结构。线性表的抽象数据类型可由如下的方式描述：</p>
+<pre><code>数据名称：线性表(List)
+数据对象集：n个元素组成的有序性序列
+操作集：L为List型,整数i表示位置,元素x为ElementType
+    1.List MakeEmpty()：初始化一个空线性表
+    2.ElementType FindKth(int K,List L):根据位序K,返回相应的元素
+    3.Find(ElementType X,List L):在线性表L中查找X的第一次出现的位置
+    4.Insert(ElementType X,int i,List L):在位序i前插入一个新元素X到L中
+    5.Delete(int i,List L):删除指定位序i的元素
+    6.Length(List L):返回线性表L的长度n
+</code></pre><h3 id="2-1-线性表顺序存储实现"><a href="#2-1-线性表顺序存储实现" class="headerlink" title="2.1 线性表顺序存储实现"></a>2.1 线性表顺序存储实现</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;线性表的顺序存储结构非常好理解,利用数组的连续存储空间顺序的存放线性表的各元素,这里就简单介绍下想法。<br>1)建立空表肯定是没问题的。<br>2)对于FindKth查找问题,需要遍历一遍,如果在到达数据末尾前能找到数据,那就返回数据,否则返回-1。<br>3)对于Find问题,循环找到元素就返回位置,如果到末尾了还没找到,就返回-1.<br>4)对于Insert插入问题,要麻烦一点,首先从最后一个元素开始右移一位,依次进行到下标为$i-1$的元素,然后将数据插入到下标为$i-1$的位置。注意在开始前判断表是否满了以及位置合法不合法。<br>5)对于Delete删除问题同理,找到下标为$i-1$的删除,然后从下标$i$开始每个向前移一位,同样开始前判断表是否满了以及位置合法不合法。<br>6)对于返回长度就不用多说了。</p>
+<h3 id="2-2-线性表链式存储实现"><a href="#2-2-线性表链式存储实现" class="headerlink" title="2.2 线性表链式存储实现"></a>2.2 线性表链式存储实现</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;通过上述引言,了解了什么是链式表后,接下来进行链式表的存储实现。创建表就不必说了,直接创建一个对象就好。</p>
+<h4 id="2-2-1-FindKth-int-K-List-L"><a href="#2-2-1-FindKth-int-K-List-L" class="headerlink" title="2.2.1 FindKth(int K,List L)"></a>2.2.1 FindKth(int K,List L)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;根据位序K,返回相应的元素问题,那么就需要遍历了。因为链式表他只能从前面找到后面,因此采用计数的方式来寻找就好。但是如果找到了末尾了,还是没找到,同样返回None.</p>
+<pre><code>def FindKth(int K,List L):
+    List p=L
+    int i =1
+    while p.nextnode!=None and i&lt;K:
+        p = p.nextnode
+        i+=1
+    if i==K: return p  #找到就返回这个节点
+    else: return None  #没找到就返回空
+</code></pre><h4 id="2-2-2-Find-ElementType-X-List-L"><a href="#2-2-2-Find-ElementType-X-List-L" class="headerlink" title="2.2.2 Find(ElementType X,List L)"></a>2.2.2 Find(ElementType X,List L)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;在线性表L中查找X的第一次出现的位置,跟上述差不多,只是循环结束的条件不同。</p>
+<pre><code>def Find(ElementType X,List L):
+    List p=L
+    while p.nextnode!=None and p.coef!=X:
+        p = p.nextnode
+    return p
+</code></pre><h4 id="2-2-3-Insert-ElementType-X-int-i-List-L"><a href="#2-2-3-Insert-ElementType-X-int-i-List-L" class="headerlink" title="2.2.3 Insert(ElementType X,int i,List L)"></a>2.2.3 Insert(ElementType X,int i,List L)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;在位序i前插入一个新元素X到L中,相当于是在位序第i-1个结点的后面插入一个新的结点。那么思路上应该<br>1)构建一个结点s.<br>2)找到链表的第i个结点,s指向这个结点。<br>3)第i-1结点再指向s.但是这里要注意是否为表头以及插入的位置是否合理。</p>
+<pre><code>def Insert(ElementType X,int i,List L):
+    if i==1:
+        s = PolyNode()
+        s.coef =X
+        s.nextnode = L
+        return s
+    p = FindKth(i-1,L)
+    if p==None:
+        print(&quot;参数i错误,请自查&quot;)
+        return None
+    else:
+        s = PolyNode()
+        s.coef =X
+        s.nextnode = p.nextnode
+        p.nextnode = s
+        return L
+</code></pre><h4 id="2-2-4-Delete-int-i-List-L"><a href="#2-2-4-Delete-int-i-List-L" class="headerlink" title="2.2.4 Delete(int i,List L)"></a>2.2.4 Delete(int i,List L)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;删除指定位序i的元素,需要以下几个步骤:<br>1)先找到链表的第i-1个结点P.<br>2)用s指向P的下一个结点(要删除的这个点).<br>3)让p指向要s指向的结点,然后释放s的空间。</p>
+<pre><code>def Delete(int i,List L):
+    if i==1:
+        s = L
+        if L!=None: L=L.nextnode 
+        else: return None
+        del s
+        return L
+    p = FindKth(i-1,L)
+    if p==None:
+        print(&quot;第%d个结点不存在&quot;%i-1)
+        return None
+    elif: 
+        p.nextnode = None
+        print(&quot;第%d个结点不存在&quot;%i)
+    else:
+        s = p.nextnode
+        p.nextnode = s.nextnode
+        del s
+        return L
+</code></pre><h3 id="2-3-线性存储和链式存储如何选择"><a href="#2-3-线性存储和链式存储如何选择" class="headerlink" title="2.3 线性存储和链式存储如何选择"></a>2.3 线性存储和链式存储如何选择</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;讲完了线性存储和链式存储,肯定会有疑惑,他们都为线性表,有非常多的共同点,但是在使用的时候应该如何抉择呢？在<a href="https://jaryhuang.github.io/2018/09/22/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%92%8C%E7%AE%97%E6%B3%95/" target="_blank" rel="noopener"><strong>数据结构和算法基本概念</strong></a>对于算法的评价从空间复杂度和时间复杂度出发。<br>&nbsp;&nbsp;&nbsp;&nbsp;从 <strong>空间复杂度</strong>来说,链式存储更加自由,不需要提前开辟很多的空间,而线性存储相当于提前开了一篇空间,虽然能append,但是实际上还是在一个固定的内存空间内操作。而链式存储是增加一个申请一个,比较灵活。<br>&nbsp;&nbsp;&nbsp;&nbsp;从 <strong>时间复杂度</strong>来说,如下图所示：</p>
+<p><img src="/../../images/Python/DataStructureAlgorthmLlinear/LinkListAndNormalListCompare.png" alt="Single Link">因此,如果有频繁的增加或者删除的操作的话建议利用链式结构来存储。</p>
+<h2 id="3-堆栈-Stack"><a href="#3-堆栈-Stack" class="headerlink" title="3.堆栈(Stack)"></a>3.堆栈(Stack)</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;堆栈是具有一定操作约束的线性表,只在一端(栈顶)做插入(入栈Push)、删除(出栈Pop).它的一个最大的特点就是后入先出(LIFO Last In First Out),如下图所示:</p>
+<p><img src="../images/DataStructure+Algorthm/linear list/stack.png" alt="Stack">堆栈的抽象数据类型有如下描述方式：</p>
+<pre><code>    数据类型：堆栈(Stack)
+    数据对象集：一个有0个或者多个元素的有穷线性表
+    操作集：长度为MaxSize的堆栈S,堆栈元素item是ElementType
+        1.Stack CreateStack(int MaxSize):生成空堆栈,其最大长度为MaxSize
+        2.int IsFull(Stack S,int MaxSize):判断堆栈S是否已满
+        3.Push(Stack S,ElementType item):将元素item压入堆栈
+        4.IsEmpty(Stack S):判断堆栈是否为空
+        5.Pop(Stack S):删除并返回栈顶元素
+</code></pre><h3 id="3-1-线性表顺序存储实现堆栈"><a href="#3-1-线性表顺序存储实现堆栈" class="headerlink" title="3.1 线性表顺序存储实现堆栈"></a>3.1 线性表顺序存储实现堆栈</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;实现堆栈,首先想到的就是顺序存储,用Python的List来实现的话,相对是比较简单的。堆栈的出栈和入栈都是从List的尾巴进行操作,注意出栈的时候要判断是否为空栈。</p>
+<pre><code>class Stack :
+    #Creates an empty stack.
+    def __init__( self ):
+        self._theItems = list()
+
+    # Returns True if the stack is empty or False otherwise.
+    def isEmpty( self ):
+        return len( self._theItems ) == 0
+
+    # Returns the number of items in the stack.
+    def __len__ ( self ):
+        return len(self._theItems)
+
+    # Removes and returns the top item on the stack.
+    def pop(self):
+        assert not self.isEmpty(self),&quot;Cannot peek at an empty stack&quot;
+        return self._theItems.pop()
+
+    # Push an item onto the top of the stack.
+    def push( self, item ):
+        self._theItems.append( item )
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;线性表实现堆栈操作,Pop和Push在时间复杂度上是$O(n)$,因为在最糟糕的情况下,用于实现Python列表的底层数组可能必须重新分配以适应顶部堆栈项的添加或删除。其他操作的复杂度都是$O(1)$</p>
+<h3 id="3-2-线性表链式存储实现堆栈"><a href="#3-2-线性表链式存储实现堆栈" class="headerlink" title="3.2 线性表链式存储实现堆栈"></a>3.2 线性表链式存储实现堆栈</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;基于Python列表的实现可能不是堆栈的最佳选择,因为有大量的Push和Pop操作。list操作每个append()和pop()需要重新分配用于实现的底层数组列表。如果利用链表来实现可以避免内存空间的重新分配。但是,当用链表存储的时候,到底是用Tail出呢还是Head.对于链表来说,对Head的操作相对容易很多,因此将堆栈后进来的看成Head.</p>
+<pre><code>class Stack:
+    def __init__(self):
+        self._top = None
+        self._size = 0
+
+    def IsEmpty(self):
+        return self._top is None
+
+    def __len__(self):
+        return self._size
+
+    def Pop(self):
+        node = self._top
+        self._top = self._top.next
+        self._size -= 1
+        return node.item
+
+    def Push(self):
+        self._top = _StackNode(item,self._top)
+        self._size += 1
+
+class _StackNode:
+    def __init__(self,item,link):
+        self.item = item
+        self.next = link
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;利用链式存储方法,堆栈的所有操作的复杂度都是$O(1)$.</p>
+<h2 id="4-队列-Queue"><a href="#4-队列-Queue" class="headerlink" title="4.队列(Queue)"></a>4.队列(Queue)</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;队列也是具有一定操作约束的线性表,只在一端做插入(入队列 AddQ)、删除(出队列 Delete).它的一个最大的特点就是先入先出(FIFO First In First Out)</p>
+<p><img src="/../../images/Python/DataStructureAlgorthmLlinear/Queue.png" alt="Queue"><br>队列的抽象数据类型有如下描述方式：</p>
+<pre><code>    数据类型：队列(Queue)
+    数据对象集：一个有0个或者多个元素的有穷线性表
+    操作集：长度为MaxSize的队列Q,队列元素item是ElementType
+        1.Queue CreateQueue(int MaxSize):生成空队列,其最大长度为MaxSize
+        2.len(Queue Q):返回队列长度
+        3.EnQueue(Queue Q,ElementType item):将元素item插入队列
+        4.IsEmpty(Queue Q):判断队列是否为空
+        5.DeQueue(Queue Q):删除并返回队头的元素
+</code></pre><h3 id="4-1-利用Python-List实现队列"><a href="#4-1-利用Python-List实现队列" class="headerlink" title="4.1 利用Python List实现队列"></a>4.1 利用Python List实现队列</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;List来实现队列的话相对比较简单,主要就是append和pop.</p>
+<pre><code>    class Queue:
+        def __init__(self):
+            self._qList = list()
+
+        def isEmpty(self):
+            return len(self._qList)==0
+
+        def __len__(self):
+            return len(self._qList)
+
+        def EnQueue(self,item)：
+            self._qList.append(item)
+
+        def DeQueue(self):
+            assert not self.isEmpty(),&quot;Cannot dequeue from an empty queue&quot;
+            return self._qList.pop(0)
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;使用List来创建队列,在入队和出队在时间复杂度上$O(n)$,当数据量增大的时候,其非常受限。</p>
+<h3 id="4-2-利用Circular-Array实现队列"><a href="#4-2-利用Circular-Array实现队列" class="headerlink" title="4.2 利用Circular Array实现队列"></a>4.2 利用Circular Array实现队列</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;循环数组是在数组的基础上将头尾相连而成。具体结构如下图所示：</p>
+<p><img src="/../../images/Python/DataStructureAlgorthmLlinear/CircularArray.png" alt="Circular Array"></p>
+<pre><code>from array import Array
+
+class Queue:
+    def __init__(self,maxSize):
+        self._count = 0
+        self._front = 0
+        self._back = maxSize - 1
+        self._qArray = Array(maxSize)
+
+    def isEmpty(self):
+        return self._count == 0
+
+    def isFull(self):
+        return self._count == len(self._qArray)
+
+    def __len__(self):
+        return self._count
+
+    def enqueue(self,item):
+        assert not self.isFull(), &quot;Cannot enqueue to a full queue&quot;
+        maxSize = len(self._qArray)
+        self._back = (self._back+1)%maxSize
+        self._qArray[self._back] = item
+        self._count += 1
+
+    def dequeue(self):
+        assert not self.isEmpty(), &quot;Cannot dequeue from an empty queue.&quot;
+        item = self._qArray[self._front]
+        maxSize = len(self._qArray)
+        self._front = (self._front+1)%maxSize
+        self._count -= 1
+        return item
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;利用Circular Array来创建队列,所有的操作在时间复杂度上$O(1)$,但是他有一个缺点就是最大能力受到了限制,跟初始化的maxSize有关。</p>
+<h3 id="4-3-利用链表来实现队列"><a href="#4-3-利用链表来实现队列" class="headerlink" title="4.3 利用链表来实现队列"></a>4.3 利用链表来实现队列</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;用List来实现队列的主要缺陷就是在入队和出队的时间复杂度上,而循环数组能够解决这个问题,但是自身又带来新的问题：有限的队列尺寸。一个最好的解决方案就是使用链表的方式,并且利用头(head)和尾(tail)参考点：</p>
+<p><img src="/../../images/Python/DataStructureAlgorthmLlinear/LinkList.png" alt="Link List"></p>
+<pre><code>class Queue:
+    def __init__(self,maxSize):
+        self._qhead = None
+        self._qtail = None
+        self._count = 0
+
+    def isEmpty(self):
+        return self._qhead is None
+
+    def __len__(self):
+        return self._count
+
+    def enqueue(self,item):
+        node = _QueueNode(item)
+        if self.isEmpty():
+            self._qhead = node
+        else:
+            self._qtail.next = node
+        self._qtail = node
+        self._count += 1
+
+    def dequeue(self):
+        assert not self.isEmpty(), &quot;Cannot dequeue from an empty queue.&quot;
+        node = self._qhead
+        if self._qhead is self._qtail
+            self._qtail = None
+        self._qhead = self._qhead.next
+        self._count -=1
+        return node.item
+class _QueueNode(object):
+    def __init__(self,item):
+        self.item = item
+        self.next = None
+</code></pre><h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5.总结"></a>5.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本文依据课程的第二章节进行了简单的梳理,主要是了解数据结构中的线性表以及其实现方式。学习了线性表的存储方式包括线性存储和链式存储,实现了线性表的一些基本操作功能。通过上述学习,我们还深入学习了堆栈和队列这两个具有一定操作约束的线性表。在接下来的编程实践中尽量利用这些方法来解决一些问题。另外,本次还参考了《Data Structures and Algorithms using Python》这本书,感觉非常的好用,推荐。</p>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6.参考"></a>6.参考</h2><p>1.中国大学MOOC课程《数据结构》——浙江大学<br>2.Data Structures and Algorithms using Python ——Rance D. Necaise</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Data-structure-and-Algorithm/" rel="tag"># Data structure and Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/22/Python/数据结构和算法1-概念/" rel="next" title="数据结构和算法----基本概念">
+                <i class="fa fa-chevron-left"></i> 数据结构和算法----基本概念
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/22/DeepLearning/Classficaition/GoogLeNet_V1/" rel="prev" title="GoogLeNet">
+                GoogLeNet <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-顺序存储结构"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 顺序存储结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2链式存储结构"><span class="nav-number">1.2.</span> <span class="nav-text">1.2链式存储结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-线性表"><span class="nav-number">2.</span> <span class="nav-text">2.线性表</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-线性表顺序存储实现"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 线性表顺序存储实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-线性表链式存储实现"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 线性表链式存储实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-FindKth-int-K-List-L"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 FindKth(int K,List L)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-Find-ElementType-X-List-L"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 Find(ElementType X,List L)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-Insert-ElementType-X-int-i-List-L"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.3 Insert(ElementType X,int i,List L)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-4-Delete-int-i-List-L"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.2.4 Delete(int i,List L)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-线性存储和链式存储如何选择"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 线性存储和链式存储如何选择</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-堆栈-Stack"><span class="nav-number">3.</span> <span class="nav-text">3.堆栈(Stack)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-线性表顺序存储实现堆栈"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 线性表顺序存储实现堆栈</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-线性表链式存储实现堆栈"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 线性表链式存储实现堆栈</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-队列-Queue"><span class="nav-number">4.</span> <span class="nav-text">4.队列(Queue)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-利用Python-List实现队列"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 利用Python List实现队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-利用Circular-Array实现队列"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 利用Circular Array实现队列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-利用链表来实现队列"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 利用链表来实现队列</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-参考"><span class="nav-number">6.</span> <span class="nav-text">6.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

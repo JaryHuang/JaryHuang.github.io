@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Classfication," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;卷积神经网络的发展主要从几个方向走，从网络深度上讲，CNN发展方向朝着层数变得更多的方向走，如ResNet是AlexNet的20多倍。通过网络深度的增加，网络能够利用增加的层数以及非线性函数来得到目标函数的近似结构，以获得更好的特征表达。当然也有研究者从内部出发，在卷积网络表达上从时间轴上或者从特征空间上(feature map)进行atte">
+<meta name="keywords" content="Classfication">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SENet">
+<meta property="og:url" content="http://yoursite.com/2018/07/13/DeepLearning/Classficaition/SE-Net/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;卷积神经网络的发展主要从几个方向走，从网络深度上讲，CNN发展方向朝着层数变得更多的方向走，如ResNet是AlexNet的20多倍。通过网络深度的增加，网络能够利用增加的层数以及非线性函数来得到目标函数的近似结构，以获得更好的特征表达。当然也有研究者从内部出发，在卷积网络表达上从时间轴上或者从特征空间上(feature map)进行atte">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/SE-Net/se_bolck.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/SE-Net/useful_seblock.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/SE-Net/se-Inception.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/SE-Net/se-ResNet.png">
+<meta property="og:updated_time" content="2019-10-14T12:00:36.846Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SENet">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;卷积神经网络的发展主要从几个方向走，从网络深度上讲，CNN发展方向朝着层数变得更多的方向走，如ResNet是AlexNet的20多倍。通过网络深度的增加，网络能够利用增加的层数以及非线性函数来得到目标函数的近似结构，以获得更好的特征表达。当然也有研究者从内部出发，在卷积网络表达上从时间轴上或者从特征空间上(feature map)进行atte">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/Classfication/SE-Net/se_bolck.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/13/DeepLearning/Classficaition/SE-Net/"/>
+
+
+
+
+
+  <title>SENet | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/13/DeepLearning/Classficaition/SE-Net/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">SENet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-13T22:58:55+08:00">
+                2018-07-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;卷积神经网络的发展主要从几个方向走，从网络深度上讲，CNN发展方向朝着层数变得更多的方向走，如ResNet是AlexNet的20多倍。通过网络深度的增加，网络能够利用增加的层数以及非线性函数来得到目标函数的近似结构，以获得更好的特征表达。当然也有研究者从内部出发，在卷积网络表达上从时间轴上或者从特征空间上(feature map)进行attention。而我们今天谈的SE-Net主要是从图像的通道(channal)上进行的。其主要思想是图像的表达中，通道这个维度对我们的识别非常的有效果，因此提出了SE块来对通道的权重进行学习，并构建一个基于权重的特征空间。<br><a id="more"></a></p>
+<h2 id="2-SE块"><a href="#2-SE块" class="headerlink" title="2.SE块"></a>2.SE块</h2><p><img src="/../../../images/DeepLearning/Classfication/SE-Net/se_bolck.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;描述如上图所示：首先是任意给定的X，其形状为$(\acute{W},\acute{H},\acute{C})$分别代表图像的长度、宽度以及通道数。其经过$U = F_{tr}\times X$计算后变成了U，形状为$(W,H,C)$。其中$F_{tr}$是一些卷积作用。接下来在U的基础上加上我们的<strong>SE</strong>块。这里介绍下我们的SE块的全称叫挤压和激励(Squeeze-and-Excitation)其分为挤压块和激励块。</p>
+<h3 id="2-1挤压块-Squeeze"><a href="#2-1挤压块-Squeeze" class="headerlink" title="2.1挤压块(Squeeze)"></a>2.1挤压块(Squeeze)</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;挤压块目的是获取我们全局特征表达中通道的描述。此例子中采用的是全局平均池化(global average pooling)去得到一个值来描述通道的统计特征。因为U是有C个通道的卷积层，因此得到的统计特征$Z\epsilon R^c$,有c个维度。</p>
+<script type="math/tex; mode=display">Z_c = F_{sq}(U_c)=\frac{1}{W\times H}\sum_{i=1}^W{\sum_{j=1}^H{u_c(i,j)}}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;每一个维度的值就等于其图像的所有的点的平均值。当然这里是单单就用了全局平均池化,但实际上其实有很多复杂的聚合策略低可以用来描述统计信息。</p>
+<h3 id="2-2刺激块-Excitation"><a href="#2-2刺激块-Excitation" class="headerlink" title="2.2刺激块(Excitation)"></a>2.2刺激块(Excitation)</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;为了利用挤压(Squeeze)中聚合的信息来捕获通道的依赖项，作者设计了这么一个刺激块。首先他肯定要能表达非线性特征，其次他能够学会一种非互斥关系(防止一个通道被激活，而其他通道没有作用，则达不到效果，这句话我是这么理解的，不知道确不确切，后续可以交流)。基于上述两个设计，作者采用了基于sigmod输出的门控机制。</p>
+<script type="math/tex; mode=display">scale = F_{ex}(z,W)=\sigma(g(z,W))=\sigma(W_2\delta(W_1z))</script><p>&nbsp;&nbsp;&nbsp;&nbsp;因为最后输出的是输入的C个通道权重值，所以这里用scale(权重的另外一个说法叫缩放尺度)来描述。$\delta$函数是参考了修正线性单元(ReLU)，$W_1\epsilon R^{\frac{C}{r}\times C}$,$W_2\epsilon R^{C\times \frac{C}{r}}$,这里$W_1$的作用是其是将C维度的信息变为$\frac{C}{r}$维度的，这是降维度。同时$W_2$的作用就是升维度，还是将其变为C维度。$F_{ex}$是sigmod函数，那么最后输出的是C维度的值，且大小都在(0,1)之间，这就是权重了。<br><img src="/../../../images/DeepLearning/Classfication/SE-Net/useful_seblock.png" alt="Alt text"><br>&nbsp;&nbsp;&nbsp;&nbsp;图中所示，这就是一个完整的SE块的应用了。其输入维度和输出维度相同，因此可以添加在任何的层之间。<br>&nbsp;&nbsp;&nbsp;&nbsp;聊到这儿了，之前本人对刺激块为什么要先降维度再升维度有一些疑惑。为何不直接一个全连接层呢。作者在其论文<strong>3.1</strong>里面做了解释：为了限制模型的复杂性和辅助推广，在非线性范围内形成了一个具有两个全连通(FC)层，即一个具有参数W1的降维层，一个具有W2的维数增加层。这里可以做一个计算。对于输入为$w_i\times h_i\times c_i$的层，一个$s_k\times s_k$的卷积核的参数个数为$s_k\times s_k\times c_i$。当然这是单个卷积的，相当于输出单通道的，我们输出为多个通道的如$w_o\times h_o\times c_o$总参数为$s_k\times s_k\times c_i\times c_o$。因此总的过程是：</p>
+<script type="math/tex; mode=display">w_i\times h_i\times c_i--->c_o个s_k\times s_k\times c_i卷积核--->w_o\times h_o\times c_o</script><p>&nbsp;&nbsp;&nbsp;&nbsp;从第二个到第三个是如何变的呢，其实是在$c_i$通道上做了累加。理解了这一层之后，我们接下来再看看为什么降维度。如我所说，如果用一个全连接层，参数数量是$1\times 1\times c\times c$，用了全两个全连接层之后，参数的数量是</p>
+<script type="math/tex; mode=display">1\times 1\times c\times \frac{c}{r}+1\times 1\times \frac{c}{r}\times c=1\times 1\times c\times \frac{2c}{r}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;因此从中可以看出，其通过这样的方式，多了一个参数r来控制模型的训练参数的数量，以根据模型的情况进行更改，当然作者也给出了其试验的比较好的值r=16。</p>
+<h2 id="3-SE块在其他网络中的应用"><a href="#3-SE块在其他网络中的应用" class="headerlink" title="3.SE块在其他网络中的应用"></a>3.SE块在其他网络中的应用</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;SE块由于其输出的是输入的feature map在每个通道上的权重,最后输出<script type="math/tex">X^~=F_{scale}(X,Scale)</script>,因此其可以嵌入到任何已知的网络。作者介绍了其插入Inception module 和Resnet的方法。<br><img src="/../../../images/DeepLearning/Classfication/SE-Net/se-Inception.png" alt="Alt text"><br><img src="/../../../images/DeepLearning/Classfication/SE-Net/se-ResNet.png" alt="Alt text"></p>
+<h2 id="4-代码分析"><a href="#4-代码分析" class="headerlink" title="4.代码分析"></a>4.代码分析</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本次代码采用的是在github上<a href="https://github.com/taki0112/SENet-Tensorflow" target="_blank" rel="noopener">SENet-Tensorflow</a>进行解析。</p>
+<pre><code>def Squeeze_excitation_layer(self, input_x, out_dim, ratio, layer_name):
+    with tf.name_scope(layer_name) :
+        squeeze = Global_Average_Pooling(input_x)
+        excitation = Fully_connected(squeeze, units=out_dim / ratio, layer_name=layer_name+&#39;_fully_connected1&#39;)
+        excitation = Relu(excitation)
+        excitation = Fully_connected(excitation, units=out_dim, layer_name=layer_name+&#39;_fully_connected2&#39;)
+        excitation = Sigmoid(excitation)
+        excitation = tf.reshape(excitation, [-1,1,1,out_dim])
+        scale = input_x * excitation
+        return scale
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;主要就是这一段程序，因为其可以嵌入到各种网络中。其实理解了上面的SE会那么对这一段程序也就理解了。<br>&nbsp;&nbsp;&nbsp;&nbsp;这里几个输入的参数理解一下。input_x这个就是我们上一层的输出，out_dim是我们的输出权重的维度，ratio就是我们上述推到的r,用来降维度和升维度来减少参数的。首先经过全局平均，接下来全连接层降维，经过线性修正单元后再升维度。最后经过sigmoids，再将其与输入相乘，得到最后SE层处理后的值。</p>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5.总结"></a>5.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;经过上述的描述，相信对SE块有了一定的认识。其相当于是一个模块，用于通道维度的信息更好的利用起来进行特征的表达，通过实验发现，其效果确实很显著。因此将其嵌入到很多已有的网络能达到很好的效果。本人写这篇也是基于这篇论文浅显的理解，有任何错误希望指正。接下来会在这基础上对网络进行训练测试效果。</p>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6.参考"></a>6.参考</h2><p>1.Hu J, Shen L, Sun G. Squeeze-and-Excitation Networks[J]. 2017.<br>2.<a href="https://github.com/taki0112/SENet-Tensorflow" target="_blank" rel="noopener">SENet-Tensorflow</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Classfication/" rel="tag"># Classfication</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/04/MachineLearning/Sublime text3+Anaconda/" rel="next" title="Sublime text3+Anaconda">
+                <i class="fa fa-chevron-left"></i> Sublime text3+Anaconda
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/21/DeepLearning/Tensorflow/TFrecord/" rel="prev" title="TFRecord创建">
+                TFRecord创建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-SE块"><span class="nav-number">2.</span> <span class="nav-text">2.SE块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1挤压块-Squeeze"><span class="nav-number">2.1.</span> <span class="nav-text">2.1挤压块(Squeeze)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2刺激块-Excitation"><span class="nav-number">2.2.</span> <span class="nav-text">2.2刺激块(Excitation)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-SE块在其他网络中的应用"><span class="nav-number">3.</span> <span class="nav-text">3.SE块在其他网络中的应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-代码分析"><span class="nav-number">4.</span> <span class="nav-text">4.代码分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-参考"><span class="nav-number">6.</span> <span class="nav-text">6.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

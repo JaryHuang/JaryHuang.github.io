@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="BasicConcept," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;神经网络在图像领域发展得益于卷积神经网络的提出。卷积的局部连接、全局共享以及形变不变性使得网络在表征能力和参数数量上有一个很好的平衡。伴随着卷积神经网络的改进，在标准卷积的基础上，许多人做不同的方面做了改进，其中主要在两个方面：通道和卷积核。同时,由于各种各样卷积的提出，那么对于卷积之后的feature map大小的计算等也是一个要点。在本文">
+<meta name="keywords" content="BasicConcept">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Convolution and Receptive Field">
+<meta property="og:url" content="http://yoursite.com/2019/03/12/DeepLearning/Basic/Convlution/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;神经网络在图像领域发展得益于卷积神经网络的提出。卷积的局部连接、全局共享以及形变不变性使得网络在表征能力和参数数量上有一个很好的平衡。伴随着卷积神经网络的改进，在标准卷积的基础上，许多人做不同的方面做了改进，其中主要在两个方面：通道和卷积核。同时,由于各种各样卷积的提出，那么对于卷积之后的feature map大小的计算等也是一个要点。在本文">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Basic/Convolution/Convolution.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Basic/Convolution/ERF_Gaussian.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Basic/Convolution/ERF_Nonlinear.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Basic/Convolution/ERF_Subsample_Dilation.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Basic/Convolution/ERF_size.png">
+<meta property="og:updated_time" content="2019-10-15T12:56:25.486Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Convolution and Receptive Field">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;神经网络在图像领域发展得益于卷积神经网络的提出。卷积的局部连接、全局共享以及形变不变性使得网络在表征能力和参数数量上有一个很好的平衡。伴随着卷积神经网络的改进，在标准卷积的基础上，许多人做不同的方面做了改进，其中主要在两个方面：通道和卷积核。同时,由于各种各样卷积的提出，那么对于卷积之后的feature map大小的计算等也是一个要点。在本文">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/Basic/Convolution/Convolution.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/12/DeepLearning/Basic/Convlution/"/>
+
+
+
+
+
+  <title>Convolution and Receptive Field | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/12/DeepLearning/Basic/Convlution/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Convolution and Receptive Field</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-12T15:58:55+08:00">
+                2019-03-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络在图像领域发展得益于卷积神经网络的提出。卷积的局部连接、全局共享以及形变不变性使得网络在表征能力和参数数量上有一个很好的平衡。伴随着卷积神经网络的改进，在标准卷积的基础上，许多人做不同的方面做了改进，其中主要在两个方面：通道和卷积核。同时,由于各种各样卷积的提出，那么对于卷积之后的feature map大小的计算等也是一个要点。在本文的最后还特别介绍了重要概念感受野、有效是感受野的以及他们的计算。<br><a id="more"></a></p>
+<h2 id="2-Conv思维导图"><a href="#2-Conv思维导图" class="headerlink" title="2.Conv思维导图"></a>2.Conv思维导图</h2><p><img src="/../../../images/DeepLearning/Basic/Convolution/Convolution.png" alt="Conv思维导图"></p>
+<center>图1.卷积思维导图</center>
+
+<h2 id="3-feature-map的计算"><a href="#3-feature-map的计算" class="headerlink" title="3.feature map的计算"></a>3.feature map的计算</h2><h3 id="3-1-标准卷积"><a href="#3-1-标准卷积" class="headerlink" title="3.1 标准卷积"></a>3.1 标准卷积</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;卷积有多个参数，主要的是：核的大小(kernel_size),填充(padding)和step(步长)。那么这三个参数是如何影响其feature map的。这里有计算公式:<script type="math/tex">f_{out} =\frac{(f_{in}+2*padding-kernel_{size})}{stride}+1</script>。以32x32输入的图片为例，经过conv(kernel_size = 5,stride = 1,padding=0)之后为28x28。<strong>这里多说一句话，池化层的feature map计算和卷积层一样。</strong></p>
+<h3 id="3-2空洞卷积"><a href="#3-2空洞卷积" class="headerlink" title="3.2空洞卷积"></a>3.2空洞卷积</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;前面第二点中的思维导图谈到了空洞卷积，其就是在卷积核中填充(d-1)个空格。他的输出feature map计算方式和标准卷积相同，只是卷积kernel_size变为$kernel_{size}+(kernel_{size}-1) \cdot (d-1)$。例如，原本为3x3卷积的话，如果d=2,那么就变为5x5了。</p>
+<h3 id="3-3转置卷积"><a href="#3-3转置卷积" class="headerlink" title="3.3转置卷积"></a>3.3转置卷积</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;转置卷积就是将feature map从小变为大，他的推导按照标准卷积的方式反向计算即可。比如输入为2x2，卷积核为4x4，步长为3.那么将上述公式带入标准卷积公式，求$f_{in}$,所以容易计算出结果为7x7。</p>
+<h2 id="4-感受野"><a href="#4-感受野" class="headerlink" title="4.感受野"></a>4.感受野</h2><h3 id="4-1-理论感受野-RF-的计算"><a href="#4-1-理论感受野-RF-的计算" class="headerlink" title="4.1 理论感受野(RF)的计算"></a>4.1 理论感受野(RF)的计算</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;感受野是深度学习中很重要的概念,<strong>是指某一层feature map中的某个位置，由前面某一层固定区域计算得出的，那这个区域大小就是这个位置的感受野，常用的是看这一层在输入层的感受野。</strong>感受野的大小在目标检测中对于Anchor具有重要的指导意义。如何进行感受野的计算是重中之重。这里我们可以根据公式进行计算：</p>
+<script type="math/tex; mode=display">L_{k}=L_{k-1}+(f_{k}-1) \cdot \prod_{i=1}^{k-1}{S_i}</script><p>&nbsp;&nbsp;&nbsp;&nbsp;公式表述了$L_k$的感受野与$L_{k-1}$层的关系，$f_{k}$为计算层的卷积核(或者池化操作)的$kernel_{size}$，$S_i$为每一层的stride。<br><strong>这里有几项通用的规则：</strong></p>
+<blockquote>
+<p>1.按照上述公式计算的时候,第一层RF=kernel_size。<br>2.经过多分支路径时,按照感受野最大之路计算,这个可用于Inception等网络的理论感受野计算。<br>3.shortcut不会影响理论感受野。<br>4.RELU，BN和Dropout等操作不会影响理论感受野的范围。</p>
+</blockquote>
+<p>国外的研究者开发了这个感受野计算器的软件，大家可以根据上述的理论,通过自己手动计算来进行对比验证。<a href="https://fomoro.com/projects/project/receptive-field-calculator" target="_blank" rel="noopener">Receptive Field Calculator</a></p>
+<h3 id="4-2-有效感受野-ERF"><a href="#4-2-有效感受野-ERF" class="headerlink" title="4.2 有效感受野(ERF)"></a>4.2 有效感受野(ERF)</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;2017年的文章<a href="https://arxiv.org/pdf/1701.04128.pdf" target="_blank" rel="noopener">Understanding the Effective Receptive Field in Deep Convolutional Neural Networks</a>中提出了有效感受野这个概念,它比<strong>理论感受野</strong>要小的多。作者主要从文中提到了以下几个点：</p>
+<p><img src="/../../../images/DeepLearning/Basic/Convolution/ERF_Gaussian.png" alt="ERF_Gaussian"><center>图2.ERF的高斯分布</center>1.图2白色部分是有效感受野，而理论感受野分别是11,21,41,81。从上述可以得出,有效感受野的<strong>是高斯分布(Gaussian)</strong>，具体理论的计算可以参考文献。</p>
+<p><img src="/../../../images/DeepLearning/Basic/Convolution/ERF_Nonlinear.png" alt="ERF_Nonlinear"><center>图3.非线性层对ERF的影响</center>2.<strong>不同的非线性函数的感受野也略有不同</strong>。图3中Tanh和Sigmoid非常的相似，但是RELU略有不同，感受野范围内存在一些不激活的区域(根据RELU的公式很容易理解)，使得整个感受野存在一些非高斯连续。我相信如果换成Leakly RELU，相信这三者的ERF形状会非常的相似。</p>
+<p><img src="/../../../images/DeepLearning/Basic/Convolution/ERF_Subsample_Dilation.png" alt="ERF_Subsample_Dilation"><center>图4.增大ERF</center>3.<strong>图4展示了Subsample和Dilation对感受野的影响，两者都能增加ERF。</strong></p>
+<p><img src="/../../../images/DeepLearning/Basic/Convolution/ERF_size.png" alt="ERF_size"><center>图5.ERF的大小和层数以及理论感受野的关系</center>4.图5中左图展示了ERF的尺寸大小和层数的关系，右图展示了ERF和RF的比率随着层数的关系。这里用的是全卷积网络，没有subsample。因此这个可以作为一个理论参考，而在实际使用中会考虑subsample,所以真实的ERF会介于上述曲线拟合结果和理论的RF。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://zhuanlan.zhihu.com/p/28749411" target="_blank" rel="noopener">变形卷积核、可分离卷积？卷积神经网络中十大拍案叫绝的操作。</a><br>2.<a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf" target="_blank" rel="noopener">AlexNet</a><br>3.<a href="https://arxiv.org/pdf/1610.02357.pdf" target="_blank" rel="noopener">Xception</a><br>4.<a href="https://arxiv.org/pdf/1707.01083.pdf" target="_blank" rel="noopener">ShuffleNet</a><br>5.<a href="https://arxiv.org/pdf/1511.07122.pdf" target="_blank" rel="noopener">Dilated Convolution</a><br>6.<a href="https://arxiv.org/pdf/1703.06211.pdf" target="_blank" rel="noopener">Deformable Convolution</a><br>7.<a href="https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/Noh_Learning_Deconvolution_Network_ICCV_2015_paper.pdf" target="_blank" rel="noopener">Deconvolution(转置卷积)</a><br>8.<a href="https://zhuanlan.zhihu.com/p/44106492" target="_blank" rel="noopener">卷积神经网络的感受野</a><br>9.<a href="https://fomoro.com/projects/project/receptive-field-calculator" target="_blank" rel="noopener">Receptive Field Calculator</a><br>10.<a href="https://arxiv.org/pdf/1701.04128.pdf" target="_blank" rel="noopener">Understanding the Effective Receptive Field in Deep Convolutional Neural Networks</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/BasicConcept/" rel="tag"># BasicConcept</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/09/DeepLearning/ObjectDetection/Fast RCNN/" rel="next" title="Fast RCNN">
+                <i class="fa fa-chevron-left"></i> Fast RCNN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/15/DeepLearning/ObjectDetection/Faster RCNN/" rel="prev" title="Faster RCNN">
+                Faster RCNN <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Conv思维导图"><span class="nav-number">2.</span> <span class="nav-text">2.Conv思维导图</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-feature-map的计算"><span class="nav-number">3.</span> <span class="nav-text">3.feature map的计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-标准卷积"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 标准卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2空洞卷积"><span class="nav-number">3.2.</span> <span class="nav-text">3.2空洞卷积</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3转置卷积"><span class="nav-number">3.3.</span> <span class="nav-text">3.3转置卷积</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-感受野"><span class="nav-number">4.</span> <span class="nav-text">4.感受野</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-理论感受野-RF-的计算"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 理论感受野(RF)的计算</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-有效感受野-ERF"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 有效感受野(ERF)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

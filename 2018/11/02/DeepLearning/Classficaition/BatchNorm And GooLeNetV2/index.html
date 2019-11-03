@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Classfication," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;深度学习在训练的时候,每一层的输出随着参数改变而改变,这也导致均值以及方差在各个层中都不相同。众所周知,如果输入是均值为0,方差为1的数据训练则会加快很多。同时,随着训练的加深,很容易造成梯度饱和,导致无法训练或者训练很慢。如图所示,在simoid函数中当$Z&amp;gt;5 or Z&amp;lt;-5$时,函数值趋向于1,梯度基本消失,参数无法进行一个">
+<meta name="keywords" content="Classfication">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BatchNorm and GoogLeNet_V2">
+<meta property="og:url" content="http://yoursite.com/2018/11/02/DeepLearning/Classficaition/BatchNorm And GooLeNetV2/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;深度学习在训练的时候,每一层的输出随着参数改变而改变,这也导致均值以及方差在各个层中都不相同。众所周知,如果输入是均值为0,方差为1的数据训练则会加快很多。同时,随着训练的加深,很容易造成梯度饱和,导致无法训练或者训练很慢。如图所示,在simoid函数中当$Z&amp;gt;5 or Z&amp;lt;-5$时,函数值趋向于1,梯度基本消失,参数无法进行一个">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/sigmoid1.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/sigmoid2.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/relu.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/sigmoid2.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/batch_applied.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/relu_acc.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/relu_acc_big.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/small_network_test.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/Inception_architecture.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/model_ensemble.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/GooLeNetV2_test.png">
+<meta property="og:updated_time" content="2019-10-14T11:44:58.078Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="BatchNorm and GoogLeNet_V2">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;深度学习在训练的时候,每一层的输出随着参数改变而改变,这也导致均值以及方差在各个层中都不相同。众所周知,如果输入是均值为0,方差为1的数据训练则会加快很多。同时,随着训练的加深,很容易造成梯度饱和,导致无法训练或者训练很慢。如图所示,在simoid函数中当$Z&amp;gt;5 or Z&amp;lt;-5$时,函数值趋向于1,梯度基本消失,参数无法进行一个">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V2/sigmoid1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/11/02/DeepLearning/Classficaition/BatchNorm And GooLeNetV2/"/>
+
+
+
+
+
+  <title>BatchNorm and GoogLeNet_V2 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/11/02/DeepLearning/Classficaition/BatchNorm And GooLeNetV2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">BatchNorm and GoogLeNet_V2</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-02T21:00:55+08:00">
+                2018-11-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;深度学习在训练的时候,每一层的输出随着参数改变而改变,这也导致均值以及方差在各个层中都不相同。<strong>众所周知,如果输入是均值为0,方差为1的数据训练则会加快很多。同时,随着训练的加深,很容易造成梯度饱和,导致无法训练或者训练很慢。</strong><br><img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/sigmoid1.png" alt="sigmod">如图所示,在simoid函数中当$Z&gt;5 or Z&lt;-5$时,函数值趋向于1,梯度基本消失,参数无法进行一个学习,这对于神经网络来说非常的不利。如何来通过一些改善来解决整个问题呢？<br><img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/sigmoid2.png" alt="sigmod">图二以sigmoid为例子,如果我们的参数范围在[-1,1]之间的话,那么在这一段的梯度是最大的,对于训练以及参数更新会是最快的,因此大家慢慢的想到了归一化。但是归一化又带来了一个问题,对sigmoid函数来说,采用直接归一化为[-1,1]之间的话又是使得sigmoid函数近似线性关系,丢失了其非线性关系,神经网络的散失了主要的能力。因此,要找到一种合适的归一化方式,以及确定归一化的范围,这是研究的重点。<br><a id="more"></a></p>
+<h2 id="2-BatchNorm"><a href="#2-BatchNorm" class="headerlink" title="2.BatchNorm"></a>2.BatchNorm</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;相信大家只要用过深度神经网络,肯定用到过BatchNorm,不管是有意还是无意,用的很多网络中都自带了BN层,这也从侧面反映出了BN层的重要性。刚刚上述说的梯度消失问题,通常采用relu函数来解决:<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/relu.png" alt="relu">如上图所示,对于relu函数,右边的梯度不管多大,都是1。而对于未激活的神经元,其没有梯度,所以不会造成上述梯度消失的问题。但是我们考虑一个网络的损失函数为：</p>
+<script type="math/tex; mode=display">\zeta = F_2(F_1(u,\theta_1)\theta_2)</script><p>其中$\theta_1,\theta_2$是参数,$F_1,F_2$是一个任意变换。当学习$\theta_2$的时候,令$x = F_1(u,\theta_1)$,那么损失函数简化为：</p>
+<script type="math/tex; mode=display">\zeta = F_2(x,\theta_2)</script><p>当我们做梯度更新,根据公式<script type="math/tex">\theta_2 \leftarrow \theta_2 - \frac{\alpha}{m}\sum{i=1}_m \frac{\partial F_2(x_i,\theta_2)}{\partial \theta_2}</script><br>可知,输入的扰动属性使得训练更有效(参数更新),但其不能过大也不能过小。因此提出了归一化,<br>$\widehat{x}^{(k)}=\frac{x^{(k)}-E[x^{(k)}]}{\sqrt{Var[x^{(k)}]}}$ 使得输入数据的分布是0均值1方差。<br>&nbsp;&nbsp;&nbsp;&nbsp;<strong>但是简单的归一化输入数据,可能会引起输出的表达。</strong>这句话如何理解呢。以sigmoid为例子,如果在其前面加了简单的归一化层之后,其会约束sigmod函数的线性状态:<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/sigmoid2.png" alt="sigmod">如图所示,sigmod在[-1,1]之间为基本的线性状态,导致深度神经网络学到了线性网络的过程,影响了深度神经网络的非线性表达能力,使得其能力变弱。为了解决上述问题,作者提出了使得整个归一化转变能够表征对象。即$y^{(k)}=\gamma^{(k)}\hat{x}^{(k)}+\beta^{(k)}$,而$\gamma$和$\beta$是学习参数,通过改变这两个参数可以调节其限定区域。<br>&nbsp;&nbsp;&nbsp;&nbsp;基于此,我们已经了解了BatchNorm的整体设计思路。那么在使用的时候,咱也非常方便,参照论文中的思路：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/batch_applied.png" alt="batch_applied">就能方便的应用。对于超参数的求解,同样应用backward的思路,因为loss对batchnorm中的各个参数都可导,所以容易求解,具体可参照参考文献中的原论文。</p>
+<h3 id="2-1-BatchNorm层到底该放在卷积网络的什么位置"><a href="#2-1-BatchNorm层到底该放在卷积网络的什么位置" class="headerlink" title="2.1 BatchNorm层到底该放在卷积网络的什么位置?"></a>2.1 BatchNorm层到底该放在卷积网络的什么位置?</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;对于BN层应该放在哪个位置,首先得了解卷积网络大概的层次。对于卷积层来说,依据AlexNet网络,大致可分为：1.卷积2.非线性3.池化。BN层的设计就是为了解决训练的速度和梯度等问题,因此当加入我们的BN层之后,BN层的位置主要考虑在2前还是2之后。作者在论文中已有一些表述,卷积层前的输入可能是另一个非线性的输出,它的分布形状很可能在训练期间发生了变化,并且对其有一定的限制(通俗点将,就是非线性层函数有其特定的形式,比如relu函数是的一部分为0了,我们不应该通过BN层让其改变)。但有许多人的尝试中觉得BN层放在后面较好。<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/relu_acc.png" alt="batch_applied">这是利用cifar10将batch_norm层放在relu之前和之后的结果,图中的网络是inceptionv1,其算中等类型大小的网络,两者实际并没有太多的差别,如果真要找出细微的差别,我将精度最终放大,看到如下的结果。<br><img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/relu_acc_big.png" alt="batch_applied"><br>显示差异基本微乎其微。<br>&nbsp;&nbsp;&nbsp;&nbsp;个人理解,原本的relu就有正则化效果,BN+RELU使得正则化的效果更明显,因为BN层将数据空间进行转换,再加上RELU,两者可配合使得网络参数更稀疏化。<br>&nbsp;&nbsp;&nbsp;&nbsp;而RELU+BN层的效果,在<a href="https://jaryhuang.github.io/2018/08/26/AlexNet/" target="_blank" rel="noopener"><strong>AleNet</strong></a>中讲过RELU的很多优点,但是实际中我们也很清楚的了解其也有一定的缺点。可能存在使得一些神经元永远未激活。但是在RELU后加入了BN层之后就变的不一样了,部分神经元通过BN层之后会变相被重新激活。因此通过上述我们可以猜测: <strong>BN+RELU适用于大网络(需要正则化防止过拟合),RELU+BN适用于小网络(小网络学习能力不够,需要更多的神经元激活)</strong> 基于这个假设,本人设计了3卷积层+1个全连接层的小网络来测试cifar-10数据集,计算结果如图所示：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/small_network_test.png" alt="batch_applied">&nbsp;&nbsp;&nbsp;&nbsp;从图中看到,比较了几组试验。红线和蓝线可以做对比,两者都用的是Maxpool池化层,从图中可以看出,在训练的速度上(如达到30%的,BN层放置后面就快了很多),但是在两者的精度上,并没有很大的差别,原因从个人分析感觉是源于maxpool。不管BN在后的话,其使得数据重新分布,但是经过最大池化后,那些变相重新激活的0神经元被最大池化给滤波掉了, 基本没有效果。因此,本人将maxpool变为avgpool,测试了效果,果然有了整体的提升。并且,两者的差距也显示出来了。RELU_BN相比较BN_RELU涨了0.6%,这也印证了我上述对小网络的猜测。至于大网络,本人拟采用resnet框架来验证,等后续整理到那块的时候再进行说明,这个部分未完待续。</p>
+<h3 id="2-2-BatchNorm层的优势"><a href="#2-2-BatchNorm层的优势" class="headerlink" title="2.2 BatchNorm层的优势"></a>2.2 BatchNorm层的优势</h3><p>1)提高学习率：传统深度网络中,过高的学习率通常会导致梯度爆炸或者梯度消失,BN层可以通过对输入空间的放大以及移动来避免这种情况。<br>2)正则化效果：加入了BN层之后,发现其有减少过拟合的效果,因此可以减弱或者移除Dropout层。这也间接说明了BN层的正则化效果。</p>
+<h2 id="3-GoogLeNetV2网络的结构与测试"><a href="#3-GoogLeNetV2网络的结构与测试" class="headerlink" title="3.GoogLeNetV2网络的结构与测试"></a>3.GoogLeNetV2网络的结构与测试</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;GoogLeNetV2的改进点可归纳为以下几个点：<br>1)5x5的卷积层被2个3x3的卷积层所替代。这个跟vgg中一样,具体为何能够替代以及等效,在之前我做出了解释,具体可参照写的<a href="https://jaryhuang.github.io/2018/09/01/VggNet/" target="_blank" rel="noopener">VggNet</a>网络。3x3网络的替代之后,使得网络的最大深度增加了9层,参数量增加了25%。<br>2)在池化层方面,有时内部采用平均池化,有时采用最大池化。<br>3)最主要的改变就是在relu前面加入了BN层,这篇论文对后续的分类模型结构影响最大的一部分。<br>&nbsp;&nbsp;&nbsp;&nbsp;GoogLeNetV2主要结构如下图所示：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/Inception_architecture.png" alt="Inception architecture">&nbsp;&nbsp;&nbsp;&nbsp;此结构图中含义可参考<a href="https://jaryhuang.github.io/2018/09/03/GoogLeNet_V1/" target="_blank" rel="noopener">GoogLeNet_V1</a>,但是在实际搭建网络的时候,发现按照此结构图中进行搭建存在问题,问题主要在inception(4c)inception(4d)的output size的channal并不等于与576,而是$160+160+160+128 = 608$,因此按照这个表格来搭建网络出现问题,具体是文中有错还是有我没注意的点,欢迎大家批评指正。个人将图中圈黄色的两处channal改为了128来进行网络搭建。</p>
+<h3 id="3-2-GoogLeNet-V2测试"><a href="#3-2-GoogLeNet-V2测试" class="headerlink" title="3.2 GoogLeNet_V2测试"></a>3.2 GoogLeNet_V2测试</h3><p><img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/model_ensemble.png" alt="model ensemble">&nbsp;&nbsp;&nbsp;&nbsp;这是论文中作者经过试验比较了V1和V2版本的效果,从上述来看,V2相比于V1降低了1.77%的百分点。当然,从这张表中可以学到的一些测试数据处理(测试数据进行切割)和模型融合(多个模型融合)的方法。本人在比赛中实操发现,特别是对于一些样本相对较少,且有一些不平衡来说,训练集和测试机的划分非常的重要。样本量少,可能导致某些特殊的样本并没有到训练集中,所以当随机划分的时候每划分一次训练的模型出来的效果可能偏差非常大,所以采用多个模型融合的方法可以缓解这个问题。<br>&nbsp;&nbsp;&nbsp;&nbsp;本文基于GooLeNet的Appendix利用pytorch进行了训练,其中增加了翻转的数据增强做一个简单的对比试验：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V2/GooLeNetV2_test.png" alt="model test">从中可以看出GooLeNetV2达到了相对较好的准确度,当然对于cifar10数据集,简单的翻转增强也提高其精度,如果加入更多的数据增强手段,应该在精度上还是会有一些增加点。</p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;GooLeNet_V2中提出的BatchNorm对后续的网络影响很大,在现今的网络大部分应用中都会加入了BN层。当然对于BN层我们也要引起注意的是其归一化是通过B,W,H这个尺度进行的(原图像为[B,C,W,H]).因此,BatchSize的大小对其有一定的影响,如果太小,对归一化影响非常大。</p>
+<h2 id="5-参考"><a href="#5-参考" class="headerlink" title="5.参考"></a>5.参考</h2><ol>
+<li>Ioffe S, Szegedy C. Batch normalization: Accelerating deep network training by reducing internal covariate shift[J]. arXiv preprint arXiv:1502.03167, 2015.</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Classfication/" rel="tag"># Classfication</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/22/DeepLearning/Classficaition/GoogLeNet_V1/" rel="next" title="GoogLeNet">
+                <i class="fa fa-chevron-left"></i> GoogLeNet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/17/DeepLearning/Classficaition/GoogLeNet_V3 and V4/" rel="prev" title="GoogLeNet_V3 and V4">
+                GoogLeNet_V3 and V4 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-BatchNorm"><span class="nav-number">2.</span> <span class="nav-text">2.BatchNorm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-BatchNorm层到底该放在卷积网络的什么位置"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 BatchNorm层到底该放在卷积网络的什么位置?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-BatchNorm层的优势"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 BatchNorm层的优势</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-GoogLeNetV2网络的结构与测试"><span class="nav-number">3.</span> <span class="nav-text">3.GoogLeNetV2网络的结构与测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-GoogLeNet-V2测试"><span class="nav-number">3.1.</span> <span class="nav-text">3.2 GoogLeNet_V2测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考"><span class="nav-number">5.</span> <span class="nav-text">5.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

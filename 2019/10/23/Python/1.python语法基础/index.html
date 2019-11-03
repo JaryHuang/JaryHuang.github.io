@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python基础," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一些Python的基础语法，主要包括  关键字  常量和变量  模块与包">
+<meta name="keywords" content="Python基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python语法基础(关键字、标识符、模块等)">
+<meta property="og:url" content="http://yoursite.com/2019/10/23/Python/1.python语法基础/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一些Python的基础语法，主要包括  关键字  常量和变量  模块与包">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-23T14:04:33.724Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python语法基础(关键字、标识符、模块等)">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一些Python的基础语法，主要包括  关键字  常量和变量  模块与包">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/23/Python/1.python语法基础/"/>
+
+
+
+
+
+  <title>Python语法基础(关键字、标识符、模块等) | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/23/Python/1.python语法基础/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python语法基础(关键字、标识符、模块等)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-23T11:00:55+08:00">
+                2019-10-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本部分主要介绍一些Python的基础语法，主要包括</p>
+<ul>
+<li><p>关键字</p>
+</li>
+<li><p>常量和变量</p>
+</li>
+<li><p>模块与包</p>
+</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h2 id="2-关键字"><a href="#2-关键字" class="headerlink" title="2.关键字"></a>2.关键字</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;Python的关键字有33个，False,None和True是大写的，其余都是小写的。这里介绍一下几个不常见的关键字。</p>
+<h3 id="2-1-as"><a href="#2-1-as" class="headerlink" title="2.1 as"></a>2.1 <strong>as</strong></h3><p>&nbsp;&nbsp;&nbsp;&nbsp;as关键字不单独用，一般是跟着with A as B这样的结构。其主要一个要求是A这个对象有<strong>enter</strong>()和<strong>exit()</strong>方法。紧接着A对象的<strong>enter</strong>()方法被调用，将返回值赋值给B。当with A as B后面的代码被全部调用完了之后，会返回执行<strong>exit()</strong>方法。我们最常用的就是with open(‘A.txt’,’r’) as f来进行操作。</p>
+<p>测试：</p>
+<pre><code>class Test:
+    def __enter__(self):
+        print(&quot;__enter__&quot;)
+        return &quot;Test Result&quot;
+    def __exit__(self,type,value,trace):
+        print(&quot;__exit__&quot;)
+
+def get_test():
+    return Test()
+
+with get_test() as f:
+    print(f)
+</code></pre><p>输出：</p>
+<pre><code>__enter__
+Test Result
+__exit__
+</code></pre><h3 id="2-2-except"><a href="#2-2-except" class="headerlink" title="2.2 except"></a>2.2 <strong>except</strong></h3><p>&nbsp;&nbsp;&nbsp;&nbsp;except是和try一起组合用于捕获异常的。语句形式为try…except….,具体可参考异常捕获那一章节。<br>测试：</p>
+<pre><code>try:
+    value=5/0
+except ZeroDivisionError:
+    print(&quot;Zero error&quot;)
+</code></pre><p>输出：</p>
+<pre><code>Zero error
+</code></pre><h3 id="2-3-is"><a href="#2-3-is" class="headerlink" title="2.3 is"></a>2.3 <strong>is</strong></h3><p>&nbsp;&nbsp;&nbsp;&nbsp;提到Python中的is关键字，那么这里要和==一起来比较做一个对比。<br>测试：</p>
+<pre><code>a=(1,2,3)
+b=(1,2,3)
+print(a==b)
+print(a is b)
+print(id(a),id(b))
+</code></pre><p>输出：</p>
+<pre><code>True
+False
+2117640755312 2117640755384
+</code></pre><p>所以从以上的测试也可以看出，== 比较的是两个值，而is比较的是内存地址。</p>
+<h3 id="2-4-lambda"><a href="#2-4-lambda" class="headerlink" title="2.4 lambda"></a>2.4 <strong>lambda</strong></h3><p>&nbsp;&nbsp;&nbsp;&nbsp;lambda语句作为一个表达式，定义了一个匿名函数。它没有其他的作用，主要的就是简化程序中函数的定义，比如一些简单的函数就可以用lambda表达式来写，不需要定义一个功能函数。<br>测试：</p>
+<pre><code>g = lambda x:x**2
+
+def f(val):
+    return val**2
+print(g(2))
+print(f(2))
+</code></pre><p>输出:</p>
+<pre><code>4
+4
+</code></pre><h3 id="2-5-raise"><a href="#2-5-raise" class="headerlink" title="2.5 raise"></a>2.5 <strong>raise</strong></h3><p>&nbsp;&nbsp;&nbsp;&nbsp;刚刚2.2提到except可以捕获异常，那么利用raise语句，我们可以自己触发异常。语法格式主要通过raise Exception(“Invalid…”,*kwag)<br>测试：</p>
+<pre><code>def get_error( level ):
+    if level &lt; 1:
+        raise Exception(&quot;Invalid level!&quot;, level)
+
+for i in range(5):
+    try:
+        get_error(i)               
+    except Exception:
+        print(i,&quot;error&quot;)
+</code></pre><p>输出：</p>
+<pre><code>0 error
+</code></pre><p>通过raise Exception触发异常后，后面的代码就不会再执行。上述for循环执行到第一步就没继续执行了。raise Exception最大的一个作用就是用于自定义的一些Error的捕获。这个在异常捕获部分细细的进行讲解。</p>
+<h3 id="2-6-assert"><a href="#2-6-assert" class="headerlink" title="2.6 assert"></a>2.6 <strong>assert</strong></h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python中assert（断言）语句用于判断一个表达式是否为True。在表达式为False的时候，触发异常。<br>测试：</p>
+<pre><code>try:
+    assert 1==2
+except Exception:
+    print(&quot;First assertException&quot;)
+
+try:
+    assert 1==1
+except Exception:
+    print(&quot;Second assertException&quot;)
+
+assert 1==1    # 条件为 true 正常执行
+assert 1==2    # 条件为 false 触发异常
+</code></pre><p>输出：</p>
+<pre><code>First assertException
+
+Traceback (most recent call last):
+File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+AssertionError
+</code></pre><h3 id="2-7-global"><a href="#2-7-global" class="headerlink" title="2.7 global"></a>2.7 <strong>global</strong></h3><p>&nbsp;&nbsp;&nbsp;&nbsp;global关键字定义的是全局变量。在Python程序中，在函数内部定义了局部变量，当要在函数外使用这个变量的时候，就需要在这个变量前加global关键字，将局部变量变为全局变量。<br>测试：</p>
+<pre><code>T = 100 
+def fun():
+    a = 10  
+    return a+100
+
+def fun2():
+    global b
+    b=10
+    return b+100
+print(T)    
+print(b)
+print(a)    
+</code></pre><p>输出：</p>
+<pre><code>100
+10
+Exception has occurred: NameError
+name &#39;a&#39; is not defined
+File &quot;C:\Users\Administrator\Desktop\test.py&quot;, line 777, in &lt;module&gt;
+    print(a)
+</code></pre><p>以上可以看出，定义在外的T是一个全局变量，在函数内的a因为是局部变量，外部访问不了。但是b加了关键字global之后就变为全局变量了，外部可以访问。</p>
+<h3 id="2-8-nonlocal"><a href="#2-8-nonlocal" class="headerlink" title="2.8 nonlocal"></a>2.8 <strong>nonlocal</strong></h3><p>&nbsp;&nbsp;&nbsp;&nbsp;nonlocal的用法主要是如果在一个函数内定义了局部变量，但是在这个函数内部又有一个函数，这个函数如果想要和外面的这个函数都用同一个变量，那么在内部函数定义时要加一个nonlocal,我们通过代码再来细细的分析下这个。<br>测试：</p>
+<pre><code>count = 1
+
+def first_function():
+    count = &#39;first_function函数里面&#39;
+    def second_function():
+        nonlocal count
+        print(count)
+        count = &#39;second_function函数里面&#39;
+    second_function()
+    print(count)
+
+first_function()
+print(count)
+</code></pre><p>输出：</p>
+<pre><code>first_function函数里面
+second_function函数里面
+1
+</code></pre><p>从上述的试验可以看出。当我们执行first_function函数的时候，我们在里面是定义了count的。在second_function中我们用了nonlocal关键字之后，接下来second_function中的count就和first_function中的count是同一个变量了。因此打印出来上述结果。但是对于外面的全局变量count,局部变量count再怎么改都不影响这个结果。所以nonlocal相当于局部函数内部的”global”。</p>
+<h3 id="2-9-yield"><a href="#2-9-yield" class="headerlink" title="2.9 yield"></a>2.9 <strong>yield</strong></h3><p>&nbsp;&nbsp;&nbsp;&nbsp;yield关键字在函数中的做用是将一个函数修改为生成器。生成器内部的代码执行到yield会返回，返回的内容是yield后面的表达式。等这个值返回了之后，下次再执行这个生成器的内部代码时将从上次的状态继续开始。这样当我们遍历一个列表的时候，就不会因为比如列表的长度过大而占用过多的内存，每次只是生成器生成一个返回。<br>测试：</p>
+<pre><code>g = (i**i for i in range(1,5)) 
+print(type(g))
+
+def get_generate():
+    for i in range(1,5):
+        yield i**i
+
+g = get_generate()
+print(type(g))
+</code></pre><p>输出：</p>
+<pre><code>&lt;class &#39;generator&#39;&gt;
+&lt;class &#39;generator&#39;&gt;
+</code></pre><p>上述是创建生成器的两种方式，两者的功能是相同的，只是一个是生成表达式，一个是生成器函数。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;以上主要讲了Python中的9个比较不常用或者大家初学的时候不大了解的几个关键字。对于常见的if，while，pass等等就不做过多的介绍了。</p>
+<h2 id="3-常量和变量"><a href="#3-常量和变量" class="headerlink" title="3 常量和变量"></a>3 常量和变量</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;Python中的变量不需要像C语言那样要进行数据类型确认，它是一种动态语言，只需要给标识符一个变量，Python内部自动会有定义数据类型。我们常说的常量是一些值定义之后就不能被修改，但是因为Python动态语言的特性，使得只能变量作为常量使用，只要不修改它。只能通过自律或者一些技术手段，不如定义个Const模块来将常量变为字段，如果修改就报错等方式来进行。</p>
+<h2 id="4-模块与包"><a href="#4-模块与包" class="headerlink" title="4.模块与包"></a>4.模块与包</h2><h3 id="4-1-模块"><a href="#4-1-模块" class="headerlink" title="4.1 模块"></a>4.1 模块</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在Python中一个模块就是一个文件。在模块中可以有变量、常量、函数、类等程序元素。只要将其导入，一个模块就可以使用另外一个模块的程序元素。<br>导入模块有两种形式。</p>
+<pre><code>import module
+from module import 元素
+</code></pre><p>这是在同一个目录下的模块导入。如果是不同目录下的导入，或者两个module的名字相同的情况下，那么建议采用包的形式。</p>
+<h3 id="4-2-包"><a href="#4-2-包" class="headerlink" title="4.2 包"></a>4.2 包</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;创建包的方式是通过在每个文件夹中，比如pkg1和pkg2，建立<strong>init</strong>.py文件，以及module.py。其中<strong>init</strong>.py文件夹中可以导入包内部module的一些元素等。接下来导入文件，主要是通过包名+module名的方式。</p>
+<pre><code>import pkg1.module as module1
+from pkg2 import module
+</code></pre><h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5.总结"></a>5.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本篇主要介绍了Python的基础语法知识，包括一些稍微不常用一点的关键字，常量变量，模块等有一些基本的了解，为后续的Python学习奠定点基础。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python基础/" rel="tag"># Python基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/05/Leetcode/leetcode_括号类问题/" rel="next" title="LeetCode括号类问题：20,22,32">
+                <i class="fa fa-chevron-left"></i> LeetCode括号类问题：20,22,32
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/25/Python/2.python数据类型/" rel="prev" title="Python数据类型与结构">
+                Python数据类型与结构 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-关键字"><span class="nav-number">2.</span> <span class="nav-text">2.关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-as"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 as</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-except"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 except</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-is"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 is</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-lambda"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 lambda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-raise"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 raise</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-assert"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 assert</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-global"><span class="nav-number">2.7.</span> <span class="nav-text">2.7 global</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-8-nonlocal"><span class="nav-number">2.8.</span> <span class="nav-text">2.8 nonlocal</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-9-yield"><span class="nav-number">2.9.</span> <span class="nav-text">2.9 yield</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-常量和变量"><span class="nav-number">3.</span> <span class="nav-text">3 常量和变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-模块与包"><span class="nav-number">4.</span> <span class="nav-text">4.模块与包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-模块"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-包"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5.总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

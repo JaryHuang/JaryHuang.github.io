@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="data imbalance," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.数据不平衡的影响机器学习(Machine learning)的训练(train)和预测(predict)受到数据集不平衡问题的影响。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;举个例子，当我们进行判断题考试训练的时候，对的打勾错的打叉。试卷过来发现1000题的判断题，真实答案中有990道题是打叉的，只有10道题是打勾的。那在此时我们会想要偷个懒，到时候真正考试的时候，我全打叉，那起码也有9">
+<meta name="keywords" content="data imbalance">
+<meta property="og:type" content="article">
+<meta property="og:title" content="The impact of data imbalance and solution">
+<meta property="og:url" content="http://yoursite.com/2018/06/30/MachineLearning/The impact of data imbalance and solutions/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.数据不平衡的影响机器学习(Machine learning)的训练(train)和预测(predict)受到数据集不平衡问题的影响。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;举个例子，当我们进行判断题考试训练的时候，对的打勾错的打叉。试卷过来发现1000题的判断题，真实答案中有990道题是打叉的，只有10道题是打勾的。那在此时我们会想要偷个懒，到时候真正考试的时候，我全打叉，那起码也有9">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/MachineLearning/imbalance_data/new_point.png">
+<meta property="og:image" content="http://yoursite.com/images/MachineLearning/imbalance_data/NearMiss-1.png">
+<meta property="og:image" content="http://yoursite.com/images/MachineLearning/imbalance_data/NearMiss-2.png">
+<meta property="og:image" content="http://yoursite.com/images/MachineLearning/imbalance_data/NearMiss-3.png">
+<meta property="og:updated_time" content="2019-10-15T14:02:07.772Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The impact of data imbalance and solution">
+<meta name="twitter:description" content="1.数据不平衡的影响机器学习(Machine learning)的训练(train)和预测(predict)受到数据集不平衡问题的影响。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;举个例子，当我们进行判断题考试训练的时候，对的打勾错的打叉。试卷过来发现1000题的判断题，真实答案中有990道题是打叉的，只有10道题是打勾的。那在此时我们会想要偷个懒，到时候真正考试的时候，我全打叉，那起码也有9">
+<meta name="twitter:image" content="http://yoursite.com/images/MachineLearning/imbalance_data/new_point.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/06/30/MachineLearning/The impact of data imbalance and solutions/"/>
+
+
+
+
+
+  <title>The impact of data imbalance and solution | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/30/MachineLearning/The impact of data imbalance and solutions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">The impact of data imbalance and solution</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-30T20:58:55+08:00">
+                2018-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/MachineLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">MachineLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-数据不平衡的影响"><a href="#1-数据不平衡的影响" class="headerlink" title="1.数据不平衡的影响"></a>1.数据不平衡的影响</h2><p><strong>机器学习(Machine learning)的训练(train)和预测(predict)受到数据集不平衡问题的影响。</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;举个例子，当我们进行判断题考试训练的时候，对的打勾错的打叉。试卷过来发现1000题的判断题，真实答案中有990道题是打叉的，只有10道题是打勾的。那在此时我们会想要偷个懒，到时候真正考试的时候，我全打叉，那起码也有99分左右的水平了，哈哈大笑。我们人能学到这个规律，那么机器当然也能学到这个规律了。<br>&nbsp;&nbsp;&nbsp;&nbsp;除此之外，特征选择是机器学习中不可或缺的一步伐，但是当样本不平衡(data unbalanced)的情况下，<strong>部分特征(feature)对于少量样本(sample)的描述比较少,导致算法认为贡献度低</strong>。因为算法的标准是找出分类准确度高的特征，也就是上个例子中表述的让答案都选错的特征，因此那些偏向让我们答案选对的特征显的就没那么重要了。<br><a id="more"></a></p>
+<h2 id="2-数据不平衡的解决方案"><a href="#2-数据不平衡的解决方案" class="headerlink" title="2.数据不平衡的解决方案"></a>2.数据不平衡的解决方案</h2><h3 id="2-1-代价损失函数角度——非均等代价-unequal-cost"><a href="#2-1-代价损失函数角度——非均等代价-unequal-cost" class="headerlink" title="2.1 代价损失函数角度——非均等代价(unequal cost)"></a>2.1 代价损失函数角度——非均等代价(unequal cost)</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在现实生活中会遇到一些情况：不同类型的错误造成的后果是不同的。例如在医疗癌症诊断中，如果我们将健康的人给检测为癌症患者，那么会增加了进一步检测的麻烦。但是如果将癌症患者诊断为健康人，那么后果可能就是丧失了拯救生命的最佳时机。这两类错误是不对等的，为了权衡不同类型的错误造成的损失不同，我们可为错误赋予非均等代价(unequal cost)。举个例子，在我们的考试中，取个极端情况，错的判为对的-1分，对的判为错的-100分。那么我们在考试中就会极其关注，肯定不会出现上述都打叉的情况了，因为极有可能是0分了。同时，在做练习题的的时候，也会特别的关注打勾的答案对应的特征(重点词汇之类的)。<br>&nbsp;&nbsp;&nbsp;&nbsp;但是在利用非均等代价(unequal cost)难点就在于如何设置你的代价矩阵(cost matrix)<br>以二分类任务为例如表所示：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">真实类别\预测类别</th>
+<th style="text-align:center">第0类</th>
+<th style="text-align:center">第1类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">第0类</td>
+<td style="text-align:center">0</td>
+<td style="text-align:center">$cost_01$</td>
+</tr>
+<tr>
+<td style="text-align:center">第1类</td>
+<td style="text-align:center">$cost_10$</td>
+<td style="text-align:center">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>总体代价(total cost)也称为“代价敏感”(cost-sensitive)：</p>
+<script type="math/tex; mode=display">E(f;D;cost)=\frac{1}{m}(\sum_{x_i\in D^+}{I(f(x_i)\neq y_i) \times cost_{01}}+ \sum_{x_i\in D^-}{I(f(x_i)\neq y_i)  \times cost_{10}})</script><p>&nbsp;&nbsp;&nbsp;&nbsp;其中的最难定义的就是$cost_{01}$和$cost_{10}$,其值的确定使得我们加入了一个先验知识。但是这并不影响我们使用。最常见的是将其与类别比设置为一样，这基于的假设是训练集是真实样本总体的无偏采样(这个假设一般很难成立)。</p>
+<h3 id="2-2-分类器的决策角度——再平衡-rebalance"><a href="#2-2-分类器的决策角度——再平衡-rebalance" class="headerlink" title="2.2 分类器的决策角度——再平衡(rebalance)"></a>2.2 分类器的决策角度——再平衡(rebalance)</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;事实上我们的分类决策方法是用预测出的y和一个阈值(threshold)进行比较，通常以0.5作为阈值。而几率$\frac{y}{1-y}$反应了正例可能性和反例可能性的比值。阈值设置为0.5恰表明了分类器认为正反例可能性相同，都为0.5。假设我们采集到的训练集是真实样本总体的无偏估计，正例为$m^+$,负例为$m^-$,观测几率则为<script type="math/tex">\frac{m^+}{m^-}</script>由于假设的无偏估计，那么观测几率就代表了真实的几率:<script type="math/tex">\frac{y}{1-y}>\frac{m^+}{m^-}</script>则预测为正例。<br>&nbsp;&nbsp;&nbsp;&nbsp;再平衡的思想虽然简单，但是训练样本是真实样本总体的无偏估计这个假设往往不成立，但是这也作为一种策略来对不平衡训练样本进行处理，称之为阈值移动(threshold-moving)。<br><strong>再平衡是非均等代价基础，是从不同的角度解决问题的类似方法。</strong></p>
+<h3 id="2-3-训练的样本角度——采样-sampling"><a href="#2-3-训练的样本角度——采样-sampling" class="headerlink" title="2.3 训练的样本角度——采样(sampling)"></a>2.3 训练的样本角度——采样(sampling)</h3><h4 id="2-3-1-过采样-over-sampling"><a href="#2-3-1-过采样-over-sampling" class="headerlink" title="2.3.1 过采样(over-sampling)"></a>2.3.1 过采样(over-sampling)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;过采样简单理解就是对于数据比较少的一类，我们进行数据补充，让少数类和多数类数据接近或者相当，接下来我们来了解过采样中的几种方法。</p>
+<h5 id="2-3-1-1-随机过采样-RandomOverSampler"><a href="#2-3-1-1-随机过采样-RandomOverSampler" class="headerlink" title="2.3.1.1 随机过采样(RandomOverSampler)"></a>2.3.1.1 随机过采样(RandomOverSampler)</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;随机过采样方法，也称之为野蛮过采样方法。其是一种最简单的方法，通过有放回的进行重采样，不断的从少数的类中抽取，以达到扩充样本的目的。我们可以自己编写函数进行随机重采样，当然imblearn库中有这个的应用，但是其称之为(Naive random over-sampling)：</p>
+<pre><code>from imblearn.over_sampling import RandomOverSampler
+ros = RandomOverSampler(random_state=0)
+X_resampled, y_resampled = ros.fit_sample(X, y)
+</code></pre><p>RandomOverSampler()中的参数ratio可以进行设置你采样的数据。</p>
+<h5 id="2-3-1-2-合成少量超采样技术-SMOTE"><a href="#2-3-1-2-合成少量超采样技术-SMOTE" class="headerlink" title="2.3.1.2 合成少量超采样技术(SMOTE)"></a>2.3.1.2 合成少量超采样技术(SMOTE)</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;SMOTE是在2002年被提出,其核心算法(Algorithm)如下,对于一些细节本人做了一些小修改：</p>
+<pre><code>**Algorithm** SMOTE(S,N,k):
+**Input:** S is the minority class samples;Amount of SMOTE N(ratio);Number of nearest neighbor k
+**Output:**N*T synthetic mniority class samples
+For each point p in S:
+    1.compute the KNN in S to require the nnarray.
+    2.choose randomly $r\leq k$ in the nnarray.
+    3.for each point s_p in selected r,the vector is p to s_p,choose a random point along the lines to join to the new_sample.
+4.add these synthetic points(new_sample) to the dataset.
+</code></pre><p>计算核心的公式是，假设我们新产生的点是$x_{new}$,起源的点是$x_i$,其KNN中的其中一个点是$x_{zi}$。则计算公式是：<script type="math/tex">x_{new} = x_i + \lambda \times (x_{zi} - x_i) \lambda \in [0,1]</script><br><img src="/../../images/MachineLearning/imbalance_data/new_point.png" alt="Alt text"></p>
+<h5 id="2-3-1-3-边缘性合成少量超采样技术-Borderline-SMOTE"><a href="#2-3-1-3-边缘性合成少量超采样技术-Borderline-SMOTE" class="headerlink" title="2.3.1.3 边缘性合成少量超采样技术(Borderline-SMOTE)"></a>2.3.1.3 边缘性合成少量超采样技术(Borderline-SMOTE)</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;这是对SMOTE改进的一个算法，其相对于SMOTE改进的点在于到底选取S中的哪些点我们进行扩增，因为原始的算法是对所有S中的点都进行扩增。具体的改进如下：</p>
+<pre><code>For each point in S:
+    (1)noise:  all nearest-neighbors are from L.
+    (2)danger: more than half of nearest-neighbors are from L,add each point to the DANGER.
+    (3)safe:   more than half of nearest-neighbors are from S.
+For each point in DANGER，apply the SMOTE algorithm to generate synthetic mniority class samples.
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;有些人的理解，不应是将安全的点进行扩增么，这样证明我们扩增的点是正确的概率就越大了。但是得明确我们最终目的是想要使我们的分类正确，那么我在危险的点的中间多加一些点，使我得危险点又变为了安全点，何乐而不为。<br>在边缘性合成少量超采样技术中也存在两个变种：<br>Borderline-1 SMOTE：$x_{zi}$是属于与$x_i$(危险点)不同的类(就是数据比较多的那个类)<br>Borderline-2 SMOTE：$x_{zi}$是属于任何类都行。<br>上述的方法imblance都有实现：</p>
+<pre><code>from imblearn.over_sampling import SMOTE, ADASYN
+X_resampled, y_resampled = SMOTE().fit_sample(X, y)
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;通过kind参数可以对方法进行选择，其还提供了SVM的方式，核心思想都不变，只是最近邻的方式变成由支持向量机来进行划分。同时，在我们的方法中还提供了一种ADASYN的方法，具体可以去对应的库中进行了解。</p>
+<h4 id="2-3-2-欠采样-under-sampling"><a href="#2-3-2-欠采样-under-sampling" class="headerlink" title="2.3.2 欠采样(under-sampling)"></a>2.3.2 欠采样(under-sampling)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;欠采样，同样比较好理解，其就是对多数的那个类进行缩小，使数据达到平衡，接下来我们来了解过采样中的几种方法。</p>
+<h5 id="2-3-2-1-随机欠采样-RandomUnderSampler"><a href="#2-3-2-1-随机欠采样-RandomUnderSampler" class="headerlink" title="2.3.2.1 随机欠采样(RandomUnderSampler)"></a>2.3.2.1 随机欠采样(RandomUnderSampler)</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;随机欠采样方法是一种最简单的方法，通过对多数的类进行采样，使得多数类和少数类数据相当。imblearn库中有这个的应用：</p>
+<pre><code>from imblearn.under_sampling import RandomUnderSampler
+rus = RandomUnderSampler(random_state=0)
+</code></pre><p>RandomUnderSampler()中的参数ratio可以进行设置你采样的数据，具体不细讲。</p>
+<h5 id="2-3-2-2-相近差错-NearMiss"><a href="#2-3-2-2-相近差错-NearMiss" class="headerlink" title="2.3.2.2 相近差错(NearMiss)"></a>2.3.2.2 相近差错(NearMiss)</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;刚刚的随机欠采样是无规则的进行随机采样，而相近差错法则是在随机欠采样的基础上进行有规则的采样。假设我们的正例是多数类，需要被欠采样的，负例是少数类。<br><strong>NearMiss-1：</strong>从所有的正样本中，找出其与N个负类最近邻的平均距离最短的正样本,舍弃掉那些距离远的。<br><img src="/../../images/MachineLearning/imbalance_data/NearMiss-1.png" alt="Alt text"><br>&nbsp;&nbsp;&nbsp;&nbsp;这种方法的核心思想是将距离近的样本留下，距离远的删除。当我们训练数据的时候，两者接近的数据我们都能区分，那么那些距离分离面远的数据当然没问题。<strong>但是这种方法很容易被噪声影响，因为在原始数据中可能就存在噪声(分离面的周围产生的噪声对分类影响最大)</strong><br><strong>NearMiss-2：</strong><br>从所有的正样本中，找出其与N个负类最远邻的平均距离最短的正样本。<br><img src="/../../images/MachineLearning/imbalance_data/NearMiss-2.png" alt="Alt text"><br>&nbsp;&nbsp;&nbsp;&nbsp;这种方法的聚焦在最远的样本上，这样在分离面上的噪声对其干扰相对较少，但是其对边缘离群值比较敏感，边缘离群噪声对其会有很大的干扰。<br><strong>NearMiss-3：</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;这种方法分为两部分：(1)对于每一个负样本，选出其M个最近邻样本。(2)然后对于正样本，挑选出N个K近邻平均距离最大的样本。<br><img src="/../../images/MachineLearning/imbalance_data/NearMiss-3.png" alt="Alt text">这相当于是上述两者的结合，来减少两类噪声的影响。</p>
+<h5 id="2-3-2-3-移除Tomek连接-Tomek-Link-Removal"><a href="#2-3-2-3-移除Tomek连接-Tomek-Link-Removal" class="headerlink" title="2.3.2.3 移除Tomek连接(Tomek Link Removal)"></a>2.3.2.3 移除Tomek连接(Tomek Link Removal)</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;Tomek连接指的是两个样本的最近邻是彼此，也就是A是B的最近邻，B也是A的最近邻。那么我们操作方式是删除多数类的那个。</p>
+<h5 id="2-3-2-4-修改最近邻法-Edited-Nearest-Neighbor"><a href="#2-3-2-4-修改最近邻法-Edited-Nearest-Neighbor" class="headerlink" title="2.3.2.4 修改最近邻法(Edited Nearest Neighbor)"></a>2.3.2.4 修改最近邻法(Edited Nearest Neighbor)</h5><p>&nbsp;&nbsp;&nbsp;&nbsp;ENN是一种利用最近邻算法进行欠采样的处理方法。对于L类，如果他的大部分K近邻样本都和他本身的类别不一样，我们就将其删除。Repeated Edited Nearest Neighbours(RENN)就是重复这个算法多次，然后对数据进行删除。当然这里面就涉及到多个参数了。比如最近邻的K是否可以进行迭代增加，重复的次数等想法都可以实现，也就出现了改进版了，这里不做详细说明。<br>&nbsp;&nbsp;&nbsp;&nbsp;另外，还有一些提出比如利用最近邻算法预测，将正例中的样本预测为负例的进行填充的负样本中、或者利用其它算法等等，这里就不说明了。</p>
+<h4 id="2-3-3-组合方法-combination-of-over-and-under-sampling"><a href="#2-3-3-组合方法-combination-of-over-and-under-sampling" class="headerlink" title="2.3.3 组合方法(combination of over- and under- sampling)"></a>2.3.3 组合方法(combination of over- and under- sampling)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;组合方法就是讲过采样和欠采样方法进行组合，以SMOTETomek为例：首先SMOTE产生噪声点，然后通过Tomek进行消噪，那么留下来的自然好的概率就大了。代表新的算法为<br>(1)合成少量超采样技术+移除Tomek连接(SMOTETomek)<br>(2)合成少量超采样技术+修改最近邻法(SMOTEENN)</p>
+<h3 id="2-4-算法的角度——集成-ensemble"><a href="#2-4-算法的角度——集成-ensemble" class="headerlink" title="2.4 算法的角度——集成(ensemble)"></a>2.4 算法的角度——集成(ensemble)</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;EasyEnsemble是一个简单的方法，其思想是使得在对算法进行训练的时候，每个模型输入的都是平衡的样本，最后将这些样本集成起来：</p>
+<pre><code>**Algorithm** EasyEnsemble(N):
+**Input:** N is the number of model
+**Output:**final model
+1.For each model:
+    (i)  sample randomly in L to generate Li whose data size is same as S
+    (ii) use Li and S to train the model
+2.Ensemble this model and get the final model
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;这就是EasyEasyEnsemble,跟Adaboost的整体框架非常相似。<br>&nbsp;&nbsp;&nbsp;&nbsp;而BalanceCascade算法和EasyEnsemble相似，但是其改进点在于，每次训练一个小模型结束，将L的样本进行分类，正确分类的就移除掉，然后进行重复训练。<br>还有一种变型，在最后模型集成的时候，是采用boosting的集成方式还是bagging的投票方式，这里也有一定的差别了。</p>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;讲到这里，对数据不平衡问题的处理方式也罗列的差不多了。这边没有讲具体算法的实现，主要是罗列了近几年提出的解决数据不平衡的问题的一些思路：<strong>从数据不平衡导致的影响出发，依靠损失函数、分类器决策、数据采样和算法角度等方面</strong>，总结了现有提出的一些方法以及个人的一些小见解。本篇的不足还在于没有依据具体的公有数据集进行实验来说明问题，等后续有时间再进行说明。</p>
+<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4.参考"></a>4.参考</h2><p>1.<a href="https://blog.csdn.net/a358463121/article/details/52304670" target="_blank" rel="noopener">不平衡数据分类算法介绍与比较</a><br>2.<a href="http://contrib.scikit-learn.org/imbalanced-learn/stable/index.html" target="_blank" rel="noopener">imbalanced-learn</a><br>3.Chawla N V, Bowyer K W, Hall L O, et al. SMOTE: synthetic minority over-sampling technique[J]. Journal of Artificial Intelligence Research, 2011, 16(1):321-357.<br>4.More A. Survey of resampling techniques for improving classification performance in unbalanced datasets[J]. 2016.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/data-imbalance/" rel="tag"># data imbalance</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/20/MachineLearning/Machine-LearningArchitecture/" rel="next" title="Machine Learning Architecture">
+                <i class="fa fa-chevron-left"></i> Machine Learning Architecture
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/04/MachineLearning/Sublime text3+Anaconda/" rel="prev" title="Sublime text3+Anaconda">
+                Sublime text3+Anaconda <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-数据不平衡的影响"><span class="nav-number">1.</span> <span class="nav-text">1.数据不平衡的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-数据不平衡的解决方案"><span class="nav-number">2.</span> <span class="nav-text">2.数据不平衡的解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-代价损失函数角度——非均等代价-unequal-cost"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 代价损失函数角度——非均等代价(unequal cost)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-分类器的决策角度——再平衡-rebalance"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 分类器的决策角度——再平衡(rebalance)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-训练的样本角度——采样-sampling"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 训练的样本角度——采样(sampling)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-过采样-over-sampling"><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1 过采样(over-sampling)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-1-1-随机过采样-RandomOverSampler"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">2.3.1.1 随机过采样(RandomOverSampler)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-1-2-合成少量超采样技术-SMOTE"><span class="nav-number">2.3.1.2.</span> <span class="nav-text">2.3.1.2 合成少量超采样技术(SMOTE)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-1-3-边缘性合成少量超采样技术-Borderline-SMOTE"><span class="nav-number">2.3.1.3.</span> <span class="nav-text">2.3.1.3 边缘性合成少量超采样技术(Borderline-SMOTE)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-2-欠采样-under-sampling"><span class="nav-number">2.3.2.</span> <span class="nav-text">2.3.2 欠采样(under-sampling)</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-1-随机欠采样-RandomUnderSampler"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">2.3.2.1 随机欠采样(RandomUnderSampler)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-2-相近差错-NearMiss"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">2.3.2.2 相近差错(NearMiss)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-3-移除Tomek连接-Tomek-Link-Removal"><span class="nav-number">2.3.2.3.</span> <span class="nav-text">2.3.2.3 移除Tomek连接(Tomek Link Removal)</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-2-4-修改最近邻法-Edited-Nearest-Neighbor"><span class="nav-number">2.3.2.4.</span> <span class="nav-text">2.3.2.4 修改最近邻法(Edited Nearest Neighbor)</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-3-组合方法-combination-of-over-and-under-sampling"><span class="nav-number">2.3.3.</span> <span class="nav-text">2.3.3 组合方法(combination of over- and under- sampling)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-算法的角度——集成-ensemble"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 算法的角度——集成(ensemble)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-总结"><span class="nav-number">3.</span> <span class="nav-text">3.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-参考"><span class="nav-number">4.</span> <span class="nav-text">4.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

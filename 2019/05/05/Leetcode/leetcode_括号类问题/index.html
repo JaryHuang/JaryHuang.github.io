@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="LeetCode," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;进行实习面试，刷了很多code,这次要进行系统的整理一下，同时督促自己继续努力的刷题，要坚持住，code才是王道！这次主要整理下做的leetCode中关于括号类的问题，其中涉及到 验证匹配，排列组合，最长有效的问题，不同类型的题目都有不同的解题方式。">
+<meta name="keywords" content="LeetCode">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LeetCode括号类问题：20,22,32">
+<meta property="og:url" content="http://yoursite.com/2019/05/05/Leetcode/leetcode_括号类问题/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;进行实习面试，刷了很多code,这次要进行系统的整理一下，同时督促自己继续努力的刷题，要坚持住，code才是王道！这次主要整理下做的leetCode中关于括号类的问题，其中涉及到 验证匹配，排列组合，最长有效的问题，不同类型的题目都有不同的解题方式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-15T13:34:06.749Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="LeetCode括号类问题：20,22,32">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;进行实习面试，刷了很多code,这次要进行系统的整理一下，同时督促自己继续努力的刷题，要坚持住，code才是王道！这次主要整理下做的leetCode中关于括号类的问题，其中涉及到 验证匹配，排列组合，最长有效的问题，不同类型的题目都有不同的解题方式。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/05/05/Leetcode/leetcode_括号类问题/"/>
+
+
+
+
+
+  <title>LeetCode括号类问题：20,22,32 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/05/Leetcode/leetcode_括号类问题/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">LeetCode括号类问题：20,22,32</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-05T22:00:55+08:00">
+                2019-05-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Leetcode/" itemprop="url" rel="index">
+                    <span itemprop="name">Leetcode</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;进行实习面试，刷了很多code,这次要进行系统的整理一下，同时督促自己继续努力的刷题，要坚持住，code才是王道！这次主要整理下做的leetCode中关于括号类的问题，其中涉及到 <strong>验证匹配</strong>，<strong>排列组合</strong>，<strong>最长有效</strong>的问题，不同类型的题目都有不同的解题方式。<br><a id="more"></a></p>
+<h2 id="2-验证括号"><a href="#2-验证括号" class="headerlink" title="2.验证括号"></a>2.验证括号</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://leetcode.com/problems/valid-parentheses/" target="_blank" rel="noopener">Valid Parentheses</a>验证括号的有效性，这种题目有一个特点：<strong>碰到这种成对的，有顺序的</strong>我们首先可以想到用栈的先后顺序来进行求解，之前大家应该都做过一道 <em>验证某一个序列是不是栈的压出序列</em>，或者是 <em>用栈来实现四则运算</em>,这两道题分别是用到了栈的顺序和括号的成对。<br>思路：<br>1)如果是空栈就append进来<br>2)如果是左括号和右括号匹配，那就将最顶端的左括号弹出，如果不匹配，那就继续append进来。<br>判别：如果是空栈，那就是匹配的，如果不是空栈，那就肯定存在不匹配的。<br>时间复杂度：O(n),空间复杂度：O(n)</p>
+<pre><code>class Solution:
+    def isValid(self, s: str) -&gt; bool:
+        str_len = len(s)
+        #如果长度不是偶数，那么肯定不匹配
+        if str_len % 2 !=0:
+            return False
+        else:
+            stack = []
+            for index in range(str_len):
+                #如果是空栈，那就增加进来
+                if len(stack)==0:
+                    stack.append(s[index])
+                #如果不匹配，那也加入到栈
+                elif self.judge(stack[-1],s[index]) == False:
+                    stack.append(s[index])
+                #既不是空栈同时也匹配，那就弹出
+                else:
+                    stack.pop()
+            return True if len(stack)==0 else False
+    #判断左右括号是否匹配，这里有三种括号，所以用了三个if               
+    def judge(self,left,right):
+        if left == &#39;(&#39; and right == &#39;)&#39;:
+            return True
+
+        if left == &#39;[&#39; and right == &#39;]&#39;:
+            return True
+
+        if left == &#39;{&#39; and right == &#39;}&#39;:
+            return True
+
+        return False
+</code></pre><h2 id="3-产生成对的括号"><a href="#3-产生成对的括号" class="headerlink" title="3.产生成对的括号"></a>3.产生成对的括号</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://leetcode.com/problems/generate-parentheses/" target="_blank" rel="noopener">Generate Parentheses</a>产生成对的括号,这一题虽然用括号来进行表示，但是实际上它是一类 <strong>排列组合问题</strong>。碰到这类问题，每一个位置上都可以有多种选择的，一定要想到 <strong>回溯法（Backtracking）</strong>。思考递归题时，只要明确三点就行：<strong>选择 (Options)，限制 (Restraints)，结束条件 (Termination)。</strong>即<a href="https://www.1point3acres.com/bbs/thread-172641-1-1.html" target="_blank" rel="noopener">“ORT原则”</a><br>在这道题目中：<br><strong>选择</strong>：每个位置上放左括号或者右括号。<br><strong>限制</strong>：1.左括号用完了，就不能放左括号了。2.如果出现的右括号和左括号一样多了，就不能放右括号了，否则就肯定不是正确解。<br><strong>结束条件</strong>：左括号和右括号都用完了。<br><strong>结束后的正确性</strong>：左右括号用完以后，一定是正确解。因为1. 左右括号一样多，2. 每个右括号都一定有与之配对的左括号。因此一旦结束就可以加入解集（有时也可能出现结束以后不一定是正确解的情况，这时要多一步判断）。<br><strong>递归函数传入参数</strong>：限制和结束条件中有“用完”和“一样多”字样，因此你需要知道左右括号的数目。当然你还需要知道当前局面sublist和解集res。</p>
+<pre><code>class Solution(object):
+    def generateParenthesis(self, n):
+        result = []
+        sub = &quot;&quot;
+        num = n
+        self.dfs(0,0,num,sub,result)
+        return result
+    &#39;&#39;&#39;
+    left,right：左右括号的用过的数量
+    num：括号的总对数，也就是左右括号的总量
+    sub:储存子序列
+    resutl:储存最终结果
+    &#39;&#39;&#39;
+    def dfs(self,left,right,num,sub,result):
+        #结束条件，左右括号都大于等于num
+        if left&gt;=num and right&gt;=num:
+            result.append(sub)
+            return
+        #如果左括号小于总数，那就放小括号
+        if left&lt;num:
+            self.dfs(left+1,right,num,sub+&#39;(&#39;,result)
+        #如果右括号小于左括号那就可以放右括号
+        if right&lt;left:
+            self.dfs(left,right+1,num,sub+&#39;)&#39;,result)
+</code></pre><h2 id="4-最长有效括号对"><a href="#4-最长有效括号对" class="headerlink" title="4.最长有效括号对"></a>4.最长有效括号对</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://leetcode.com/problems/longest-valid-parentheses/" target="_blank" rel="noopener">Longest Valid Parentheses</a>最长有效括号对，碰到这种 <strong>最长、最短、时间最少</strong>等要特别想起 <strong>动态规划DP</strong>。在处理动归问题的时候，要考虑它的子结构和自身结构的一个关系。本题因为要找最长有效括号对，而右括号明确了位置，是可以推算左括号位置的，因此这里用<strong>一维DP</strong>：dp[i]为到i处有效括号，<br>1）如果s[i]为左括号，则dp[i]为0，因为若字符串是以左括号结束，则不可能为有效的；<br>2）若是为右括号，有两种情况：<br>    (1)其前者s[i-1]为左括号，所以dp[i]=dp[i-2]+2;<br>    (2)s[i-1]为右括号且s[i-dp[i-1]-1]为左括号，所以 dp[i] = dp[i-1] + 2 + dp[i-dp[i-1]-2]，其中i-dp[i-1]-1对应最长括号的起始点</p>
+<pre><code>class Solution:
+    def longestValidParentheses(self, s: str) -&gt; int:
+        s_len = len(s)
+        if s_len&lt;2:
+            return 0
+        max_len = 0
+        #dp[i]表示刚好在s[i]以前（包括s[i]在内)的最长括号长度
+        #如果s[i] = &#39;(&#39;, dp[i] = 0
+        dp = [0 for _ in range(s_len)]
+        for i in range(1,s_len):
+            #当前i的对称点的索引
+            pos = i-1-dp[i-1]
+            if s[i] == &#39;)&#39; and s[i-1] == &#39;(&#39; and i-2&gt;0:#i-2为前前项
+                 #等于前前项的最长长度+2
+                dp[i] = dp[i-2]+2
+            elif s[i] == &#39;)&#39; and pos &gt;= 0 and s[pos] ==&#39;(&#39;:
+                 #等于上个对称点+2
+                dp[i] = dp[i-1]+2
+                if pos-1&gt;=0:
+                     #如果对称点前还有长度，则加上那段长度
+                    dp[i]+=dp[pos-1]
+        return max(dp)
+</code></pre><h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5.总结"></a>5.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;这里总结了leetcode的三道题目，感觉跟考研一样要看题眼，什么类型要想到什么方法，哈哈！继续努力，为秋招而奋斗！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/01/DeepLearning/Pytorch/pytorch operation in image/" rel="next" title="pytorch函数操作Tensor">
+                <i class="fa fa-chevron-left"></i> pytorch函数操作Tensor
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/23/Python/1.python语法基础/" rel="prev" title="Python语法基础(关键字、标识符、模块等)">
+                Python语法基础(关键字、标识符、模块等) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-验证括号"><span class="nav-number">2.</span> <span class="nav-text">2.验证括号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-产生成对的括号"><span class="nav-number">3.</span> <span class="nav-text">3.产生成对的括号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-最长有效括号对"><span class="nav-number">4.</span> <span class="nav-text">4.最长有效括号对</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5.总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

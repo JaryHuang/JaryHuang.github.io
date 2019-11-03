@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Classfication," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;图像分类的网络结构从AlexNet到NASNet已经有了很大的改进。最近的许多研究在图像分类领域主要是在训练的进程上修改,例如 数据增强(data augmentations)和 优化策略(Optimization methods)。但是在每篇论文里面这些细节都很少的提到,只有通过读源码才能理解。作者基于这个原因,写下了这篇文章,通过数据增强">
+<meta name="keywords" content="Classfication">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Bag of Tricks for Image Classfication 论文阅读笔记">
+<meta property="og:url" content="http://yoursite.com/2018/12/22/DeepLearning/Classficaition/Bag of Trick for Image Classification/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;图像分类的网络结构从AlexNet到NASNet已经有了很大的改进。最近的许多研究在图像分类领域主要是在训练的进程上修改,例如 数据增强(data augmentations)和 优化策略(Optimization methods)。但是在每篇论文里面这些细节都很少的提到,只有通过读源码才能理解。作者基于这个原因,写下了这篇文章,通过数据增强">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/model_acc.png">
+<meta property="og:image" content="http://yoursite.com/2018/12/22/images/DeepLearning/Classfication/Bag%20of%20Tricks%20for%20Classfication/训练进程.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/数据增强的效果.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/Heuristic.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/Low_precision_training.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/ResNet结构.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/ResNet-C.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/ResNet-B.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/ResNet-D.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/model_tweak.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/cos_learningrate.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/zi.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/label_smooth.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/Trainning_Refinements.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/Transfer_Learning.png">
+<meta property="og:updated_time" content="2019-10-14T11:29:39.625Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Bag of Tricks for Image Classfication 论文阅读笔记">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;图像分类的网络结构从AlexNet到NASNet已经有了很大的改进。最近的许多研究在图像分类领域主要是在训练的进程上修改,例如 数据增强(data augmentations)和 优化策略(Optimization methods)。但是在每篇论文里面这些细节都很少的提到,只有通过读源码才能理解。作者基于这个原因,写下了这篇文章,通过数据增强">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/model_acc.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/12/22/DeepLearning/Classficaition/Bag of Trick for Image Classification/"/>
+
+
+
+
+
+  <title>Bag of Tricks for Image Classfication 论文阅读笔记 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/12/22/DeepLearning/Classficaition/Bag of Trick for Image Classification/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Bag of Tricks for Image Classfication 论文阅读笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-12-22T17:00:55+08:00">
+                2018-12-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;图像分类的网络结构从AlexNet到NASNet已经有了很大的改进。最近的许多研究在图像分类领域主要是在训练的进程上修改,例如 <strong>数据增强(data augmentations)</strong>和 <strong>优化策略(Optimization methods)</strong>。<strong><em>但是在每篇论文里面这些细节都很少的提到</em></strong>,只有通过读源码才能理解。作者基于这个原因,写下了这篇文章,通过数据增强——&gt;高效训练——&gt;模型微改动——&gt;训练修改等几个方面的Trick来提升模型的精度,在几乎不增加模型复杂度的情况下将Resnet50的top1精度提升了4%。同时这些Trick在其他大量的模型上都是有效的,且提升后的模型作为迁移学习也提升了Object detection和Segmentation。<br><img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/model_acc.png" alt="Model Accuracy"><br><a id="more"></a><br>&nbsp;&nbsp;&nbsp;&nbsp;作者训练网络的整个过程如下图所示:<img src="../../../images/DeepLearning/Classfication/Bag of Tricks for Classfication/训练进程.png" alt="训练进程"></p>
+<h2 id="2-数据处理"><a href="#2-数据处理" class="headerlink" title="2.数据处理"></a>2.数据处理</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;在数据预处理阶段,作者总共做了6部分:<br>1)随机采样一个图片并且转为32位的[0,255]之间的浮点型数据。<br>2)以宽高比为[4/3,3/4]的矩形进行随机裁剪图片,裁剪的区域大小随机8%-100%。之后将裁剪完的图片resize成[224,224]。<br>3)按0.5的概率随机水平翻转。<br>4)从[0.6,1.4]均匀分布的数据中随机缩放色调(hue)、饱和度(saturation)和亮度(brightness)。<br>5)增加一个PCA噪声,系数随机提取从普通的正太分布N(0,0.1)<br>6)归一化RGB通道通过减去[123.68,116.779,103.939]除以[58.393,57.12,57.375]。为什么是这几个值呢,是因为ImageNet那个数据集,RGB三个色彩的期望值,就是这3个值。<br>&nbsp;&nbsp;&nbsp;&nbsp;对于验证集,作者没有做其他处理,只是将图片resize成[256,256],然后从中间crop出[224,224]并归一化。对于网络,卷积层和全连接层初始化参数采用Xavier algorithm:通过从$a = \sqrt{6/(d_{in}+d_{out})}$的区间[-a,a]随机进行取值初始化卷积层。$d_{in}$和$d_{out}$是输入和输出的通道数,所有的偏差设置为0,对于BN层,$\gamma$设置为1,$\beta$设置为0。<br>batchsize设置为256,而学习率的设置为0.1,接下来每30个epoch变为1/10。<br><img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/数据增强的效果.png" alt="训练进程">从作者的试验中可以看出,数据增强对于ResNet50有了一定的提升。但是对于Inceptionv3和MobileNet可能由于训练细节的不同导致其并没有提升。</p>
+<h2 id="3-高效训练"><a href="#3-高效训练" class="headerlink" title="3.高效训练"></a>3.高效训练</h2><h3 id="3-1-大批量训练"><a href="#3-1-大批量训练" class="headerlink" title="3.1 大批量训练"></a>3.1 大批量训练</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;使用大批量的训练方法可能会减慢训练的进程。对于训练相同epoch,使用较大的batch_size训练的模型比起相对较小batch_size训练的模型具有较低的验证准确度。这可能是由于较大的batch_size减少了随机噪声。作者将多种启发式解决方法进行了整理:<br><strong>1)线性放缩学习率:</strong>增加初始学习率为0.1xb/256。<br><strong>2)预热式学习:</strong>在开始训练的时候,如果学习率太大可能会导致数值不稳定,因此可采用预热式学习。比如拿前m个batch_size来进行预热,可根据这m个来设置线性递增的方式到达初始学习率。<br><strong>3)0 $\gamma$:</strong>初始化的时候,将残差块末端的BN层中的$\gamma$设置为0,所有的剩余块只返回其输入,相当于在初始训练阶段模仿只有较少层数且更容易的网络。(因为残差块只将x——&gt;x)这也提供了思路,可以先训练小网络,不够拟合的时候慢慢的将一些batch_norm的参数解开,相当于慢慢增加网络。<br><strong>4)对偏差不进行衰减:</strong>只对卷积核参数进行decay。<br>&nbsp;&nbsp;&nbsp;&nbsp;作者通过实验对这些trick进行了对比:仅通过线性缩放学习率将批量大小从256增加到1024导致前1精度降低0.9％,而其余三个启发式叠加能补偿这个精度降低的精度<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/Heuristic.png" alt="Heuristic"></p>
+<h3 id="3-2-低精度训练"><a href="#3-2-低精度训练" class="headerlink" title="3.2 低精度训练"></a>3.2 低精度训练</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络通常是在32位的浮点精度下训练,所有计算所得的参数也被储存为(FP32),但是,现在的硬件用于较低精度的数据类型可能具有增强的算术逻辑单元。例如,前Nvidia V100在FP32中提供14 TFLOPS,在FP16中提供超过100 TFLOPS。作者通过实验发现,将数值的精度从32位变为16位没有影响精度,同时在速度上提升了好几倍<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/Low_precision_training.png" alt="低精度训练"></p>
+<h2 id="4-模型修改"><a href="#4-模型修改" class="headerlink" title="4.模型修改"></a>4.模型修改</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;ResNet的结构可分解为如下几个部分:<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/ResNet结构.png" alt="ResNet结构">在Input stem主要做的是降维操作,通常的改进方法主要是对7x7卷积的一个改进:将其用3x3卷积核替代,既有相同的感受野,又减少了计算量,如下图ResNet-C所示<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/ResNet-C.png" alt="ResNet-C">另外有很多主要的改进在于对stage块的Down sampling进行改进。在原始的stage中用的是1x1的step为2的conv,这忽视了3/4的输入特征图。因此一个做法是将step为2的移到3x3卷积层上,如下图ResNet-B所示:<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/ResNet-B.png" alt="ResNet-B">作者收到上述ResNet-B块改进的启发,他发现在Down sampling层的右支路上,1x1卷积块同样存在着忽视了输入特征图的3/4的数据,因此作者加了step为2的AvgPool层,如下图ResNet-D所示:<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/ResNet-D.png" alt="ResNet-D">最终的试验结果如图所示:<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/model_tweak.png" alt="model_tweak"><br>&nbsp;&nbsp;&nbsp;&nbsp;试验结果显示,ResNetB在下采样块中接收更多信息,验证集提升了0.5%,ResNetC的改进也增加了0.2%,ResNetD结合C比原始的ResNet50总的提升了1%左右。</p>
+<h2 id="5-训练修改"><a href="#5-训练修改" class="headerlink" title="5.训练修改"></a>5.训练修改</h2><h3 id="5-1余弦学习率衰减"><a href="#5-1余弦学习率衰减" class="headerlink" title="5.1余弦学习率衰减"></a>5.1余弦学习率衰减</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络的学习和学习率的设置密切相关。前面也提到了预热式等方式初始化学习率。但是在进行训练多个epoch的时候,通常大家采用的都是step decay,比如He等人训练的时候,学习率从0.1开始每隔30个epoch降低为其1/10。衰减除了阶梯衰减之外还有余弦衰减:<script type="math/tex">\eta_t = \frac{1}{2}(1+cos(\frac{t\pi}{T}))\eta</script>:T为总的epoch,t为第i个epoch。<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/cos_learningrate.png" alt="cos_learningrate">可以看出,余弦衰减在开始时慢慢降低学习速度,然后在中间变得几乎线性减少,并且减慢最后再次下降。与step衰减相比,余弦衰减从一开始就降低学习率,但是大小仍然很大(不像step衰减到那么低),这可能会改善训练进度。</p>
+<h3 id="5-2标签平滑"><a href="#5-2标签平滑" class="headerlink" title="5.2标签平滑"></a>5.2标签平滑</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;标签平滑策略在<a href="https://jaryhuang.github.io/2018/12/17/GoogLeNet_V3%20and%20V4/" target="_blank" rel="noopener"><em>GooLeNetV3</em></a>中提及到了。每个样本的概率为:<script type="math/tex">q(i) = \frac{exp(z_i)}{\sum_{j=1}^{K}exp(z_j)}</script><br>$z_i$的公式如下图所示:<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/zi.png" alt="zi">将i=y时的概率称之为gap:<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/label_smooth.png" alt="label_smooth">上图中$\varepsilon$=0.1和K=1000(imagnet的类别数)。从上图4a可知,当$\varepsilon=0,gap=\infty$,随着$\varepsilon$增加,gap会随着减小。特别是当$\varepsilon=\frac{K-1}{K}$,gap为0。作者也分析了imagenet的数据集结果,图上清晰的展示了标签平滑使得整个扰动中心和理论值相同并且有更少的极端值。</p>
+<h3 id="5-3知识蒸馏"><a href="#5-3知识蒸馏" class="headerlink" title="5.3知识蒸馏"></a>5.3知识蒸馏</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;知识蒸馏主要做的是利用一个老师模型来训练现在的学生模型。而老师模型一般具有预训练的基础并且有更高的精度,这样学生模型就能利用老师模型来提高自己的精度。作者用了ResNet152的模型作为老师模型来帮助训练ResNet50。损失函数改为:</p>
+<script type="math/tex; mode=display">loss = \ell(p,softmax(z))+T^2\ell(softmax(r/T),softmax(z/T))</script><p>其中P是真实标签,z是学生模型预测出来的结果,r是教师模型训练出来的结果,T作为调节因子。从上述可以看出,模型不仅要拟合真值,而且还要拟合教师模型的值。两者的比重可以通过T来调节。</p>
+<h3 id="5-4-混合训练"><a href="#5-4-混合训练" class="headerlink" title="5.4 混合训练"></a>5.4 混合训练</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;混合训练顾名思义就是对训练集进行混合,训练的时候随机抽取两个数据集,根据如下公式获得新的数据集:</p>
+<script type="math/tex; mode=display">\hat{x} = \lambda x_i+(1-\lambda)x_j</script><script type="math/tex; mode=display">\hat{y} = \lambda y_i+(1-\lambda)y_j</script><p>$\lambda\in[0,1]且\lambda\in Beta(\alpha,\alpha)$ Beta分布的具体信息见<a href="https://www.zhihu.com/question/30269898" target="_blank" rel="noopener">如何通俗理解beta分布?</a>这样的混合方式使得结果中标签不会那么的不平滑。</p>
+<h3 id="5-5-结果展示"><a href="#5-5-结果展示" class="headerlink" title="5.5 结果展示"></a>5.5 结果展示</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/Trainning_Refinements.png" alt="Trainning Refinements">如Table6所示,作者将上述第五点所述的trick分别用于ResNet50,InceptionV3,MobileNet中发现都有提升。但是知识蒸馏方法在Inception和MobileNet中没有提升,作者怀疑可能是教师模型ResNet152和InceptionV3等不是一类型的网络缘故。同时作者也在数据集MIT Places365 dataset进行了测试,Table7的结果显示了同样的trick在不同数据集上都是有一定的提升。</p>
+<h2 id="6-迁移学习"><a href="#6-迁移学习" class="headerlink" title="6.迁移学习"></a>6.迁移学习</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;作者发现,新的trick训练的ResNet50模型作为迁移学习预训练模型来替换掉Faster-RCNN的Vgg-19,在分割和对象检测上分别做了测试。<img src="/../../../images/DeepLearning/Classfication/Bag_of_Tricks_for_Classfication/Transfer_Learning.png" alt="Transfer Learning">如上所示,在对象检测和分割上都有一定的提升,但是一些trick在分割上的表现一般,可能是语义分割在像素级别进行预测。 而使用标签平滑,蒸馏和混合培训的模型有利于软化标签,可能是模糊的像素级信息模糊并降低整体像素级精度。</p>
+<h2 id="7-总结"><a href="#7-总结" class="headerlink" title="7.总结"></a>7.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;上述在数据预处理、损失函数、学习率等方面的改进技巧始终如一的在各个模型上都表现出了提高模型精度的能力。更加好的是将这些trick叠加能更好的提高精度。因此在未来可以探索这些改变。</p>
+<h2 id="8-参考"><a href="#8-参考" class="headerlink" title="8.参考"></a>8.参考</h2><ol>
+<li>Bag of Tricks for Image Classification with Convolutional Neural Networks</li>
+<li><a href="https://www.zhihu.com/question/30269898" target="_blank" rel="noopener">如何通俗理解beta分布?</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Classfication/" rel="tag"># Classfication</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/17/DeepLearning/Classficaition/GoogLeNet_V3 and V4/" rel="next" title="GoogLeNet_V3 and V4">
+                <i class="fa fa-chevron-left"></i> GoogLeNet_V3 and V4
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/05/DeepLearning/Basic/Normalization/" rel="prev" title="Normalization">
+                Normalization <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-数据处理"><span class="nav-number">2.</span> <span class="nav-text">2.数据处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-高效训练"><span class="nav-number">3.</span> <span class="nav-text">3.高效训练</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-大批量训练"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 大批量训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-低精度训练"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 低精度训练</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-模型修改"><span class="nav-number">4.</span> <span class="nav-text">4.模型修改</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-训练修改"><span class="nav-number">5.</span> <span class="nav-text">5.训练修改</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1余弦学习率衰减"><span class="nav-number">5.1.</span> <span class="nav-text">5.1余弦学习率衰减</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2标签平滑"><span class="nav-number">5.2.</span> <span class="nav-text">5.2标签平滑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3知识蒸馏"><span class="nav-number">5.3.</span> <span class="nav-text">5.3知识蒸馏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-混合训练"><span class="nav-number">5.4.</span> <span class="nav-text">5.4 混合训练</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-结果展示"><span class="nav-number">5.5.</span> <span class="nav-text">5.5 结果展示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-迁移学习"><span class="nav-number">6.</span> <span class="nav-text">6.迁移学习</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-总结"><span class="nav-number">7.</span> <span class="nav-text">7.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-参考"><span class="nav-number">8.</span> <span class="nav-text">8.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python基础," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一些Python的函数式编程。Python中的函数是定义在模块之中的。如果函数定义在类中，那么称之为类的方法，如果定义在别的函数中，那么就是嵌套函数。要了解一个语言函数的写法，那么必须要了解的几个函数的基本要素：1）如何定义。2）函数参数。3）返回值。本部分除了介绍函数重要的三部分之外，还会介绍一下生成器、三大基础函数：filt">
+<meta name="keywords" content="Python基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python函数与装饰器">
+<meta property="og:url" content="http://yoursite.com/2019/10/30/Python/3.python函数/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一些Python的函数式编程。Python中的函数是定义在模块之中的。如果函数定义在类中，那么称之为类的方法，如果定义在别的函数中，那么就是嵌套函数。要了解一个语言函数的写法，那么必须要了解的几个函数的基本要素：1）如何定义。2）函数参数。3）返回值。本部分除了介绍函数重要的三部分之外，还会介绍一下生成器、三大基础函数：filt">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-30T16:14:53.376Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python函数与装饰器">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一些Python的函数式编程。Python中的函数是定义在模块之中的。如果函数定义在类中，那么称之为类的方法，如果定义在别的函数中，那么就是嵌套函数。要了解一个语言函数的写法，那么必须要了解的几个函数的基本要素：1）如何定义。2）函数参数。3）返回值。本部分除了介绍函数重要的三部分之外，还会介绍一下生成器、三大基础函数：filt">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/30/Python/3.python函数/"/>
+
+
+
+
+
+  <title>Python函数与装饰器 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/30/Python/3.python函数/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python函数与装饰器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-30T18:00:55+08:00">
+                2019-10-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本部分主要介绍一些Python的函数式编程。Python中的函数是定义在模块之中的。如果函数定义在类中，那么称之为类的方法，如果定义在别的函数中，那么就是嵌套函数。要了解一个语言函数的写法，那么必须要了解的几个函数的基本要素：1）如何定义。2）函数参数。3）返回值。本部分除了介绍函数重要的三部分之外，还会介绍一下生成器、三大基础函数：filter()、map()和reduce()和装饰器。</p>
+<a id="more"></a>
+<hr>
+<h2 id="2-函数的基本要素"><a href="#2-函数的基本要素" class="headerlink" title="2.函数的基本要素"></a>2.函数的基本要素</h2><h3 id="2-1-函数的定义"><a href="#2-1-函数的定义" class="headerlink" title="2.1 函数的定义"></a>2.1 函数的定义</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python中函数的定义非常简单，用的是def关键字。</p>
+<pre><code>def 函数名(参数):
+    函数功能主体
+    return 返回值
+</code></pre><p>但是其中一个注意事项是Python中函数必须是先定义后调用，否则就发生错误。</p>
+<h3 id="2-2-函数的参数"><a href="#2-2-函数的参数" class="headerlink" title="2.2 函数的参数"></a>2.2 函数的参数</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python中函数的参数传递比较灵活，主要有：</p>
+<ul>
+<li>关键字参数</li>
+<li>参数默认值</li>
+<li>可变参数<br>接下来我们通过一个函数来了解下这几个函数参数的意义。</li>
+</ul>
+<p>输入</p>
+<pre><code>def test(name,age,height=170,*kwage,**info):
+    print(name,age,height)
+    for value in kwage:
+        print(value)
+    for key,value in info.items():
+        print(key,value)
+nums_kwage = [1,2,3,4,5]
+nums_info = {&quot;001&quot;:&quot;aaa&quot;,&quot;002&quot;:&quot;bbb&quot;,&quot;003&quot;:&quot;ccc&quot;}
+test(&quot;javierhuang&quot;, 24,175, *nums_kwage,**nums_info)
+</code></pre><p>输出：</p>
+<pre><code>javierhuang 24 175
+1
+2
+3
+4
+5
+001 aaa
+002 bbb
+003 ccc
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;通过上述的代码我们来分析一下，name和age就是属于关键字参数。我们在调用的时候可以直接填入数字，按顺序对应，当然也可以用name=”javierhuang”这样来进行调用。但是如果第一个用了关键字调用，后续的所有参数都必须要用关键字调用，否则会报错。height是一个默认参数，默认是170，当然在调用的时候也可以对其进行修改。这里重点介绍一下<em>和**表示的可变参数。前者表示的是将后续的所有参数都用列表输入。后者表示了后续的所有参数用字典储存。在调用过程中，实际上</em>nums_kwage是将列表解包，然后变为[1,2,3,4,5].实际在函数中相当于输入了1,2,3,4,5个参数。同理后面的nums_info也是。所以这样就达到了一个可变参数输入的目的。在程序设计的时候可以多留个接口出来。</p>
+<h3 id="2-3-函数返回值"><a href="#2-3-函数返回值" class="headerlink" title="2.3 函数返回值"></a>2.3 函数返回值</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python中函数不需要指明返回类型，只需要return参数就行。如果没有返回值可以不写返回值或者return None。如果有一个返回参数，那就直接return 返回值。如果有多个返回值，那么可以用tuple将他们括号起来，直接return (A,B,C)。然后调用函数的时候，比如res = test(),res[0]就代表了A,res[1]就代表了B。</p>
+<h2 id="3-生成器与基础函数"><a href="#3-生成器与基础函数" class="headerlink" title="3. 生成器与基础函数"></a>3. 生成器与基础函数</h2><h3 id="3-1-生成器"><a href="#3-1-生成器" class="headerlink" title="3.1 生成器"></a>3.1 生成器</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python的生成器实际上在<a href="https://jaryhuang.github.io/2019/10/23/Python/1.python%E8%AF%AD%E6%B3%95%E5%9F%BA%E7%A1%80/" target="_blank" rel="noopener">Python语法基础</a>中的2.9 yield关键字中做了一个说明。这里再对这个生成器方法做一个介绍。生成器，返回的是一个generate对象，它存在的意义是，比如我们要返回一个1到100万的数进行遍历。如果通过列表产生这个数，那么就占用了100万个单元了。但是如果用生成器呢，相当于在每次调用的时候仅仅迭代该值，并将该值填到内存单元，只占用一个单元，非常适合大序列的处理。<br>输入</p>
+<pre><code>def fib(num):
+    for i in range(num):
+        yield i**i
+gefib = fib(5)
+print(type(gefib))
+for value in gefib:
+    print(value)
+
+res = fib(3)
+print(res.__next__())
+</code></pre><p>输出：</p>
+<pre><code>&lt;class &#39;generator&#39;&gt;
+1
+1
+4
+27
+256
+
+1
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;上述试验中定义了fib这样一个生成器，我们可以看到得到的类型是generator生成器，我们可以通过遍历来进行访问，在每次遍历的时候，都会使其运行.<strong>next</strong>()函数来调用生成下一个数。这是其generator的内置功能函数。因此合理的运用生成器会使得程序内存消耗更少。</p>
+<h3 id="3-2-三大基础函数"><a href="#3-2-三大基础函数" class="headerlink" title="3.2 三大基础函数"></a>3.2 三大基础函数</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;函数式编程的思想主要是通过函数来对数据进行处理。对数据处理的主要方式是：</p>
+<ul>
+<li>过滤：filter()</li>
+<li>映射：map()</li>
+<li>聚合：reduce()</li>
+</ul>
+<h4 id="3-2-1-过滤filter"><a href="#3-2-1-过滤filter" class="headerlink" title="3.2.1 过滤filter()"></a>3.2.1 过滤filter()</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;过滤可以对可迭代的对象进行滤波，语法主要是filter(function, iterable)。其中function是一个功能函数，参数iterable是一个可迭代对象。在调用filter的时候，可迭代对象iterable的元素会被逐一传入到function函数中，function函数编写的是过滤的条件，返回布尔值，如果是True的会被保留，如果是False的就会被过滤掉。<br>测试：</p>
+<pre><code>num = range(1,20)
+num_filter = filter(lambda v:v%3 == 0,num)
+print(list(num_filter)) 
+</code></pre><p>输出：</p>
+<pre><code>[3, 6, 9, 12, 15, 18]
+</code></pre><h4 id="3-2-2-映射map"><a href="#3-2-2-映射map" class="headerlink" title="3.2.2 映射map()"></a>3.2.2 映射map()</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;映射是对可迭代的对象进行变换，利用map函数来进行，主要语法如下map(function,iterable),其中function是一个功能函数，iterble是一个可迭代的对象，在调用map时，可迭代对象的每一个元素都被逐一的传入到function中，在function中进行元素的变换。<br>测试：</p>
+<pre><code>users = [&#39;Tony&#39;, &#39;Tom&#39;, &#39;Ben&#39;, &#39;Alex&#39;]
+users_map = map(lambda u:u.lower(), users)
+print(list(users_map))
+</code></pre><p>输出：</p>
+<pre><code>[&#39;tony&#39;, &#39;tom&#39;, &#39;ben&#39;, &#39;alex&#39;]
+</code></pre><p>上述代码主要是将所有对象的大写字母变为小写字母。</p>
+<h4 id="3-2-3-聚合reduce"><a href="#3-2-3-聚合reduce" class="headerlink" title="3.2.3 聚合reduce()"></a>3.2.3 聚合reduce()</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;聚合操作是将多个数据聚合到一起输出多个数据，聚合操作最基础的函数就是归纳函数reduce(),语法如下reduce(function, iterable,initializer)<br>输入：</p>
+<pre><code>from functools import reduce
+a = [1,2,3,4]
+a_reduce = reduce(lambda acc,i: acc+i,a,2)
+print(a_reduce)
+</code></pre><p>输出：</p>
+<pre><code>12
+</code></pre><p>此函数的作用是将a进行累加，然后2是一个初始值也进行累加，最终有一个结果。</p>
+<h2 id="4-装饰器"><a href="#4-装饰器" class="headerlink" title="4. 装饰器"></a>4. 装饰器</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;装饰器（Decorator）的作用主要是传入一个函数，返回一个函数。而在这个装饰器中加入了我们的一些公用的代码。这里借用一篇文章的内容<a href="https://lotabout.me/2017/Python-Decorator/" target="_blank" rel="noopener">Python Decorator(装饰器)</a>来进行说明，这篇文章写的很不错，清晰明廖的讲明白了用装饰器的目的。按照这个思路我们来进行讲解。</p>
+<p>首先假设我们写了一个函数并测试功能：</p>
+<pre><code>def add(a,y=10):
+    return x+y
+print(add(10))
+print(add(20))
+</code></pre><p>现在，我们想看看这个函数的运行时间，于是我们利用了time库来进行</p>
+<pre><code>from time import time
+
+before = time()
+print(add(10))
+after = time()
+print(&quot;time taken: {}&quot;.format(after - before))
+
+before = time()
+print(add(20))
+after = time()
+print(&quot;time taken: {}&quot;.format(after - before))
+</code></pre><p>那么这个代码就变得复杂了起来，如果我们有很多个add,那么所有都需要复制一遍了。因此是否有简单的办法呢，我们将这个改掉，将我们的计算时间功能直接嵌入到函数之中。</p>
+<pre><code>from time import time
+
+def add(x, y=10):
+    before = time()
+    result = x + y
+    after = time()
+    print(&#39;time taken: {}&#39;.fomat(after - before))
+    return result
+
+print(add(10))
+print(add(20))
+</code></pre><p>代码变得简单了很多，但是如果我们又写了一个函数，那么如果我们想同样测试这个函数的性能，那么我们只能再加个上述步骤复制一遍。</p>
+<pre><code>def sub(x, y=10):
+    before = time()
+    result = x - y
+    after = time()
+    print(&#39;time taken: {}&#39;.fomat(after - before))
+    return result
+</code></pre><p>这感觉又带来了麻烦，因为这串代码又反复的出现了，那么我们是否能将这块代码抽象出来了。于是我们用函数来表示，并将另外一个函数作为传入参数。</p>
+<pre><code>from time import time
+
+def timer(func, x, y = 10):
+    before = time()
+    result = func(x, y)
+    after = time()
+    print(&#39;time taken: {}&#39;.fomat(after - before))
+    return result
+
+def add(x, y = 10):
+    return x + y
+
+def sub(x, y = 10):
+    return x - y
+
+print(timer(add, 10))
+print(timer(add, 20, 30))
+</code></pre><p>但是这样还是带来了一个麻烦，每次我们建立一个新函数，相当于用一个timer函数来封装这个函数，那么是否有直接的函数呢。那么再改进下，直接返回函数就好。</p>
+<pre><code>def timer(func):
+    def wraper(x, y=10):
+        before = time()
+        result = func(x, y)
+        after = time()
+        print(&#39;time taken: {}&#39;.fomat(after - before))
+        return result
+    return wraper
+
+def add(x, y = 10):
+    return x + y
+add = timer(add)
+
+def sub(x, y = 10):
+    return x - y
+sub = timer(sub)
+
+print(add(10))
+print(add(20, 30))
+</code></pre><p>这样之后，我们相当于用一个timer函数把add给包起来了，而且重新返回了这个add函数，调用的时候相当于没有区别。这里的timer就是一个“装饰器”，它接受了一个函数，又返回了一个新的函数。在内部对原来的函数进行了装饰。</p>
+<pre><code>def add(x, y = 10):
+    return x + y
+add = timer(add)
+
+def sub(x, y = 10):
+    return x - y
+sub = timer(sub)
+</code></pre><p>这种方式写的话，如果我们的add函数名字做了修改，那么我们下面的几个名字都需要修改，那有没有更好的办法来进行替换呢。</p>
+<pre><code>@timer
+def add(x, y=10):
+    return x + y
+</code></pre><p>这就是我们最常见的装饰器了。</p>
+<h3 id="4-1-带参数的装饰器"><a href="#4-1-带参数的装饰器" class="headerlink" title="4.1 带参数的装饰器"></a>4.1 <strong>带参数的装饰器</strong></h3><p>在我们对装饰器的使用是会看到装饰器带一些参数，举一个例子：</p>
+<pre><code>def use_logging(level):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            if level == &quot;warn&quot;:
+                logging.warn(&quot;%s is running&quot; % func.__name__)
+            elif level == &quot;info&quot;:
+                logging.info(&quot;%s is running&quot; % func.__name__)
+            return func(*args)
+        return wrapper
+
+    return decorator
+
+@use_logging(level=&quot;warn&quot;)
+def foo(name=&#39;foo&#39;):
+    print(&quot;i am %s&quot; % name)
+</code></pre><p>看了这段代码也就理解了，首先use_logging(level = “warn”)调用返回了decorator函数，调用decorator(foo),返回了wrapper调用wrapper后犯规foo(*args)。</p>
+<h3 id="4-2-类作为装饰器"><a href="#4-2-类作为装饰器" class="headerlink" title="4.2 类作为装饰器"></a>4.2 类作为装饰器</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;如果说 Python 里一切都是对象的话，那函数怎么表示成对象呢？其实只需要一个类实现 <strong>call</strong> 方法即可。</p>
+<pre><code>class Timer:
+    def __init__(self, func):
+        self._func = func
+    def __call__(self, *args, **kwargs):
+        before = time()
+        result = self._func(*args, **kwargs)
+        after = time()
+        print(&quot;elapsed: &quot;, after - before)
+        return result
+
+@Timer
+def add(x, y=10):
+    return x + y
+</code></pre><p>把类的构造函数当成了一个装饰器，它接受一个函数作为参数，并返回了一个对象，而由于对象实现了 <strong>call</strong> 方法，因此返回的对象相当于返回了一个函数。因此该类的构造函数就是一个装饰器。</p>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本篇第2部分主要介绍了Python中函数的写法，从函数的三要素出发进行讲解。第3部分主要讲解了Python中有一个特别的函数叫生成器，它不适用return,适用yeild,用于解决大量数据占内存等问题。而Python主要的数据处理基础函数是滤波（filter)、映射（map)和聚合（reduce）。在了解了这些之后，第四部分还特别介绍了Python的一个很好用的叫装饰器。顾名思义，是用来封装函数的装饰器，其输入是一个函数，返回的也是一个函数，可以使得我们对一些重复运用的模块进行封装使用。</p>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6. 参考"></a>6. 参考</h2><p><a href="https://lotabout.me/2017/Python-Decorator/" target="_blank" rel="noopener">Python Decorator装饰器</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python基础/" rel="tag"># Python基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/25/Python/2.python数据类型/" rel="next" title="Python数据类型与结构">
+                <i class="fa fa-chevron-left"></i> Python数据类型与结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/11/01/Python/4.python类和对象/" rel="prev" title="Python类和对象">
+                Python类和对象 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-函数的基本要素"><span class="nav-number">2.</span> <span class="nav-text">2.函数的基本要素</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-函数的定义"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 函数的定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-函数的参数"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 函数的参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-函数返回值"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 函数返回值</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-生成器与基础函数"><span class="nav-number">3.</span> <span class="nav-text">3. 生成器与基础函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-生成器"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 生成器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-三大基础函数"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 三大基础函数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-过滤filter"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 过滤filter()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-映射map"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 映射map()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-聚合reduce"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.2.3 聚合reduce()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-装饰器"><span class="nav-number">4.</span> <span class="nav-text">4. 装饰器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-带参数的装饰器"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 带参数的装饰器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-类作为装饰器"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 类作为装饰器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5. 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-参考"><span class="nav-number">6.</span> <span class="nav-text">6. 参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

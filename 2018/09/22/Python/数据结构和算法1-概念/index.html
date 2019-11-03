@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Data structure and Algorithm," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;有人说,你学会了编程相当于你学会了砌砖;你了解了数据结构,你会建造一座房子;你明白了算法,才能快速有效的建成这套房子。现在我才刚进入数据结构和算法的学习阶段,因此还无法对这段话进行评价,希望在整个课程结束之后,我能够重新再来理解下这句话。">
+<meta name="keywords" content="Data structure and Algorithm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构和算法----基本概念">
+<meta property="og:url" content="http://yoursite.com/2018/09/22/Python/数据结构和算法1-概念/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;有人说,你学会了编程相当于你学会了砌砖;你了解了数据结构,你会建造一座房子;你明白了算法,才能快速有效的建成这套房子。现在我才刚进入数据结构和算法的学习阶段,因此还无法对这段话进行评价,希望在整个课程结束之后,我能够重新再来理解下这句话。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/1.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/2.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/3.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/4.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/5.jpg">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/6.jpg">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/7.jpg">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/8.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/9.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/11.jpg">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/10.png">
+<meta property="og:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/12.png">
+<meta property="og:updated_time" content="2019-10-14T11:03:31.589Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构和算法----基本概念">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;有人说,你学会了编程相当于你学会了砌砖;你了解了数据结构,你会建造一座房子;你明白了算法,才能快速有效的建成这套房子。现在我才刚进入数据结构和算法的学习阶段,因此还无法对这段话进行评价,希望在整个课程结束之后,我能够重新再来理解下这句话。">
+<meta name="twitter:image" content="http://yoursite.com/images/Python/DataStructureAlgorthmConcept/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/09/22/Python/数据结构和算法1-概念/"/>
+
+
+
+
+
+  <title>数据结构和算法----基本概念 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/09/22/Python/数据结构和算法1-概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据结构和算法----基本概念</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-09-22T22:00:55+08:00">
+                2018-09-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;有人说,你学会了编程相当于你学会了砌砖;你了解了数据结构,你会建造一座房子;你明白了算法,才能快速有效的建成这套房子。现在我才刚进入数据结构和算法的学习阶段,因此还无法对这段话进行评价,希望在整个课程结束之后,我能够重新再来理解下这句话。<br><a id="more"></a></p>
+<hr>
+<h2 id="2-数据结构"><a href="#2-数据结构" class="headerlink" title="2.数据结构"></a>2.数据结构</h2><h3 id="2-1-解决问题方法的效率-跟数据的组织方式有关"><a href="#2-1-解决问题方法的效率-跟数据的组织方式有关" class="headerlink" title="2.1 解决问题方法的效率,跟数据的组织方式有关"></a>2.1 解决问题方法的效率,跟数据的组织方式有关</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;了解数据结构,首先从一个我们生活中耳熟能详的例子开始,<strong>如何在书架上摆放图书问题</strong>:对于图书的摆放,有两个关键的问题1)插入:如何插入新书。2)寻找：如何找到指定的书。<br><strong>方法一：随便放(放容易查找难)</strong>,随便放的方式对于放的问题,是很容易的,有空的位置就直接放书。但是对于查找的问题,这就复杂了(遍历所有的书找过去)<br><strong>方法二：按字母顺序(放难查找容易)</strong>,这种方式对于新书放的问题比较复杂了。假设只有一层的话,首先得查找到新放的书的位置,每次放还需要挪动所有的书。但是对于查找的话容易了许多,利用二分法进行查找。<br><strong>方法三：分类+按字母顺序(折中)</strong>,这种方式对于找书问题,先定类别,然后再二分查找。对于新书插入时,一样是先定类别,然后二分查找确定位置,只是多出了一步叫移出空位(当然移动是必须移动的,优秀的算法就是移动很少的量)。<br>&nbsp;&nbsp;&nbsp;&nbsp;以上三种方式,大家也清楚现在书店和图书馆普遍用的就是第三种方式,但是这里也有几个问题可以进行讨论的：<strong>类别应该分多细?</strong>太细的话相当于没分了,100本书分100类没有任何意义。第二个问题：<strong>每个类别应该分配给它多少的空间?</strong>图书馆或者书店总的面积是有限,每个类别的书他的数量本身就是不一样的,以及每个月增加的书肯定是有部分多有部分少。如果每个类别都均分,就会导致有些类别的书没地方放,有些类别的书架一直空空如也。所以要解决放图书问题要注意组织方式。</p>
+<h3 id="2-2-解决问题方法的效率-跟空间的利用效率相关"><a href="#2-2-解决问题方法的效率-跟空间的利用效率相关" class="headerlink" title="2.2 解决问题方法的效率,跟空间的利用效率相关"></a>2.2 解决问题方法的效率,跟空间的利用效率相关</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>问题：写一个程序实现传入一个正整数N,能顺序的打印从1到N的全部正整数?</strong><br>对于这么一个问题,首先简单的就是循环实现(Python语言)：</p>
+<pre><code>def PrintN(N):
+    for i in range(N):
+        print(i)
+if __name__ == &#39;__main__&#39;:
+    PrintN(10000)
+</code></pre><p>给定10000,实现的结果如图所示：<img src="/../../images/Python/DataStructureAlgorthmConcept/1.png" alt="Alt text"><br>还有一种方式是采用递归的方法实现：</p>
+<pre><code>def PrintN2(N):
+    if N:
+        PrintN2(N - 1)
+        print(N)
+if __name__ == &#39;__main__&#39;:
+    PrintN2(10000)
+</code></pre><p>实现的结果如图所示：<img src="/../../images/Python/DataStructureAlgorthmConcept/2.png" alt="Alt text"><br>&nbsp;&nbsp;&nbsp;&nbsp;两者在给定10、100等都能打印,但是到了10000之后,循环打印一切如常,但是递归的方式就打印不出来了。这原因相当好理解,当利用循环方式的时候,我们的i只是一个临时变量,他一直占着计算机中的一个坑,只是这个数字进进出出,坑内的数据在变化而已。但是对于递归算法则不一样了。递归算法首先先储存,来了一个N储存一个,然后直到1的时候。接下来返回打印1到N。随着N的增大,其储存的空间也就越来越大了,会导致存储爆掉。</p>
+<h3 id="2-3-解决问题方法的效率-跟算法的巧妙程度有关"><a href="#2-3-解决问题方法的效率-跟算法的巧妙程度有关" class="headerlink" title="2.3 解决问题方法的效率,跟算法的巧妙程度有关"></a>2.3 解决问题方法的效率,跟算法的巧妙程度有关</h3><p><strong>问题：写程序计算给定多项式在给定x处的值,其中<script type="math/tex">f(x)=\sum_{i=0}^n{i*x^{(i)}}</script></strong><br>对于多项式累加和问题,我们第一个想到的是pow函数,可以算次方:</p>
+<pre><code>import numpy as np 
+def f1(a,x):
+    p = a[0]
+    for i in range(1,len(a)):
+        p+=np.pow(x,i)
+    return p 
+</code></pre><p>另外一种方式,提取x:</p>
+<pre><code>def f2(a, x):
+    p = a[-1]
+    for i in range(len(a) - 1, 0, -1):
+        p = x * p + a[i - 1]
+    return p
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;由于当数据小的时候跑的飞快,两者基本没什么差别。但是当我们的数据量大的时候,就很容易看出问题了,设n=100000,下面两张图是两种算法跑的时间。f2的方法比f1的方法快了20倍由于,相差一个数量级了。随着n的继续变大,两者的时间相差会更大,因此算法对问题的解决影响很大。<br>下图是f1方法得到的结果,用了14秒钟计算。<img src="/../../images/Python/DataStructureAlgorthmConcept/3.png" alt="Alt text">f2方法得到的结果,用了0.7秒钟计算。<br><img src="/../../images/Python/DataStructureAlgorthmConcept/4.png" alt="Alt text"><strong>到底什么是数据结构呢？</strong><br>数据结构,是指数据对象在计算机中的组织方式,组织方式包含着：<br>1)逻辑结构：<br><strong>线性结构</strong>：以书店为例子,书店的书假设看成都放在架子一层上面,给每本书一个编号,那么对于每一本书来说,它前面只有一本书,后面只有一个书,每个编号对应的唯一一本书,这就是 <strong>一对一</strong>的关系,这称之为线性结构。</p>
+<p><strong>树</strong>：另外一个组织方式,如果按照类别进行放书(第三种方法),给每一类进行编号,那么每个编号会对应着一堆书,这是 <strong>一对多</strong>的关系,称之为树结构。</p>
+<p><strong>图</strong>：在书店里,假设还需要统计一些数据,比如这本书有哪些人买过,买过这本书的人又买过其他什么书。其实就是一本书对应着很多人,一个人又对应着很多书,这就是一个很复杂的关系网,一种 <strong>多对多</strong>的关系,称之为图的结构。<br>2)物理存储结构：<br>&nbsp;&nbsp;&nbsp;&nbsp;数据对象在计算机里面的存储方式,是连续的放还是东一个西一个放,到底是数据的形式还是链表的形式,这就是物理存储结构。<br>&nbsp;&nbsp;&nbsp;&nbsp;描述数据结构有一个很好的方法很好的方法叫 <strong>抽象数据类型(Abstract Data Type)：</strong>这里有两个概念1)数据类型:数据对象集(是什么东西)。2)数据集合相关联的操作集。如果理解面向对象的语言(如C++)你会发现类,其有类的对象以及操作,并且封装在一个类里面。2)抽象：抽象是指描述数据类型的方法不依赖于具体实现(与存放数据的机器,数据存储的物理结构,实现操作的算法和变成语言等无关),只描述数据对象集和相关操作 <strong>是什么</strong>,并不涉及 <strong>如何做到</strong>。<br>大家可以对着这个矩阵的抽象数据集类型定义来进行理解。<br><img src="/../../images/Python/DataStructureAlgorthmConcept/5.jpg" alt="Alt text"><strong>抽象到底有什么好处呢？个人理解,抽象可以在整体上把握架构,避免做重复性的工作,也就是通用性(或者说适用性广)</strong>。</p>
+<h2 id="3-算法"><a href="#3-算法" class="headerlink" title="3.算法"></a>3.算法</h2><h3 id="3-1-什么是算法"><a href="#3-1-什么是算法" class="headerlink" title="3.1 什么是算法"></a>3.1 什么是算法</h3><p>算法,是对一系列数据对象的操作所用的方法,其有一些特征：<br>&nbsp;&nbsp;1)一个有限的指令集<br>&nbsp;&nbsp;2)接受一些输入(有些情况下不需要输入)<br>&nbsp;&nbsp;3)产生输出<br>&nbsp;&nbsp;4)有限步骤之后终止<br>&nbsp;&nbsp;5)每一条指令明确(明确的定义、计算机可处理范围内、不依赖于任何一种语言与具体实现手段)</p>
+<h3 id="3-2-算法的评价标准"><a href="#3-2-算法的评价标准" class="headerlink" title="3.2 算法的评价标准"></a>3.2 算法的评价标准</h3><p>评价算法的好坏从两个指标出发：<strong>空间复杂度S(n)</strong>和 <strong>时间复杂度T(n)</strong>。</p>
+<h4 id="3-2-1-空间复杂度S-n"><a href="#3-2-1-空间复杂度S-n" class="headerlink" title="3.2.1 空间复杂度S(n)"></a>3.2.1 空间复杂度S(n)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;算法的空间复杂度是指根据算法程序在执行时占用的存储单元的长度,一般与输入数据的规模有关。空间复杂度过高的算法可能导致使用的内存超限,造成程序的非正常中断,如2.2中的递归PrintN函数所示,其空间复杂度$S(N) = C*N$,与输入的N成正比。</p>
+<h4 id="3-2-2-时间复杂度T-n"><a href="#3-2-2-时间复杂度T-n" class="headerlink" title="3.2.2 时间复杂度T(n)"></a>3.2.2 时间复杂度T(n)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;时间复杂度是根据算法写成的程序在执行时耗费时间的长度,与输入数据的规模有关。时间复杂度低效的算法可能会导致我们等不到运行结果。如对2.3中的累加问题(由于计算机计算乘除的速度比加减慢的多,因此可以大致估算乘除所需的时间来估计),pow函数的乘法次数为$\sum_{i=0}^n{i=\frac{n^2+n}{2}}$,因此时间复杂度<script type="math/tex">T(n) = C_1*n^2+C_2*n</script>,而对于2.3中f2的运算方式,时间复杂度$T(n) = C*n$</p>
+<h4 id="3-2-3-复杂度的渐进表示"><a href="#3-2-3-复杂度的渐进表示" class="headerlink" title="3.2.3 复杂度的渐进表示"></a>3.2.3 复杂度的渐进表示</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;对于复杂度来说,直接精确的很难获得,一般都采用渐进表示来代表,以T(n)为例：<br>1)$T(n) = O(f(n))$代表T(n)有上界<script type="math/tex">C*f(n)</script><br>2)$T(n) = \Omega(g(n))$代表T(n)有下界$C*g(n)$<br>3)$T(n) = \theta(h(n))$代表T(n)又有上界又有下界。<br>下图是常见的几个复杂度的函数：<br><img src="/../../images/Python/DataStructureAlgorthmConcept/6.jpg" alt="Alt text"><br><img src="/../../images/Python/DataStructureAlgorthmConcept/7.jpg" alt="Alt text"><br>从上图可以明显的看出来,对于$n^2$以上的这类复杂度随输入爆炸性增长,因此当设计算法的时候,如果复杂度为$n^2$,则可以考虑降到$nlogn$等。</p>
+<h2 id="4-算法应用实例"><a href="#4-算法应用实例" class="headerlink" title="4.算法应用实例"></a>4.算法应用实例</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;最大子列问题：给定N个整数的序列$\{A_1,A_2,…,A_N\}$,求函数$f(i,j) = max\{0,\sum_{k=i}^j{A_k}\}$的最大值。</p>
+<h3 id="4-1-计算所有的子序列和"><a href="#4-1-计算所有的子序列和" class="headerlink" title="4.1 计算所有的子序列和"></a>4.1 计算所有的子序列和</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;第一种方法是最开始想到的,如果一个序列,知道左边界,知道右边界。接下来从左边界加到右边界,把所有子序列的和都求出来做比较。</p>
+<pre><code>def MaxSubseqfunc_1(seq):
+    max_sum = 0
+    for i in range(0, len(seq)):
+        for j in range(i, len(seq)):
+            seq_sum = 0
+            for k in range(i, j):
+                seq_sum += seq[k]
+            if(seq_sum &gt; max_sum):
+                max_sum = seq_sum
+    return max_sum
+</code></pre><p><img src="/../../images/Python/DataStructureAlgorthmConcept/8.png" alt="Alt text"><br>&nbsp;&nbsp;&nbsp;&nbsp;这个算法容易的算出其复杂度,三个循环复杂度$T(n)=C*n^3$由于电脑性能比较好,所以怕看不出效果,所以总的循环了100000次。<br>&nbsp;&nbsp;&nbsp;&nbsp;对于上述方法,其实理解下,在每次计算的时候,都是从左计算到右边,比如$A_1,…,A_4$和$A_1,…,A_5$,多次的重复计算。因此进行了改进：</p>
+<pre><code>def MaxSubseqfunc_2(seq):
+    max_sum = 0
+    for i in range(0, len(seq)):
+        seq_sum = 0
+        for j in range(i, len(seq)):
+            seq_sum += seq[j]
+            if(seq_sum &gt; max_sum):
+                max_sum = seq_sum
+    return max_sum
+</code></pre><p><img src="/../../images/Python/DataStructureAlgorthmConcept/9.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;这个算法2个循环,复杂度$T(n)=C*n^2$基于上述改进,从运行时间上看,减少了1/3有余,当参数更大的时候,效果应该会更加明显。</p>
+<h3 id="4-2-分治法"><a href="#4-2-分治法" class="headerlink" title="4.2 分治法"></a>4.2 分治法</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;上述方法虽然已经实现了功能,但是复杂度是$T(n)=C*n^2$,随着n的增大还是会更加复杂,得想办法将其继续降低。在这里运用分治法来进行处理。分治法的核心是“分而治之”：首先是分,将数据进行切分,一长段序列分为N段小序列。基于分成的N段小序列,应用同样的算法来进行治(递归)。<br><img src="/../../images/Python/DataStructureAlgorthmConcept/11.jpg" alt="Alt text">分治法的原理以及复杂度计算,最后的NlogN是将K=logN带入计算得到的。我们编写了代码进行了测试：</p>
+<pre><code>def max3(A, B, C):
+        # 返回三个数中的最大值
+    return max(A, B, C)
+
+def DivedeAndConquer(seq, left, right):
+    &#39;&#39;&#39;
+    分治法求List[left]到List[right]的最大子列和
+    int MaxLeftSum, MaxRightSum
+    存放左右子问题的解
+    int MaxLeftBorderSum, MaxRightBorderSum
+    存放跨分界线的结果
+    int LeftBorderSum, RightBorderSum
+    int center, i
+    &#39;&#39;&#39;
+    if left == right:
+     # 递归终止条件,子列只有一个数字
+        if seq[left] &gt; 0:
+            return seq[left]
+        else:
+            return 0
+    #-----分的过程------
+    # 找到中分点
+    center = int((left + right) / 2)
+    # 递归求得两边子列的最大和
+    MaxLeftSum = DivedeAndConquer(seq, left, center)
+    MaxRightSum = DivedeAndConquer(seq, center + 1, right)
+    # 求跨分界线的最大子列和
+    MaxLeftBorderSum = 0
+    LeftBorderSum = 0
+    # 从中线向左扫描
+    for i in range(center, left - 1, -1):
+        LeftBorderSum += seq[i]
+        if LeftBorderSum &gt; MaxLeftBorderSum:
+            MaxLeftBorderSum = LeftBorderSum
+    # 左边扫描结束
+    MaxRightBorderSum = 0
+    RightBorderSum = 0
+    for i in range(center + 1, right + 1, 1):
+        # 从中线开始扫描
+        RightBorderSum += seq[i]
+        if(RightBorderSum &gt; MaxRightBorderSum):
+            MaxRightBorderSum = RightBorderSum
+    # 右边扫描结束
+    # 下面返回“治”的结果
+    return max3(MaxLeftSum, MaxRightSum, MaxLeftBorderSum + MaxRightBorderSum)
+
+def MaxSubseqSum3(seq):
+    # 保持和前两种算法相同的函数接口
+    return DivedeAndConquer(seq, 0, len(seq) - 1)
+</code></pre><p>基于分治法的代码编写已经增加了注释了,因此大家可以对照着来进行看以及理解。接下来同样运行100000次,运行结果如图所示：<br><img src="/../../images/Python/DataStructureAlgorthmConcept/10.png" alt="Alt text">可见在时间上是有明显的减少的。</p>
+<h3 id="4-3-在线处理"><a href="#4-3-在线处理" class="headerlink" title="4.3 在线处理"></a>4.3 在线处理</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;对于最大子列和问题,还有一个在线处理的方式。称之为在线处理是指每输入一个数据就进行即时处理,在任何一个地方终止输入,算法都能正确给出当前的解。</p>
+<pre><code>def MaxSubseqSum4(seq):
+    ThisSum = MaxSum = 0
+    for i in range(len(seq)):
+        #向右累加
+        ThisSum+=seq[i]
+        #发现更大和则更新当前结果   
+        if ThisSum&gt;MaxSum:
+            MaxSum = ThisSum
+        elif ThisSum &lt;0：
+            #如果子列和负,则不可能使后面的部分和增大,抛弃
+            ThisSum=0
+    return MaxSum
+</code></pre><p>从代码上我们可以清楚的看到这个算法的复杂度为N(就一个循环)。运行结果如图所示,这应该是目前为止最快的算法了,100000次采用了0.3秒。<br><img src="/../../images/Python/DataStructureAlgorthmConcept/12.png" alt="Alt text"></p>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5.总结"></a>5.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本文主要依据课程描述了数据结构和算法的概念,了解了数据结构的逻辑结构、物理存储结构以及其表示方式为抽象数据类型。而算法作为对一系列数据对象操作的方法,在设计的时候必须考虑其空间复杂度和时间复杂度。通过一个最大子列和的例子列举了常见的一些算法以及改进的策略。</p>
+<h2 id="6-参考"><a href="#6-参考" class="headerlink" title="6.参考"></a>6.参考</h2><p>1.中国大学MOOC课程《数据结构》——浙江大学</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Data-structure-and-Algorithm/" rel="tag"># Data structure and Algorithm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/09/01/DeepLearning/Classficaition/VggNet/" rel="next" title="VggNet">
+                <i class="fa fa-chevron-left"></i> VggNet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/17/Python/数据结构和算法2-线性表/" rel="prev" title="数据结构和算法----线性表">
+                数据结构和算法----线性表 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-数据结构"><span class="nav-number">2.</span> <span class="nav-text">2.数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-解决问题方法的效率-跟数据的组织方式有关"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 解决问题方法的效率,跟数据的组织方式有关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-解决问题方法的效率-跟空间的利用效率相关"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 解决问题方法的效率,跟空间的利用效率相关</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-解决问题方法的效率-跟算法的巧妙程度有关"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 解决问题方法的效率,跟算法的巧妙程度有关</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-算法"><span class="nav-number">3.</span> <span class="nav-text">3.算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-什么是算法"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 什么是算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-算法的评价标准"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 算法的评价标准</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-空间复杂度S-n"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 空间复杂度S(n)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-时间复杂度T-n"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 时间复杂度T(n)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-3-复杂度的渐进表示"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.2.3 复杂度的渐进表示</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-算法应用实例"><span class="nav-number">4.</span> <span class="nav-text">4.算法应用实例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-计算所有的子序列和"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 计算所有的子序列和</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-分治法"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 分治法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-在线处理"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 在线处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-参考"><span class="nav-number">6.</span> <span class="nav-text">6.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

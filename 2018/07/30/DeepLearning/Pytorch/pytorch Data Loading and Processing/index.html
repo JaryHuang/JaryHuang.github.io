@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Pytorch," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.常用数据集的导入对于一些常用的数据集(torchvision.datasets)：(1)MNIST(2)Fashion-MNIST(3)EMNIST(4)COCO(5)LSUN(6)ImageFolder(7)DatasetFolder(8)Imagenet-12(9)CIFAR(10)STL10(11)SVHN(12)PhotoTour可以用torchvision.datasets直接读取，">
+<meta name="keywords" content="Pytorch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pytorch 数据导入和预处理">
+<meta property="og:url" content="http://yoursite.com/2018/07/30/DeepLearning/Pytorch/pytorch Data Loading and Processing/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.常用数据集的导入对于一些常用的数据集(torchvision.datasets)：(1)MNIST(2)Fashion-MNIST(3)EMNIST(4)COCO(5)LSUN(6)ImageFolder(7)DatasetFolder(8)Imagenet-12(9)CIFAR(10)STL10(11)SVHN(12)PhotoTour可以用torchvision.datasets直接读取，">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/pytorch/data_load/1.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/pytorch/data_load/2.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/pytorch/data_load/3.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/pytorch/data_load/4.png">
+<meta property="og:updated_time" content="2019-10-15T13:20:57.913Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pytorch 数据导入和预处理">
+<meta name="twitter:description" content="1.常用数据集的导入对于一些常用的数据集(torchvision.datasets)：(1)MNIST(2)Fashion-MNIST(3)EMNIST(4)COCO(5)LSUN(6)ImageFolder(7)DatasetFolder(8)Imagenet-12(9)CIFAR(10)STL10(11)SVHN(12)PhotoTour可以用torchvision.datasets直接读取，">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/pytorch/data_load/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/30/DeepLearning/Pytorch/pytorch Data Loading and Processing/"/>
+
+
+
+
+
+  <title>Pytorch 数据导入和预处理 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/30/DeepLearning/Pytorch/pytorch Data Loading and Processing/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Pytorch 数据导入和预处理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-30T20:58:55+08:00">
+                2018-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-常用数据集的导入"><a href="#1-常用数据集的导入" class="headerlink" title="1.常用数据集的导入"></a>1.常用数据集的导入</h2><p>对于一些常用的数据集(torchvision.datasets)：<br>(1)MNIST<br>(2)Fashion-MNIST<br>(3)EMNIST<br>(4)COCO<br>(5)LSUN<br>(6)ImageFolder<br>(7)DatasetFolder<br>(8)Imagenet-12<br>(9)CIFAR<br>(10)STL10<br>(11)SVHN<br>(12)PhotoTour<br>可以用torchvision.datasets直接读取，以cifar10为例子：</p>
+<pre><code>import torchvision
+transforms = transforms.Compose([
+transforms.ToTensor()])           
+
+# torch.utils.data.DataLoader
+cifarSet = torchvision.datasets.CIFAR10(root = &quot;../data/cifar/&quot;, train= True, download = True, transform = transforms )
+cifarLoader = torch.utils.data.DataLoader(cifarSet, batch_size= 10, shuffle= False, num_workers= 2)
+</code></pre><p>简单理解下，torchvision.datasets.CIFAR10()，torchvision.datasets.CIFAR100()中等的参数都一样，从字面上都好理解。transforms是将得到的数据转化为tensor。<br>在得到数据集后需要载入，利用torch.utils.data.DataLoader(),可以调节我们的batch_size,是否打乱数据(shuffle)等。因此，利用这个库可以轻松的得到一些公共数据集。<br><a id="more"></a></p>
+<h2 id="2-创建自己的数据集"><a href="#2-创建自己的数据集" class="headerlink" title="2.创建自己的数据集"></a>2.创建自己的数据集</h2><h3 id="2-1-类的介绍"><a href="#2-1-类的介绍" class="headerlink" title="2.1 类的介绍"></a>2.1 类的介绍</h3><p>pytorch读取数据集非常便捷，主要是用到两个类:<br><strong>1)torch.utils.data.Dataset</strong><br><strong>2)torch.utils.data.DataLoader</strong><br>上述提到的torchvision.datasets也是基于这两个的重写。因此要构建自己的数据集，首先得去读一读这两个类的<a href="https://pytorch.org/tutorials/beginner/data_loading_tutorial.html" target="_blank" rel="noopener">官方源码</a><br>其主要分为三个部分。</p>
+<pre><code>class myDataset(torch.utils.data.Dataset):
+    def __init__(self):   
+    def __getitem__(self,index):
+        return img.......
+    def __len__(self):
+        return 
+</code></pre><p><strong><strong>init</strong>(self)</strong>是进行初始化，初始化数据集的一些参数，比如要读取的图片数据集列表(img_list)是否为训练数据(istrain),是否打乱数据(shuffle)，是否数据预处理等<br><strong><strong>getitem</strong>(self,index):</strong>是进行数据读取了，根据初始化参数，在这里读取数据与处理数据，index标签是用来描述读取哪张图片。此函数是有返回值的，返回的值即是所需的。比如train_data 和 val_data要返回的就是img and label了，如果是test_data的，可以只返回img<br><strong><strong>len</strong>(self):</strong>这个非常的简洁，返回的要读取数据的总长度，如要读取的图片类数据的总数。</p>
+<h3 id="2-2-制作存储数据集和标签名的文件"><a href="#2-2-制作存储数据集和标签名的文件" class="headerlink" title="2.2 制作存储数据集和标签名的文件"></a>2.2 制作存储数据集和标签名的文件</h3><p>如刚刚上述所说，重写torch.utils.data.Dataset()的时候最主要是数据集列表如何获取。以我的数据为例：<br>要分类的两类数据集，标签分别为0和1。<br><img src="/../../../images/DeepLearning/pytorch/data_load/1.png" alt="Alt text"><br>图片数据集如下图所示<br><img src="/../../../images/DeepLearning/pytorch/data_load/2.png" alt="Alt text"></p>
+<h4 id="2-2-1-获取文件夹信息"><a href="#2-2-1-获取文件夹信息" class="headerlink" title="2.2.1 获取文件夹信息"></a>2.2.1 获取文件夹信息</h4><p>由于在文件夹下有可能存在除了标签类的文件夹之外还有其他的一些描述性的文件，因此首先我们的获取文件夹的标签列表。</p>
+<pre><code>def traversalDir_FirstDir(path):
+    dir_list = []
+# 判断路径是否存在
+    if (os.path.exists(path)):
+        # 获取该目录下的所有文件或文件夹目录
+        files = os.listdir(path)
+        for file in files:
+            # 得到该文件下所有目录的路径
+            m = os.path.join(path, file)
+            # 判断该路径下是否是文件夹
+            if (os.path.isdir(m)):
+                dir_list.append(m)
+    return dir_list    
+</code></pre><h4 id="2-2-2-获取具体的数据名称以及标签"><a href="#2-2-2-获取具体的数据名称以及标签" class="headerlink" title="2.2.2 获取具体的数据名称以及标签"></a>2.2.2 获取具体的数据名称以及标签</h4><p>当获取完上述标签文件夹后，下一步便是遍历标签文件夹获取数据名称以及标签，变为tuple存入list中。这里注意下，在ubuntu和windows系统中存在着’/‘和’\’的问题，因此在不同系统上请做如下备注中的修改。</p>
+<pre><code>def require_img_label(path):
+    img_label = []
+    for i in traversalDir_FirstDir(path):
+        for root, dirs, files in os.walk(i):
+            #s = root.split(&quot;\\&quot;)     #windows
+            s = root.split(&quot;/&quot;)       #linux
+            for filename in files:
+                if filename.endswith(&quot;jpg&quot;):
+                    f1 = root + &#39;\\&#39; + filename
+                    f1 = f1.replace(&#39;\\&#39;, &#39;/&#39;)
+                    tup = tuple((f1, s[-1]))
+                    img_label.append(tup)
+    return img_label
+</code></pre><h4 id="2-2-3-打乱数据集并且存储"><a href="#2-2-3-打乱数据集并且存储" class="headerlink" title="2.2.3 打乱数据集并且存储"></a>2.2.3 打乱数据集并且存储</h4><p>将其存储为txt,每行写入name和tuple</p>
+<pre><code>def write_txt(path_out, image_list):
+    with open(path_out, &#39;w&#39;) as fout:
+        for i, item in enumerate(image_list):
+            line = &#39;%s\r&#39; % item[0]
+            line += item[1]+&#39;\n&#39;
+            fout.write(line)
+</code></pre><p>重点就是make_txt文件了，这里将参数做一个解释。<br><strong>filepath</strong>：为训练的图片集所在的文件夹，即上述0,1文件夹所在的路径，如’data/train/‘<br><strong>shuffle</strong>：是否进行数据打乱，一般作为训练集和验证机，一般会进行打乱，设置为True<br><strong>chunks</strong>：将数据分成多少堆，如1<br><strong>train_ratio</strong>：训练数据的比例 如0.9<br><strong>test_ratio</strong>：验证数据的比例，如0.1</p>
+<pre><code>def make_txt(path, rand_shuff, chunks, tra_ratio, tes_ratio):
+    imglab_list = require_img_label(path)
+    if rand_shuff is True:
+        np.random.seed(100)
+        np.random.shuffle(imglab_list)
+    N = len(imglab_list)
+    chunk_size = (N + chunks - 1) 
+
+    for i in range(chunks):
+        chunk = imglab_list[i * chunk_size:(i + 1) * chunk_size]
+        if chunks &gt; 1:
+            str_chunk = &#39;_%d&#39; % i
+        else:
+            str_chunk = &#39;&#39;
+        sep = int(chunk_size * tra_ratio)
+        sep_test = int(chunk_size * tes_ratio)
+        if tra_ratio == 1.0:
+            write_txt(path+str_chunk + &#39;train.txt&#39;, chunk)
+        else:
+            if tes_ratio:
+                write_txt(path+str_chunk + &#39;_val.txt&#39;, chunk[:sep_test])
+            if tra_ratio + tes_ratio &lt; 1.0:
+                write_txt(str_chunk + &#39;_val.txt&#39;, chunk[sep_test + sep:])
+            write_txt(path+str_chunk + &#39;_train.txt&#39;, chunk[sep_test:sep_test + sep])
+</code></pre><h4 id="2-2-4-测试"><a href="#2-2-4-测试" class="headerlink" title="2.2.4 测试"></a>2.2.4 测试</h4><p>将其用于到本人的数据集进行实验：</p>
+<pre><code># coding: utf8
+import os
+import numpy as np
+#上述的所有函数复制到这
+
+filepath = &#39;data/val/&#39;  # 图片所在文件夹
+shuffle = True
+chunks = 1
+train_ratio =0.9
+test_ratio = 0.1
+if __name__ == &#39;__main__&#39;:
+    make_txt(filepath, shuffle, chunks, train_ratio, test_ratio)
+</code></pre><p>运行后在data/val/下出现了_train.txt和_val.txt。<br><img src="/../../../images/DeepLearning/pytorch/data_load/3.png" alt="Alt text"><br>随便打开_train.txt，如上图所示，那么标签数据集算是完成了。<br><img src="/../../../images/DeepLearning/pytorch/data_load/4.png" alt="Alt text"></p>
+<h3 id="2-3-构建myDataset-torch-utils-data-Dataset"><a href="#2-3-构建myDataset-torch-utils-data-Dataset" class="headerlink" title="2.3 构建myDataset(torch.utils.data.Dataset)"></a>2.3 构建myDataset(torch.utils.data.Dataset)</h3><p>基于2.2已经得到我们所需要的txt文件了，接下来一步便是得到构建myDataset(torch.utils.data.Dataset)。直接看代码：</p>
+<pre><code>class myData(torch.utils.data.Dataset):
+    def __init__(self,root,datatxt,transform=None,train=True, target_transform=None):
+        f = open(root + datatxt, &#39;r&#39;)
+        img_label = []
+        for line in f:
+            line = line.rstrip()
+            words = line.split(&#39;\r&#39;)
+            if len(words) &gt;= 2:
+                img_label.append((words[0],words[1]))
+                continue
+        self.root = root
+        self.img_label = img_label
+        self.transform = transform
+        self.target_transform = target_transform
+        self.train = train
+    def __getitem__(self,index):
+        image_path, label = self.img_label[index]
+        img = Image.open(self.root+image_path).convert(&#39;RGB&#39;) 
+        if self.transform is not None:
+            img = self.transform(img)
+        if(self.train ==True):
+            return img,int(label)
+        else:
+            return img
+    def __len__(self):
+        return len(self.img_label)
+</code></pre><p>有了2.1的介绍，相信对这部分非常容易的理解。重点关注下<strong>getitem</strong>的返回值，需要什么内容则就返回什么内容。调用方式如下：</p>
+<pre><code>train_data = myData(root = root,datatxt=&#39;train.txt&#39;,transform = data_transforms[&#39;train&#39;])
+val_data = myData(root = root,datatxt = &#39;val.txt&#39;,transform =data_transforms[&#39;val&#39;])
+
+train_loader = Data.DataLoader(dataset=train_data,batch_size = 50,shuffle = True)
+val_loader = Data.DataLoader(dataset = val_data,batch_size = 50)
+</code></pre><p>DataLoader和刚刚创建的数据集myData,来创建dataloader，loader的长度是有多少个batch，所以和batch_size有关，此处是设置为50。<br>那么在训练或者测试中如何应用train_loader呢，看如下代码：</p>
+<pre><code>for step,batch  in enumerate(train_loader):
+    inputs,labels = batch
+</code></pre><p>dataloader返回值如上述所说，train_loader是一个有很多batch的数组，得到的每个batch含有<strong>getitem</strong>方法return的image和label。<br>input:[batch_size,channal,width,height]<br>labels：[batch_size,label]</p>
+<h3 id="2-4-Data-DataLoader"><a href="#2-4-Data-DataLoader" class="headerlink" title="2.4 Data.DataLoader"></a>2.4 Data.DataLoader</h3><p>当构建好数据集后要进行导入，但是不可能将所有的数据集都放入内存中(内存就爆掉了)，需要定义迭代器，pytorch定义好了torh.utils.data.DataLoader()<br>参数为：<br>    datasets:2.3中定义好的dataset。<br>    batch_size:batch_size的大小<br>    shuffle:是否打乱顺序<br>    number_works:采用几个线程<br>等等这些参数，具体可以去<a href="https://github.com/pytorch/pytorch/blob/master/torch/utils/data/dataloader.py" target="_blank" rel="noopener">官网查看</a>。<br>这里介绍下一个重要的参数为collate_fn，它默认是default_collate()函数，输入一个list,list的长度和batch_size相等，list是从<strong>getitem</strong>()中获得的，所以它的作用就是，比如将一张图片tensor=[3,224,224]，如果batch_size=8，通过第一维堆叠成[8,3,224,224]的8张图片，输入到我们的网络。<br>我们本身是可以自定义my_collate_fn，插入dataloader(collate_fn = my_collate_fn)。<br>里面的惭怍就是对我们输入的list进行操作。信息可以参考<a href="https://zhuanlan.zhihu.com/p/30385675" target="_blank" rel="noopener">PyTorch实现自由的数据读取</a></p>
+<h2 id="3-数据转换以及处理"><a href="#3-数据转换以及处理" class="headerlink" title="3.数据转换以及处理"></a>3.数据转换以及处理</h2><p>在上述<strong>getitem</strong>(self,index)中调用了self.transform的方法，它是传入的转换参数，也称之为数据处理。因此，这里简单的介绍下pytorch的一些数据处理方式: <strong>torchvision.transforms</strong></p>
+<h3 id="3-1-PIL-Image-transform"><a href="#3-1-PIL-Image-transform" class="headerlink" title="3.1 PIL Image transform"></a>3.1 PIL Image transform</h3><p>PIL图像读入是一个对象，非numpy矩阵，下面介绍的函数都是对PIL Image图像直接操作。</p>
+<h4 id="3-1-1-CenterCrop-size"><a href="#3-1-1-CenterCrop-size" class="headerlink" title="3.1.1 CenterCrop(size)"></a>3.1.1 CenterCrop(size)</h4><p>将给定的图像根据中心点向两边裁剪，输入的size可以为一个值或者序列(w,h)。如果为一个值则表明w和h相等。</p>
+<h4 id="3-1-2-ColorJitter-brightness-0-contrast-0-saturation-0-hue-0"><a href="#3-1-2-ColorJitter-brightness-0-contrast-0-saturation-0-hue-0" class="headerlink" title="3.1.2 ColorJitter(brightness=0, contrast=0, saturation=0, hue=0)"></a>3.1.2 ColorJitter(brightness=0, contrast=0, saturation=0, hue=0)</h4><p>随机更改图像的亮度，对比度，饱和度。更改后各个值归一化到[max(0, 1-brightness),1+ brightness]之间，其他几个参数也类似。</p>
+<h4 id="3-1-3-FiveCrop-size"><a href="#3-1-3-FiveCrop-size" class="headerlink" title="3.1.3 FiveCrop(size)"></a>3.1.3 FiveCrop(size)</h4><p>裁剪给定的PIL图像为4个角落+1中心部分，size的参数描述和 <strong>3.1.1</strong>一样。</p>
+<pre><code>transform = Compose([
+    FiveCrop(size), 
+    Lambda(lambda crops: torch.stack([ToTensor()(crop) for crop in crops])) 
+    # returns a 4D tensor
+])
+#In your test loop you can do the following:
+input, target = batch # input is a 5d tensor, target is 2d
+bs, ncrops, c, h, w = input.size()
+result = model(input.view(-1, c, h, w)) # fuse batch size and ncrops
+result_avg = result.view(bs, ncrops, -1).mean(1) # avg over crops
+</code></pre><h4 id="3-1-4-Grayscale-num-output-channels-1"><a href="#3-1-4-Grayscale-num-output-channels-1" class="headerlink" title="3.1.4 Grayscale(num_output_channels=1)"></a>3.1.4 Grayscale(num_output_channels=1)</h4><p>将图像转换为灰度图，如果num_output_channels=3的话，返回的还是rgb的图。</p>
+<h4 id="3-1-5-Pad-padding-fill-0-padding-mode-’constant’"><a href="#3-1-5-Pad-padding-fill-0-padding-mode-’constant’" class="headerlink" title="3.1.5 Pad(padding, fill=0, padding_mode=’constant’)"></a>3.1.5 Pad(padding, fill=0, padding_mode=’constant’)</h4><p>给这个PIL图像所有的边附上给的pad值。<br>pad:int(四个边补上这个尺寸的数)，tuple(如果是2个常数，则第一个是左右，第二个是上下。如果是四个参数，则代表上下左右)<br>fill:默认是补上0，如果有给出一个tuple(r,g,b)，则补上的为这个值。<br>padding_mode：决定补上的值到底是fill,还是图像的edge等</p>
+<h4 id="3-1-6-RandomHorizontalFlip-p-0-5-or-RandomVerticalFlip-p-0-5"><a href="#3-1-6-RandomHorizontalFlip-p-0-5-or-RandomVerticalFlip-p-0-5" class="headerlink" title="3.1.6 RandomHorizontalFlip(p=0.5) or RandomVerticalFlip(p=0.5)"></a>3.1.6 RandomHorizontalFlip(p=0.5) or RandomVerticalFlip(p=0.5)</h4><p>随机翻转给定的图像，概率有P来指定。</p>
+<h4 id="3-1-7-RandomRotation-degrees-resample-False-expand-False-center-None"><a href="#3-1-7-RandomRotation-degrees-resample-False-expand-False-center-None" class="headerlink" title="3.1.7 RandomRotation(degrees, resample=False, expand=False, center=None)"></a>3.1.7 RandomRotation(degrees, resample=False, expand=False, center=None)</h4><p>将图像旋转degree个角度。</p>
+<h4 id="3-1-8-Resize-size-interpolation-2"><a href="#3-1-8-Resize-size-interpolation-2" class="headerlink" title="3.1.8 Resize(size, interpolation=2)"></a>3.1.8 Resize(size, interpolation=2)</h4><p>重新框定图像的尺寸，比较常用。</p>
+<h3 id="3-2-Tensor-transform"><a href="#3-2-Tensor-transform" class="headerlink" title="3.2 Tensor transform"></a>3.2 Tensor transform</h3><h4 id="3-2-1-Normalize-mean-std"><a href="#3-2-1-Normalize-mean-std" class="headerlink" title="3.2.1 Normalize(mean, std)"></a>3.2.1 Normalize(mean, std)</h4><p>根据均值和方法归一化图像。mean:($M_1,M_2…,M_n$) std:($S_1,S_2…,S_n$）<br>n是通道值。</p>
+<h4 id="3-2-2-ToPILImage-mode-None"><a href="#3-2-2-ToPILImage-mode-None" class="headerlink" title="3.2.2 ToPILImage(mode=None)"></a>3.2.2 ToPILImage(mode=None)</h4><p>转变tensor(CxHxW)或array(HxWxC)为PIL Image</p>
+<h4 id="3-2-2-ToTensor"><a href="#3-2-2-ToTensor" class="headerlink" title="3.2.2 ToTensor()"></a>3.2.2 ToTensor()</h4><p>转变PIL Image或array(HxWxC)为tensor(CxHxW),转变后的tensor值为[0,1]之间</p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4 总结"></a>4 总结</h2><p>综上，我们了解了torchvision.datasets给出的常用数据集和导入方式，并介绍了根据具体问题制作自己的数据集，重点说明了data.txt的创建，以及torch.utils.data.Dataset的重写和<br>torch.utils.data.DataLoader应用。在数据集导入的过程中简单的数据预处理比分，也根据torchvision.transforms给的一些例子做了一点小整理。深度模型学习的成功与否和数据集息息相关。因此如何做好数据预处理至关重要，opencv提供了很多数据处理的方法，等后续再专门写一章节介绍。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://pytorch.org/tutorials/beginner/data_loading_tutorial.html" target="_blank" rel="noopener">Data Loading and Processing Tutorial</a></p>
+<p>2.<a href="https://blog.csdn.net/Teeyohuang/article/details/79587125" target="_blank" rel="noopener">Pytorch打怪路（三）Pytorch创建自己的数据集1</a></p>
+<p>3.<a href="https://pytorch.org/docs/stable/torchvision/transforms.html" target="_blank" rel="noopener">torchvision.transforms</a></p>
+<p>4.<a href="https://zhuanlan.zhihu.com/p/30385675" target="_blank" rel="noopener">PyTorch实现自由的数据读取</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/29/DeepLearning/Pytorch/pytorch Introduction/" rel="next" title="pytorch入门">
+                <i class="fa fa-chevron-left"></i> pytorch入门
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/04/DeepLearning/Pytorch/pytorch create net/" rel="prev" title="构建网络模型的方法以及torch.nn的相关函数">
+                构建网络模型的方法以及torch.nn的相关函数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-常用数据集的导入"><span class="nav-number">1.</span> <span class="nav-text">1.常用数据集的导入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-创建自己的数据集"><span class="nav-number">2.</span> <span class="nav-text">2.创建自己的数据集</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-类的介绍"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 类的介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-制作存储数据集和标签名的文件"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 制作存储数据集和标签名的文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-获取文件夹信息"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 获取文件夹信息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-获取具体的数据名称以及标签"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 获取具体的数据名称以及标签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-打乱数据集并且存储"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.3 打乱数据集并且存储</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-4-测试"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.2.4 测试</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-构建myDataset-torch-utils-data-Dataset"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 构建myDataset(torch.utils.data.Dataset)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Data-DataLoader"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 Data.DataLoader</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-数据转换以及处理"><span class="nav-number">3.</span> <span class="nav-text">3.数据转换以及处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-PIL-Image-transform"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 PIL Image transform</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-CenterCrop-size"><span class="nav-number">3.1.1.</span> <span class="nav-text">3.1.1 CenterCrop(size)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-ColorJitter-brightness-0-contrast-0-saturation-0-hue-0"><span class="nav-number">3.1.2.</span> <span class="nav-text">3.1.2 ColorJitter(brightness=0, contrast=0, saturation=0, hue=0)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-3-FiveCrop-size"><span class="nav-number">3.1.3.</span> <span class="nav-text">3.1.3 FiveCrop(size)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-4-Grayscale-num-output-channels-1"><span class="nav-number">3.1.4.</span> <span class="nav-text">3.1.4 Grayscale(num_output_channels=1)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-5-Pad-padding-fill-0-padding-mode-’constant’"><span class="nav-number">3.1.5.</span> <span class="nav-text">3.1.5 Pad(padding, fill=0, padding_mode=’constant’)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-6-RandomHorizontalFlip-p-0-5-or-RandomVerticalFlip-p-0-5"><span class="nav-number">3.1.6.</span> <span class="nav-text">3.1.6 RandomHorizontalFlip(p=0.5) or RandomVerticalFlip(p=0.5)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-7-RandomRotation-degrees-resample-False-expand-False-center-None"><span class="nav-number">3.1.7.</span> <span class="nav-text">3.1.7 RandomRotation(degrees, resample=False, expand=False, center=None)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-8-Resize-size-interpolation-2"><span class="nav-number">3.1.8.</span> <span class="nav-text">3.1.8 Resize(size, interpolation=2)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Tensor-transform"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Tensor transform</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-Normalize-mean-std"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 Normalize(mean, std)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-ToPILImage-mode-None"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 ToPILImage(mode=None)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-ToTensor"><span class="nav-number">3.2.3.</span> <span class="nav-text">3.2.2 ToTensor()</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4 总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

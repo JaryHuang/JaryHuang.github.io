@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Classfication," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;GoogLeNet是由谷歌(Google)团队研发出来的,为什么要将整个L大写呢,大家看后面的LeNet,据说是为了向“LeNet”致敬,因此取名为“GoogLeNet”。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;前面我已经介绍了VggNet,VGG在当年的ImageNet挑战赛中拿到了第二名的成绩,而GoogLeNet是获得了第一名。">
+<meta name="keywords" content="Classfication">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GoogLeNet">
+<meta property="og:url" content="http://yoursite.com/2018/10/22/DeepLearning/Classficaition/GoogLeNet_V1/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;GoogLeNet是由谷歌(Google)团队研发出来的,为什么要将整个L大写呢,大家看后面的LeNet,据说是为了向“LeNet”致敬,因此取名为“GoogLeNet”。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;前面我已经介绍了VggNet,VGG在当年的ImageNet挑战赛中拿到了第二名的成绩,而GoogLeNet是获得了第一名。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V1/1.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V1/2.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V1/3.jpg">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V1/4.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V1/5.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V1/7.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V1/6.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V1/ensembleAndaugment.png">
+<meta property="og:updated_time" content="2019-10-14T11:48:57.607Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GoogLeNet">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;GoogLeNet是由谷歌(Google)团队研发出来的,为什么要将整个L大写呢,大家看后面的LeNet,据说是为了向“LeNet”致敬,因此取名为“GoogLeNet”。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;前面我已经介绍了VggNet,VGG在当年的ImageNet挑战赛中拿到了第二名的成绩,而GoogLeNet是获得了第一名。">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/Classfication/GoogLeNet_V1/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/10/22/DeepLearning/Classficaition/GoogLeNet_V1/"/>
+
+
+
+
+
+  <title>GoogLeNet | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/22/DeepLearning/Classficaition/GoogLeNet_V1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GoogLeNet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-22T23:50:55+08:00">
+                2018-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;GoogLeNet是由谷歌(Google)团队研发出来的,为什么要将整个L大写呢,大家看后面的LeNet,据说是为了向“LeNet”致敬,因此取名为“GoogLeNet”。<br>&nbsp;&nbsp;&nbsp;&nbsp;前面我已经介绍了<a href="https://jaryhuang.github.io/2018/09/01/VggNet/" target="_blank" rel="noopener">VggNet</a>,VGG在当年的ImageNet挑战赛中拿到了第二名的成绩,而GoogLeNet是获得了第一名。两者网络的设计方面都是在深度方面进行了加深,但是加深的方式又是不同的：VggNet是延续了LeNet或者说AlexNet等网络框架,按照标准的网络结构,由卷积层,归一化层,非线性层,池化层以及全连接层组成,其主要通过这些层的叠加来加深网络深度。在网络深度加深的同时,利用dropout层来减弱出现的过拟合现象。而对于GoogLeNet网络来说,在Going deeper with convolutions论文中提到了其对于deeper的两方面的理解：首先就是新的Inception模块,再者就是加深了网络的层数这个直接的含义了。因此,从其对深度的理解也能容易的看出其在网络结构方面做的改进。<br><a id="more"></a></p>
+<h2 id="2-网络的创新点"><a href="#2-网络的创新点" class="headerlink" title="2.网络的创新点"></a>2.网络的创新点</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;提升神经网络能力的最直接方式就是增加典型环节的规格：他们包括增加网络的深度或者增加网络的宽度。这相对来说比较容易、安全的训练一个神经网络(大家改进的方向大多是沿着这个方向,而且很多文章都验证了深度能够提升神经网络的性能)。但是通过这种方式也带来了两个缺点：<br>&nbsp;&nbsp;&nbsp;&nbsp;1)更大的尺寸意味着更多的训练参数,使得网络更容易过拟合。<br>&nbsp;&nbsp;&nbsp;&nbsp;2)更多的训练参数增加了计算资源的利用,消耗更多的时间。<br>&nbsp;&nbsp;&nbsp;&nbsp;在神经网络的训练完成后,当查询最终模型参数的,会发现结果中大部分参数都是0,换个说法就是参数具有很强的稀疏性(参数中真正有用的是非零的数据,这才算是激活了的神经元)。因此,要解决上述两个缺点的根本方法就是从全连接层(在<a href="https://jaryhuang.github.io/2018/09/01/VggNet/" target="_blank" rel="noopener">VggNet</a>网络第4部分中以做出说明,网络参数多的原因主要就是聚集在全连接层)中解脱出来稀疏连接的结构。<br>&nbsp;&nbsp;&nbsp;&nbsp; <strong>如果数据集的概率分布可以由非常稀疏的神经网络表示出来,那么理论上可以逐层分析网络最后一层激活的相关统计数据,来构建一个最优的网络拓扑结构,聚集这些高度相关的神经元。</strong> 严格的数学证明需要非常强大的条件,但是这一想法和Hebbian准则不谋而合：neurons that fire together, wire together,这一思想引导着我们探索网络的稀疏结构。卷积滤波器个人理解其实际上就是一个稀疏结构,利用卷积滤波器来代替全连接层,最后的参数稀疏化为kernel size。但不同的是这个稀疏结构的size由人为进行设定,如1x1,3x3,5x5等。虽然自身无法构建整个强烈的数学关系来推出稀疏结构的尺寸,但是可以利用不同的感受野进行假设、组合以及叠加等。Google提出的Inception模块是对各个感受野进行了组合和叠加(其实这里还涉及到了一个问题,如何确定各层的感受野,个人感觉是一个很好的研究问题,在未来可以进行交流)。</p>
+<h3 id="2-1-Inception模块"><a href="#2-1-Inception模块" class="headerlink" title="2.1 Inception模块"></a>2.1 Inception模块</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;正如上述所说我的理解中的Inception模块,其利用卷积这个稀疏结构来覆盖全连接层。但是由于卷积层的稀疏结构并没有直接的理论验证应该是什么尺寸,因此Inception中是利用了1x1,3x3,5x5的模块,如下图所示：<br><img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V1/1.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;此外,作者在Inception模块中加入了池化操作。池化操作的加入使得网络不仅有了不同kernel size的感受野,同时加上了上一层的聚类信息,使得网络提取的特征更加的丰富。在每个卷积层之后加入了ReLU非线性层,更加提高了其非线性拟合能力。<br>&nbsp;&nbsp;&nbsp;&nbsp;由于Inception模块是通过各个结构的叠加,因此需要尺寸在W和H上保持相同,因此在使用过程中需要设定padding。对于不管是卷积还是池化操作中,遇到kernel size为1x1,3x3,5x5的padding分别为0,1,2。</p>
+<h3 id="2-2-1x1卷积核降维的Inception"><a href="#2-2-1x1卷积核降维的Inception" class="headerlink" title="2.2 1x1卷积核降维的Inception"></a>2.2 1x1卷积核降维的Inception</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Inception模块作为一个整体,可视为网络的一层。在网络的维度设置上,在低层的时候一般用较小的channel。随着网络层数的增加,网络的channel会增加,这预计会使得空间浓度降低,1x1卷积核主要提取的就是空间的信息,空间信息通过1x1卷积核应该能获取到其强烈的关系了,因此应该更关注与W和H层面的信息,意味着在更高层的时候需要增大3x3和5x5卷积核的比例。<br>&nbsp;&nbsp;&nbsp;&nbsp;但是Inception模块随着3x3和5x5卷积核的比例增加导致参数数量增大(最明显就是池化层了,使得每经历一个Inception模块的便会增加channal数量),越到高层数量越大,可能会导致阶段内计算爆炸,所以需要用到降维技术。1X1卷积核的另外一个重要的作用就是降维了,本人在<a href="https://jaryhuang.github.io/2018/07/13/SE-Net/" target="_blank" rel="noopener">SE-Net</a>的2.2部分讲了SE块中讲述了利用1X1卷积核来降维,具体可参考如何降维度(channel)。<br>&nbsp;&nbsp;&nbsp;&nbsp;基于此,论文中提出了降维的Inception模块(应该叫减少参数量的Inception模块应该更恰当),具体结构如图所示：<br><img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V1/2.png" alt="Alt text"><strong>结构中的1x1卷积核除了降低维度之外,同时后面跟着非线性层(ReLU),增加了网络非线性拟合能力</strong></p>
+<h3 id="2-3-Average-pooling代替全连接层"><a href="#2-3-Average-pooling代替全连接层" class="headerlink" title="2.3 Average pooling代替全连接层"></a>2.3 Average pooling代替全连接层</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在GoogLeNet中还有一个很大的改进就是网络最后采用average pooling来代替全连接层,该想法来自NIN(Network in Network),作者实验的结果是准确率提升了0.6%,但是其在最后还是加了一个全连接层,为了方便对输出进行灵活的调整。</p>
+<h2 id="3-GoogLeNet网络的结构与测试"><a href="#3-GoogLeNet网络的结构与测试" class="headerlink" title="3.GoogLeNet网络的结构与测试"></a>3.GoogLeNet网络的结构与测试</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;基于Inception模块构建的GoogLeNet总共有22层(如果计算入池化层的话,就是27层),网络结构如下：<br><img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V1/3.jpg" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;网络额外增加了2个辅助的softmax用于向前传导梯度(辅助分类器)。辅助分类器是将中间某一层的输出用作分类,并按一个较小的权重(0.3)加到最终分类结果中,这样相当于做了模型融合,同时给网络增加了反向传播的梯度信号,也提供了额外的正则化,对于整个网络的训练很有裨益。而在实际测试的时候,这两个额外的softmax会被去掉。整体网络具体网络的细节图如图所示：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V1/4.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;<strong>上表中的“#3x3 reduce”,“#5x5 reduce”表示在3x3,5x5卷积操作之前使用了1x1卷积的数量</strong>,下面以 <strong>Inception 3a层</strong>为例子进行下说明：输入channel是192<br>&nbsp;&nbsp; <em>1)64个1x1的卷积核,然后RuLU,输出28x28x64</em><br>&nbsp;&nbsp; <em>2)96个1x1的卷积核,作为3x3卷积核之前的降维,变成28x28x96,然后进行ReLU计算,再进行128个3x3的卷积（padding为1）,输出28x28x128</em><br>&nbsp;&nbsp; <em>3)16个1x1的卷积核,作为5x5卷积核之前的降维,变成28x28x16,进行ReLU计算后,再进行32个5x5的卷积(padding为2),输出28x28x32</em><br>&nbsp;&nbsp; <em>4)pool层,使用3x3的核(padding为1),输出28x28x192,然后进行32个1x1的卷积,输出28x28x32</em><br><em>将四个结果进行连接,对这四部分输出结果的第三维并联,即64+128+32+32=256,最终输出28x28x256</em></p>
+<h3 id="3-1-网络深度以及辅助层的影响"><a href="#3-1-网络深度以及辅助层的影响" class="headerlink" title="3.1 网络深度以及辅助层的影响"></a>3.1 网络深度以及辅助层的影响</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;论文采用三个softmax的combine来作为训练,测试的时候直接利用softmax2的结果。依据作者的思路,本人先后测试了训练每个softmax以及combine的结果如下图所示：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V1/5.png" alt="Alt text"><br>&nbsp;&nbsp;&nbsp;&nbsp;图中softmax0代表的是网络结构中softmax0的输出,其他同理。combine的结果是训练的时候,将softmax0到2的结果通过[0.3,0.3,0.4]的权重进行加权训练的结果。从图中清楚的发现,从softmax0到softmax2来讲,其训练以及测试的误差越来越小,表明通过Inception模块来增加网络深度的方式是有利于提高网络的精度。再者,图中的黄线(combine)的结果表明,通过三个结果的加权训练能够提高网络的精度。</p>
+<h3 id="3-2-与VGG网络的对比"><a href="#3-2-与VGG网络的对比" class="headerlink" title="3.2 与VGG网络的对比"></a>3.2 与VGG网络的对比</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;GoogLeNet和VGG网络作为当年分类比赛的第一第二名,自然需要拿来进行比较比较。1.从参数方面来看,VGG-16的总参数量为1.3亿个参数,GoogLeNet-V1版本的参数0.1亿个,这里相差了13倍。参数的差别最直观的体现在训练的时间上：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V1/7.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;图上清晰的看出来,从训练时间来看,GoogLeNet远远快于VGG网络。2.从网络精度来看,由于pytorch没找到GoogLeNet-V1的ImageNet预训练模型(V3的有),因此做训练精度的对比只能从两者零初始化来对比,这个对比没有那么的严格,仅供大家交流参考(有无预训练差别很大,在VGG网络里面利用VGG-11已经做过对比,如有问题,可以过去查看)：<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V1/6.png" alt="Alt text"><br>&nbsp;&nbsp;&nbsp;&nbsp;这是两者的误差对比,从零初始化来看GoogLeNet优于VGG-16网络。明显的看出,VGG-16网络其实处于过拟合状态,这也和其参数量有关。但是在很多的网络应用中,都是利用VGG网络的卷积层(只占11%的参数)来进行特征的提取,推出了很多的改良版本,每个网络都有其可借鉴之处。</p>
+<h3 id="3-3-模型融合和测试数据增强"><a href="#3-3-模型融合和测试数据增强" class="headerlink" title="3.3 模型融合和测试数据增强"></a>3.3 模型融合和测试数据增强</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;GooLeNet_v1的论文中测试数据增强主要体现,将每张测试图片变为了$4\cdot 3\cdot 6\cdot 2 = 144$张图来进行softmax后的取平均。这144张图片如何处理的呢。<br>1)<strong>4：</strong>按图片的短边分别resize成256,288,320,352的图片.<br>2)<strong>3:</strong>将上述resize后的图片变为上中下或者左中右三幅。具体如何理解，比如上述按短边resize后为$[w,h] = [256,300]$(这里短边是w),那么按照上中下分别crop三张图都为$[256,256]$,出现左中右是因为短边有可能是h.<br>3)<strong>6:</strong>接下来将上述crop后的方形图片按照4个角落+1个中间+原图resize变为 $[224,224]$.<br>4)<strong>2:</strong>上述所有图片的镜像图片.<br>&nbsp;&nbsp;&nbsp;&nbsp;GooLeNet_v1的论文中除了测试数据增强外,其也应用了模型融合技术，采用7个模型融合。这7个模型改变的主要是初始化以及图片送进来的顺序。这些测试的trick给了模型很大的提升,可以参见论文中的图。<img src="/../../../images/DeepLearning/Classfication/GoogLeNet_V1/ensembleAndaugment.png" alt="Alt text"></p>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;GoogLeNet的出现,给了大家一些启示,1.Inception结构的应运而生,作者其核心思想是找出一个稀疏结构来表征神经网络,而稀疏化与卷积结合起来,因此出现了著名的Inception——“稀疏化全连接层”。这也给了研究者启发,除了运用标准的各个层加深网络之外,也可以从网络的宽度以及每层的结构上着手2.GoogLeNet中的应用1X1卷积核的降维方法,为网络在深度方面的提升给了很大的帮助。3.Average pooling代替全连接层减少了网络参数,同时提高了精度,有很大的指导意义。4.当然其在训练的时候有很多trick,如增加辅助层等。5.在测试的时候,通过模型融合以及图片的数据增强,显著降低了模型的误差。<br>&nbsp;&nbsp;&nbsp;&nbsp;本人先看的VGG网络论文,后看的GoogLeNet,考虑到VGG网络的3x3卷积核的叠加来代替5x5,后面发现在GoogLeNet-V2中正好也是应用了这个思路(证明笔者还是有思考的)。</p>
+<h2 id="5-参考"><a href="#5-参考" class="headerlink" title="5.参考"></a>5.参考</h2><ol>
+<li>Szegedy C, Liu W, Jia Y, et al. Going deeper with convolutions[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2015: 1-9.</li>
+<li>Min Lin, Qiang Chen, and Shuicheng Yan. Network in network. CoRR, abs/1312.4400, 2013.</li>
+<li><a href="https://blog.csdn.net/imPlok/article/details/79932834" target="_blank" rel="noopener">大话CNN经典模型：GoogLeNet(从Inception v1到v4的演进)</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Classfication/" rel="tag"># Classfication</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/10/17/Python/数据结构和算法2-线性表/" rel="next" title="数据结构和算法----线性表">
+                <i class="fa fa-chevron-left"></i> 数据结构和算法----线性表
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/02/DeepLearning/Classficaition/BatchNorm And GooLeNetV2/" rel="prev" title="BatchNorm and GoogLeNet_V2">
+                BatchNorm and GoogLeNet_V2 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-网络的创新点"><span class="nav-number">2.</span> <span class="nav-text">2.网络的创新点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Inception模块"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Inception模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1x1卷积核降维的Inception"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 1x1卷积核降维的Inception</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Average-pooling代替全连接层"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Average pooling代替全连接层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-GoogLeNet网络的结构与测试"><span class="nav-number">3.</span> <span class="nav-text">3.GoogLeNet网络的结构与测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-网络深度以及辅助层的影响"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 网络深度以及辅助层的影响</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-与VGG网络的对比"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 与VGG网络的对比</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-模型融合和测试数据增强"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 模型融合和测试数据增强</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-参考"><span class="nav-number">5.</span> <span class="nav-text">5.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Classfication," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ResNet等网络的成功应用表明,在输入层和输出层中加入短连接(skip-connect)能够更加准确有效的训练网络。基于上述启发,作者提出了DenseNet(密集连接网络)。每一层接收来自前面多层的feature map形成密集连接。DenseNet优点主要在以下几个方面:  缓解梯度消失问题(同ResNet) 加强特征传播,鼓励特征重用">
+<meta name="keywords" content="Classfication">
+<meta property="og:type" content="article">
+<meta property="og:title" content="DenseNet">
+<meta property="og:url" content="http://yoursite.com/2019/04/09/DeepLearning/Classficaition/DenseNet/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ResNet等网络的成功应用表明,在输入层和输出层中加入短连接(skip-connect)能够更加准确有效的训练网络。基于上述启发,作者提出了DenseNet(密集连接网络)。每一层接收来自前面多层的feature map形成密集连接。DenseNet优点主要在以下几个方面:  缓解梯度消失问题(同ResNet) 加强特征传播,鼓励特征重用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/DenseNet/DenseNet.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/DenseNet/DenseBlock.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/DenseNet/Transition_Layer.png">
+<meta property="og:updated_time" content="2019-10-14T11:21:09.629Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="DenseNet">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;ResNet等网络的成功应用表明,在输入层和输出层中加入短连接(skip-connect)能够更加准确有效的训练网络。基于上述启发,作者提出了DenseNet(密集连接网络)。每一层接收来自前面多层的feature map形成密集连接。DenseNet优点主要在以下几个方面:  缓解梯度消失问题(同ResNet) 加强特征传播,鼓励特征重用">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/Classfication/DenseNet/DenseNet.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/09/DeepLearning/Classficaition/DenseNet/"/>
+
+
+
+
+
+  <title>DenseNet | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/09/DeepLearning/Classficaition/DenseNet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">DenseNet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-09T18:00:55+08:00">
+                2019-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;ResNet等网络的成功应用表明,在输入层和输出层中加入短连接(skip-connect)能够更加准确有效的训练网络。基于上述启发,作者提出了DenseNet(密集连接网络)。每一层接收来自前面多层的feature map形成密集连接。DenseNet优点主要在以下几个方面:</p>
+<ul>
+<li>缓解梯度消失问题(同ResNet)</li>
+<li><strong>加强特征传播,鼓励特征重用</strong></li>
+<li>大幅度减少参数量。</li>
+</ul>
+<a id="more"></a>
+<h2 id="2-DenseNet"><a href="#2-DenseNet" class="headerlink" title="2.DenseNet"></a>2.DenseNet</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;在介绍具体的网络之前,先来了解下DenseNet的整体结构:<br><img src="/../../../images/DeepLearning/Classfication/DenseNet/DenseNet.png" alt="DenseNet"><center>图1.DenseNet结构图</center><br>如图1所示,DenseNet由基础卷积、池化以及DenseBlock组成。不同大小的网络如DenseNet-121,169,201等差异主要就在DenseBlock上,接下来重点来介绍下DenseBlock。</p>
+<h2 id="2-1-DenseBlock"><a href="#2-1-DenseBlock" class="headerlink" title="2.1 DenseBlock"></a>2.1 DenseBlock</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;DenseBlock的结构如下图所示:<br><img src="/../../../images/DeepLearning/Classfication/DenseNet/DenseBlock.png" alt="DenseBlock"><center>图2.DenseBlock</center></p>
+<ul>
+<li><strong>Dense Connect</strong><br>&nbsp;&nbsp;&nbsp;&nbsp;DenseNet和ResNet两个网络有一个共同点就是连接(connect),但是两者的连接方式有很大的差异。ResNet采用的是加法(summation),DenseNet采用的是拼接(concatenate)。假设经过一系列的卷积和非线性作用的函数为$H_l$,各个层分别表示为$x_0,x_1,…x_{l-1},x_{l}$:</li>
+</ul>
+<p>ResNet中:</p>
+<script type="math/tex; mode=display">x_l = H_l(x_{l-1})+x_l</script><p>DenseNet中:</p>
+<script type="math/tex; mode=display">x_l = H_l([x_0,x_1,...x_{l-1}])</script><ul>
+<li><strong>Growth rate</strong></li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;讲完上述的连接之后,接下来还有一个问题,假设每一层产生k个feature map, 那么最后一层得到的特征图就是$k*l$个。原论文中因为定义了第一层是$k_0$,公式不一样,实际上同理。作者将这个k值定为一个参数,试验了k=12,24,40等,说明了小k也有很好的效果,小k也大大的减少了参数量。</p>
+<ul>
+<li>$H_l$<strong>的定义</strong></li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;$H_l$是由卷积(Conv)、激活函数(ReLU)和批归一化(BN)组成。具体形式:</p>
+<script type="math/tex; mode=display">BN-ReLU-Conv(1×1)-BN-ReLU-Conv(3×3)</script><p>其中1x1卷积用于降维。</p>
+<h2 id="2-2-Transition-Layer"><a href="#2-2-Transition-Layer" class="headerlink" title="2.2 Transition Layer"></a>2.2 Transition Layer</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;从图1的总体结构中了解,Dense Block之间的采用卷积和池化连接,将其称之为Transition Layer:</p>
+<p><img src="/../../../images/DeepLearning/Classfication/DenseNet/Transition_Layer.png" alt="称之为Transition_Layer:"></p>
+<p><center>图3.Transition Layer</center><br>&nbsp;&nbsp;&nbsp;&nbsp;这一层的结构没什么特殊的改进,主要从上述Dense连接方式可知Dense Block的输出特征图很大,所以在这个层中用了1x1卷积核来进行降维,利用一个参数$\theta$来表征降维的幅度,作者默认用0.5。</p>
+<h2 id="3-网络的理论解释"><a href="#3-网络的理论解释" class="headerlink" title="3.网络的理论解释"></a>3.网络的理论解释</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;深度学习虽然是一个黑箱,但是渐渐的大家根据网络的效果总结出一些准则来指导网络的设计以及解释。主要有以下3种(这几种解释,其本质表达的是一个意思):</p>
+<ol>
+<li><p><strong>多层语义信息</strong>：这种解释主要应用在语义分割中。在网络前馈过程中,每层产生的feature map都包含了语义信息,但是在前进过程中不管是激活函数还是池化操作等,都有可能会丢失重要的语义信息。因此,ResNet和DenseNet等都通过connection的方式尽可能的使得重要语义信息保留和传递。</p>
+</li>
+<li><p><strong>感受野</strong>：这个概念出现在检测任务中比较多,它与生理视觉相对应。人眼对在一定范围内具有感受野,太远的东西就看不到了。在神经网络的设计中,不同的网络结构具有不同的感受野,具体参照<a href="https://jaryhuang.github.io/2019/03/12/Convlution/#more" target="_blank" rel="noopener">Convolution and Receptive Field</a>。DenseNet等网络中,通过connection feature map,相当于叠加了不同大小感受野,就好像看一张图片咱们放大看了又放小看,做出综合评价,这样多种尺度会看的更加准。</p>
+</li>
+<li><p><strong>数据的冗余</strong>：这个是从信息论的角度出发来解释。一张图片,存在很多的信息(有我们的关注信息和无关信息)。要做到正确的分类就要抑制掉干扰量,保留关注的一些特征。因此,对于冗余的信息应该抑制,对于重点特征的要进行传递。那么connection为什么有效呢？因为抑制(卷积+激活函数),保留(connect),两者都做到了。</p>
+</li>
+</ol>
+<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4.参考"></a>4.参考</h2><p>1.<a href="https://arxiv.org/pdf/1608.06993.pdf" target="_blank" rel="noopener">DenseNet</a><br>2.<a href="https://mp.weixin.qq.com/s/2cxEIqGhhQ-AgrEC1-a3gA" target="_blank" rel="noopener">对ResNet本质的一些思考</a> </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Classfication/" rel="tag"># Classfication</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/02/DeepLearning/Visualization/Class Activation Mapping/" rel="next" title="Learning Deep Features for Discriminative Localization">
+                <i class="fa fa-chevron-left"></i> Learning Deep Features for Discriminative Localization
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/01/DeepLearning/Pytorch/pytorch operation in image/" rel="prev" title="pytorch函数操作Tensor">
+                pytorch函数操作Tensor <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-DenseNet"><span class="nav-number">2.</span> <span class="nav-text">2.DenseNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-DenseBlock"><span class="nav-number">3.</span> <span class="nav-text">2.1 DenseBlock</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Transition-Layer"><span class="nav-number">4.</span> <span class="nav-text">2.2 Transition Layer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-网络的理论解释"><span class="nav-number">5.</span> <span class="nav-text">3.网络的理论解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-参考"><span class="nav-number">6.</span> <span class="nav-text">4.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

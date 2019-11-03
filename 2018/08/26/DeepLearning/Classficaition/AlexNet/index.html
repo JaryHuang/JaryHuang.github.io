@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Classfication," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;自2012年AlexNet网络的出现,卷积神经网络得到了快速的发展,AlexNet也称之为现代意义上的深度卷积神经网络的开端。网络的结构如下图所示： &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;AlexNet整体架构包含了8层结构,前5层是卷积层,后面接着3个全连接层。网络的输入图像是224x224x3的三通道彩图。&amp;nbsp;&amp;nbsp">
+<meta name="keywords" content="Classfication">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AlexNet">
+<meta property="og:url" content="http://yoursite.com/2018/08/26/DeepLearning/Classficaition/AlexNet/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;自2012年AlexNet网络的出现,卷积神经网络得到了快速的发展,AlexNet也称之为现代意义上的深度卷积神经网络的开端。网络的结构如下图所示： &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;AlexNet整体架构包含了8层结构,前5层是卷积层,后面接着3个全连接层。网络的输入图像是224x224x3的三通道彩图。&amp;nbsp;&amp;nbsp">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/AlexNet/1.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/AlexNet/relu_train_loss.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/AlexNet/relu_error.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/AlexNet/dropout.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/AlexNet/pooling_time.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/Classfication/AlexNet/pooling.png">
+<meta property="og:updated_time" content="2019-10-14T09:20:34.012Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AlexNet">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;自2012年AlexNet网络的出现,卷积神经网络得到了快速的发展,AlexNet也称之为现代意义上的深度卷积神经网络的开端。网络的结构如下图所示： &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;AlexNet整体架构包含了8层结构,前5层是卷积层,后面接着3个全连接层。网络的输入图像是224x224x3的三通道彩图。&amp;nbsp;&amp;nbsp">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/Classfication/AlexNet/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/26/DeepLearning/Classficaition/AlexNet/"/>
+
+
+
+
+
+  <title>AlexNet | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/26/DeepLearning/Classficaition/AlexNet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">AlexNet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-26T22:58:55+08:00">
+                2018-08-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;自2012年AlexNet网络的出现,卷积神经网络得到了快速的发展,AlexNet也称之为现代意义上的深度卷积神经网络的开端。网络的结构如下图所示：</p>
+<p><img src="/../../../images/DeepLearning/Classfication/AlexNet/1.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;AlexNet整体架构包含了8层结构,前5层是卷积层,后面接着3个全连接层。网络的输入图像是224x224x3的三通道彩图。<br>&nbsp;&nbsp;&nbsp;&nbsp;第一个卷积层是有96组11x11的卷积核,卷积步长stride=4,同时后面跟着LRN层,ReLU层以及pooling层。<br>&nbsp;&nbsp;&nbsp;&nbsp;第二个卷积层是由256组5x5大小的卷积核组成,分为两个group,每个group通道数为128,卷积步长stride=1,同时后面跟着LRN层,ReLU层以及pooling层。<br>&nbsp;&nbsp;&nbsp;&nbsp;第三层有384组3X3的卷积核,分为两个group,每个group通道数为192,卷积步长stride=1,后面跟着ReLU层。<br>&nbsp;&nbsp;&nbsp;&nbsp;第四层依旧有384组3X3的卷积核,分为两个group,每个group通道数为192,卷积步长stride=1,后面跟着ReLU层。<br>&nbsp;&nbsp;&nbsp;&nbsp;第五个卷积层是由256组3x3大小的卷积核组成,分为两个group,每个group通道数为128,卷积步长stride=1,同时后面跟着LRN层,ReLU层以及pooling层。<br>&nbsp;&nbsp;&nbsp;接下来是3个全连接层,第1第2个全连接层每一层都是分为两个group,输入输出都是(2048,2048),第三个全连接层输入输出是(4096,1000)。<br><a id="more"></a></p>
+<h2 id="2-网络的创新点"><a href="#2-网络的创新点" class="headerlink" title="2.网络的创新点"></a>2.网络的创新点</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;如作者所说,AlexNet网络其提出了很多trick,而且在过程中他根据这些trick的重要性就行了验证。笔者根据作者的思路对这些trick进行了简单的验证,但是由于设备以及数据的原因,笔者没有按照作者的一模一样的思路以及方法进行训练处理,笔者利用的GPU是GTX1080TI,数据集采用的是cifar-10,数据量不是很大,有利于短时间内的验证。</p>
+<h3 id="2-1-ReLU激活函数"><a href="#2-1-ReLU激活函数" class="headerlink" title="2.1 ReLU激活函数"></a>2.1 ReLU激活函数</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;之前的神经网络大多采用的是$f(x)=tanh(x)$或者$f(x)=(1+e^{-x})^{-1}$,但是这些非线性函数有一个显著的缺点：随着训练的增加,这些非线性函数的梯度会趋近于0导致学习的速率急速的下降,对深度学习的影响很大,作者利用了ReLU函数$f(x)=max(0,x)$。<img src="/../../../images/DeepLearning/Classfication/AlexNet/relu_train_loss.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;如上图所示是在分别利用激活函数ReLU和tanh训练网络的训练损失图,图中蓝色虚线是利用tanh激活函数训练的Training Loss,红色虚线是利用ReLU激活函数训练的Training Loss。从图中可以看出两者的趋势相同,但也明显的在训练时间上以及训练Loss的减少上,ReLU有明显的优势,利用ReLU激活函数只需要9个epoch后loss达到0.25的时候,而tanh需要14个epoch。究其原因是由于ReLU函数的特性：1)其线性抑制使得一些神经元不会被激活,部分神经元一直为0能够加快训练。2)其被激活部分X的导数恒为1,不会因为训练的增加和使得梯度为0或者消失,因此能够加速其训练。<br>同时,在训练误差方面如图所示：<img src="/../../../images/DeepLearning/Classfication/AlexNet/relu_error.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;从图中显而易见,ReLU激活函数相较于tanh函数在训练集和测试集的训练误差上有显著的减少。通过ReLU函数,在cifar-10数据集网络的误差降低了4%,效果非常显著。ReLU函数能够加快训练这个容易理解,为何其能帮助提高精度呢？这得以与上述提到的1,其使得一些神经元不被激活,输出值为0,使得网络参数稀疏化,起到了类似L1的正则化的效果,也在一定程度上防止了过拟合。</p>
+<h3 id="2-2-Dropout机制"><a href="#2-2-Dropout机制" class="headerlink" title="2.2 Dropout机制"></a>2.2 Dropout机制</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在机器学习中,如果模型的参数过多,而数据样本太少很容易造成过拟合现象。在训练神经网络的过程特别容易出现(通常神经网络的参数非常的多)。而常用的方法是在损失函数中加入惩罚项,在神经网络中,还有一种机制是Dropout。Dropout是hintion提出的,为了防止模型过拟合,Dropout可以作为一种trikc供选择。在hinton的论文摘要中指出,在每个训练批次中,通过忽略一半的特征检测器(让一半的隐层节点值为0),可以明显地减少过拟合现象。这种方式可以减少特征检测器间的相互作用,检测器相互作用是指某些检测器依赖其他检测器才能发挥作用。<br>&nbsp;&nbsp;同时,在传统的机器学习中有很多ensemble的方法,比如boosting,bagging,stacking等等。这些集成方法有助于减少网络的误差。但是其在深度神经网络中应用不是很方便,主要原因还是深度神经网络模型训练的周期比较长,可这样的代价太昂贵了。但是,dropout的出现给了深度神经网络提供了一个模型融合的方式。通过隐藏一些神经元,使得每次mini-batch训练的都是一个新的网络,最后相当于达到了模型融合的效果。<br>&nbsp;&nbsp;&nbsp;&nbsp;因此综上两点,理论上Dropout能够防止过拟合以及提高精度,根据AlexNet作者的说明,在全连接层中加入了dropout层,并使得probability=0.5,对比结果如图所示：<br><img src="/../../../images/DeepLearning/Classfication/AlexNet/dropout.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;在没引入dropout机制之前,网络训练的时候出现了一个问题：在训练集上损失函数以及错误率很低,但是在测试集上错误率比较高,这是一种过拟合的表现。因此在引入dropout之后,很明显其抑制了训练的错误降低,同时提高了验证集的准确度,提升了2%,有较明显的效果。</p>
+<h3 id="2-3-重叠最大池化Overlapping-Pooling"><a href="#2-3-重叠最大池化Overlapping-Pooling" class="headerlink" title="2.3 重叠最大池化Overlapping Pooling"></a>2.3 重叠最大池化Overlapping Pooling</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在神经网络中我们通过会用到池化层,其将局部信息进行汇总,通过特定的算法来表征某一块的局部信息,可以称之为叫特征化。比如2x2的maxpooling,就是用在2x2区域内的最大值来表征这2x2的区域,以期找到有效特征。池化层最重要的作用是能够减少参数的数量,通过池化层,将图像的W和H进行缩小,减少了网络的参数数量,能够加速学习。<br>&nbsp;&nbsp;&nbsp;&nbsp;池化层通常选择的是步长等于池化宽度。比如假设池化宽度是Z,步长是S,一般Z=S。如很多网络中都是2x2的池化层,步长也为2。但是这也间接导致了信息的损失,因为每次跨步进行池化。因此在AlexNet中,作者提出了S&lt;Z,即步长小于Z。这样能够减少信息的损失,但是图像的尺寸每次只缩小S像素。如下图所示是训练的时间：<br><img src="/../../../images/DeepLearning/Classfication/AlexNet/pooling_time.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;显而易见,由于图像尺寸每次只缩小S像素,导致每一层卷积以及池化之后参数量相较之前大很多,因此在训练时间上马上有了体现。而在训练与测试误差方面,本文根据AlexNet网络,修改所有的池化层分别为S=2,Z=2和S=1,Z=2来做对比,对比结果如下图所示：<br><img src="/../../../images/DeepLearning/Classfication/AlexNet/pooling.png" alt="Alt text">&nbsp;&nbsp;&nbsp;&nbsp;在训练误差和测试误差方面,两者的趋势一致,但S=1相较于S=2在训练误差和测试误差都有了一定的下降。原作者在imagnet上top1和top5错误率减少了0.4%和0.3%,本人在cifar-10数据集上错误率减少了0.2%。因此通过Overlapping Pooling能够达到减少误差的目的,但是效果可能没有那么明显。在对具体问题分析的时候,需要综合考虑错误率和训练速度的因素。</p>
+<h3 id="2-4-数据增强-data-augmentation"><a href="#2-4-数据增强-data-augmentation" class="headerlink" title="2.4 数据增强(data augmentation)"></a>2.4 数据增强(data augmentation)</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;数据增强,通常会从现有数据中生成额外的数据,以丰富数据样本,提升模型能力,并达到减少过拟合的效果。在AlexNet网络中也使用了一些技巧：<br>1.<strong>水平镜像翻转：</strong>通过水平镜像翻转,原本是一只狗,那么经过水平镜像翻转那么还应该是。这丰富了数据样本,训练数据变为原来的两倍。<br>2.<strong>随机裁剪：</strong>通过随机裁剪实现数据增强,即原始数据的移位。作者从大小为256×256的图像中随机裁剪出大小为224×224的图像,作为网络的输入。<br>&nbsp;&nbsp;&nbsp;&nbsp;作者通过这两种方式实现了数据扩增2048倍,$(256-224)\cdot (256-224)\cdot 2=2048$ 如何理解呢?<br>在256x256的左上角(32x32)范围内,以每个点为图像的顶角,既(w+224,h+224)来进行提取,那么提取的图像就是$32\cdot32=1024$,再加上一个水平反射可得2048张图.</p>
+<h2 id="3-总结"><a href="#3-总结" class="headerlink" title="3.总结"></a>3.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;AlexNet作为深度神经网络的开端,在2012提出之后有非常大的影响力,至今的引用量超过了1.4万,后面很多的研究以及提出的方法都是基于AlexNet网络来进行改进。因此笔者也是从这开始,慢慢的跟着研究者的思路进行学习,同时根据作者在文章中提出的一些创新机制进行验证并理解,以期在以后能够灵活应用其机制。基于上述的验证,同时发现在CIFAR-10数据集上AlexNet笔者的最后的验证精度是78%左右,其精度相对比较低,这也可能是网络的一个限制,因此也是基于此,接下来利用cifar-10数据集来研究各个网络在此基础上的改进以及如何提升。</p>
+<h2 id="4-参考"><a href="#4-参考" class="headerlink" title="4.参考"></a>4.参考</h2><p>1.<a href="https://blog.csdn.net/stdcoutzyx/article/details/49022443" target="_blank" rel="noopener">理解dropout</a><br>2.Krizhevsky A, Sutskever I, Hinton G E. ImageNet classification with deep convolutional neural networks[C] International Conference on Neural Information Processing Systems. Curran Associates Inc. 2012:1097-1105.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Classfication/" rel="tag"># Classfication</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/04/DeepLearning/Pytorch/pytorch create net/" rel="next" title="构建网络模型的方法以及torch.nn的相关函数">
+                <i class="fa fa-chevron-left"></i> 构建网络模型的方法以及torch.nn的相关函数
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/09/01/DeepLearning/Classficaition/VggNet/" rel="prev" title="VggNet">
+                VggNet <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-网络的创新点"><span class="nav-number">2.</span> <span class="nav-text">2.网络的创新点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-ReLU激活函数"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 ReLU激活函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Dropout机制"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Dropout机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-重叠最大池化Overlapping-Pooling"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 重叠最大池化Overlapping Pooling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-数据增强-data-augmentation"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 数据增强(data augmentation)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-总结"><span class="nav-number">3.</span> <span class="nav-text">3.总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-参考"><span class="nav-number">4.</span> <span class="nav-text">4.参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

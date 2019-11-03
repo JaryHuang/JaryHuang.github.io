@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Pytorch," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言pytorch由于其与python的库完美结合，感觉就是用numpy一样受到大家青睐。其建立神经网络模型也是十分的方便，以下来介绍创建几种。首先来了解一下，创建网络的基础架构。首先第一步定义一个网络类继承nn.Module。其内部主要有两大函数init负责定义网络的架构以及一些必要的参数(如是否训练，卷积层、池化层等)forward叫前向通道，当执行这个模型输入图像时，模型会调用forwa">
+<meta name="keywords" content="Pytorch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="构建网络模型的方法以及torch.nn的相关函数">
+<meta property="og:url" content="http://yoursite.com/2018/08/04/DeepLearning/Pytorch/pytorch create net/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言pytorch由于其与python的库完美结合，感觉就是用numpy一样受到大家青睐。其建立神经网络模型也是十分的方便，以下来介绍创建几种。首先来了解一下，创建网络的基础架构。首先第一步定义一个网络类继承nn.Module。其内部主要有两大函数init负责定义网络的架构以及一些必要的参数(如是否训练，卷积层、池化层等)forward叫前向通道，当执行这个模型输入图像时，模型会调用forwa">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/pytorch/create_net/1.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/pytorch/create_net/2.png">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/pytorch/create_net/3.png">
+<meta property="og:updated_time" content="2019-10-15T13:23:12.285Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="构建网络模型的方法以及torch.nn的相关函数">
+<meta name="twitter:description" content="1.引言pytorch由于其与python的库完美结合，感觉就是用numpy一样受到大家青睐。其建立神经网络模型也是十分的方便，以下来介绍创建几种。首先来了解一下，创建网络的基础架构。首先第一步定义一个网络类继承nn.Module。其内部主要有两大函数init负责定义网络的架构以及一些必要的参数(如是否训练，卷积层、池化层等)forward叫前向通道，当执行这个模型输入图像时，模型会调用forwa">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/pytorch/create_net/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/08/04/DeepLearning/Pytorch/pytorch create net/"/>
+
+
+
+
+
+  <title>构建网络模型的方法以及torch.nn的相关函数 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/04/DeepLearning/Pytorch/pytorch create net/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">构建网络模型的方法以及torch.nn的相关函数</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-04T20:58:55+08:00">
+                2018-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>pytorch由于其与python的库完美结合，感觉就是用numpy一样受到大家青睐。其建立神经网络模型也是十分的方便，以下来介绍创建几种。<br>首先来了解一下，创建网络的基础架构。首先第一步定义一个网络类继承nn.Module。其内部主要有两大函数<strong><strong>init</strong></strong>负责定义网络的架构以及一些必要的参数(如是否训练，卷积层、池化层等)<strong><strong>forward</strong></strong>叫前向通道，当执行这个模型输入图像时，模型会调用forward函数，按顺序执行forward函数里的代码，然后return结果。</p>
+<pre><code>import torch
+import torch.nn.functional as F
+class Net(nn.Module):
+    def __init__(self):
+    def forward(self, x):
+</code></pre><a id="more"></a>
+<h2 id="2-torch-nn的了解"><a href="#2-torch-nn的了解" class="headerlink" title="2.torch.nn的了解"></a>2.torch.nn的了解</h2><p>构建网络主要运用的是torch.nn这个功能类，因此有必要来全面了解一下其有哪些函数以及功能。torch.nn有Parameters、Containers等，这些模块会在后续神经网络的预训练这章会介绍，这次只介绍pytorch里面关于神经网络各个层的一些函数。</p>
+<h3 id="2-1-Convolution-Layers"><a href="#2-1-Convolution-Layers" class="headerlink" title="2.1 Convolution Layers"></a>2.1 Convolution Layers</h3><p><strong>torch.nn.Conv2d(in_channels,out_channels,kernel_size,stride=1,padding=0, dilation=1,groups=1,bias=True)</strong><br>参数的概念这里就不大解释了，一般应用关注输入通道(in_channels)，输出通道(out_channels)，核的尺寸(kernel_size)以及步距(stride)和填充(padding)卷积核的输入输出有如下关系：<br>其他也就默认为1了，因此输入输出也就简单的有如下公式<br>输入为$(N,C_{in},H_{in},W_{in})$<br>输出为$(N,C_{out},H_{out},W_{out})$此时</p>
+<script type="math/tex; mode=display">H_{out} = floor((H_{in} + 2 * padding[0] - (kernel\_size[0] - 2) / stride[0] + 1)</script><script type="math/tex; mode=display">W_{out} = floor((W_{in} + 2 * padding[1] -  (kernel\_size[1] - 2) / stride[1] + 1)</script><h3 id="2-2-Pooling-Layers"><a href="#2-2-Pooling-Layers" class="headerlink" title="2.2 Pooling Layers"></a>2.2 Pooling Layers</h3><h4 id="2-2-1-最大池化"><a href="#2-2-1-最大池化" class="headerlink" title="2.2.1 最大池化"></a>2.2.1 最大池化</h4><p><strong>torch.nn.MaxPool2d(kernel_size, stride=None, padding=0, dilation=1, return_indices=False, ceil_mode=False)</strong><br>最大池化的参数顾名思义，kernel_size中找出最大值，stride默认是kernel_size的尺寸。<br>其不改不变输入输出通道数量，$H_{out},W_{out}$的输出与2.1的计算方法一样。</p>
+<h4 id="2-2-2-平均池化"><a href="#2-2-2-平均池化" class="headerlink" title="2.2.2 平均池化"></a>2.2.2 平均池化</h4><p><strong>torch.nn.AvgPool2d(kernel_size,stride=None,padding=0,ceil_mode=False, count_include_pad=True)</strong><br>平均池化是在kernel_size中取平均值，其他同理与最大池化。</p>
+<h3 id="2-3-Non-linear-Activations"><a href="#2-3-Non-linear-Activations" class="headerlink" title="2.3 Non-linear Activations"></a>2.3 Non-linear Activations</h3><p>1)<strong>校正线性单元ReLU</strong><br><strong>torch.nn.ReLU(inplace=False)</strong>，这个是目前常用的非线性激活函数。${ReLU}(x)= max(0, x)$,参数只有一个inplace,如果设置为True,就取代掉原来的值。除了校正线性单元之外在torch.nn这里还有很多的变体，这里不做过多的介绍。<br>2)<strong>Sigmoid函数</strong><br><strong>torch.nn.Sigmoid()</strong>，其没有参数，集体的计算如下$f(x) = 1 / ( 1 + exp(-x))$<br>3)<strong>正切函数</strong><br><strong>torch.nn.Tanh()</strong>,$f(x) = (exp(x) - exp(-x)) / (exp(x) + exp(-x))$<br>4)<strong>SoftPlus函数</strong><br><strong>torch.nn.Softplus(beta=1, threshold=20)</strong>,其是ReLU的平滑近似输出，可约束输出始终为正。<br>5)<strong>Softmax函数</strong><br><strong>torch.nn.Softmax(dim=None)</strong>，将Softmax函数应用于n维输入Tensor重新缩放它们，使得n维输出Tensor的元素位于范围(0,1)中并总的和为1。$f_i(x) = \frac{\exp(x_i)}{\sum_j \exp(x_j)}$<br>然还有很多很多的非线性激活函数，这里也是简单的介绍几个，如有需要可参考官网。</p>
+<h3 id="2-4-Normalization-layers"><a href="#2-4-Normalization-layers" class="headerlink" title="2.4 Normalization layers"></a>2.4 Normalization layers</h3><p><strong>torch.nn.BatchNorm2d(num_features, eps=1e-05, momentum=0.1, affine=True)</strong><br>$y = \frac{x - mean[x]}{ \sqrt{Var[x] + \epsilon}} * gamma + beta$它的从参数这里简单的做一个介绍。eps参数就是公式里的$\epsilon$,num_features是期望输入的通道数[batch_size,num_feature,height,width]gamma和beta是学习参数。</p>
+<h3 id="2-5-Linear-layers"><a href="#2-5-Linear-layers" class="headerlink" title="2.5 Linear layers"></a>2.5 Linear layers</h3><p><strong>torch.nn.Linear(in_features, out_features, bias=True)</strong>线性层非常好理解，就是通过$y = Ax + b$输出结果。主要参数就是输入的维度(in_feature)以及输出的维度(out_features)</p>
+<h3 id="2-6-Dropout-layers"><a href="#2-6-Dropout-layers" class="headerlink" title="2.6 Dropout layers"></a>2.6 Dropout layers</h3><p><strong>torch.nn.Dropout(p=0.5, inplace=False)</strong>正则化层，防止过拟合。P可能被抑制的比例。</p>
+<h2 id="3-构建网络的方法"><a href="#3-构建网络的方法" class="headerlink" title="3.构建网络的方法"></a>3.构建网络的方法</h2><p>简单的介绍了上面的函数之后，接下来我们介绍利用pytorch来构建网络模型的方法。<br>pytorch构建网络的方法有很多，这里也简单的介绍几种方式。<br>假设构建一个网络模型有如下形式：<strong>卷积层—-&gt;ReLu层—-&gt;池化层—-&gt;Normalization层—-&gt;卷积层—-&gt;ReLu层—-&gt;池化层—-&gt;Dropout层—-&gt;全连接层</strong></p>
+<h3 id="3-1-方法1"><a href="#3-1-方法1" class="headerlink" title="3.1 方法1"></a>3.1 方法1</h3><pre><code>import torch
+class myNet1(torch.nn.Module):
+    def __init__(self):
+        super(myNet1,self).__init__()
+        self.conv1 = torch.nn.Conv2d(3, 32, (3,3),1)
+        self.relu1 = torch.nn.ReLU(inplace = True)
+        self.max1 = torch.nn.MaxPool2d((2,2))
+        self.nor1 = torch.nn.BatchNorm2d(32)
+        self.conv2 = torch.nn.Conv2d(32, 64, (2,2),1)
+        self.relu2 = torch.nn.ReLU(inplace = True)
+        self.avg2 = torch.nn.AvgPool2d((2,2))
+        self.drop2 = torch.nn.Dropout2d(inplace = True)
+        self.dense2 = torch.nn.Linear(64,2)
+    def forward(self,x):
+        x = self.conv1(x)
+        x = self.relu1(x)
+        x = self.max1(x)
+        x = self.nor1(x)
+
+        x = self.conv2(x)
+        x = self.relu2(x)
+        x = self.avg2(x)
+        x = self.drop2(x)
+
+        x = x.view(x.size(0),-1)
+        x = self.dense2(x)
+        return x
+</code></pre><p>这种方法很常用，基本就是流程型的，需要哪些结构，定义好机构调用，基本刚开始的时候都是基于这种方法来构建网络。<br><img src="/../../../images/DeepLearning/pytorch/create_net/1.png" alt="Alt text"></p>
+<h3 id="3-2-方法2"><a href="#3-2-方法2" class="headerlink" title="3.2 方法2"></a>3.2 方法2</h3><pre><code>class myNet2(torch.nn.Module):
+    def __init__(self):
+        super(myNet2,self).__init__()
+        self.conv_lay1 = torch.nn.Sequential(
+            torch.nn.Conv2d(3, 32, (3,3),1),
+            torch.nn.ReLU(inplace = True),
+            torch.nn.MaxPool2d((2,2)),
+            torch.nn.BatchNorm2d(32)
+            )
+        self.conv_lay2 = torch.nn.Sequential(
+            torch.nn.Conv2d(32, 64, (2,2),1),
+            torch.nn.ReLU(inplace = True),
+            torch.nn.AvgPool2d((2,2)),
+            torch.nn.Dropout2d(inplace = True)
+            )
+        self.dense2 = torch.nn.Linear(64,2)
+    def forward(self,x):
+        x = self.conv_lay1(x)
+        x = self.conv_lay2(x)
+
+        x = x.view(x.size(0),-1)
+        x = self.dense2(x)
+        return x
+</code></pre><p>方法二是采用Sequential的方式进行封装，这和另外一种定义卷积网络的方式相对应：一般将conv+relu+pool三合一称为神经网络的一层。这样封装之后能更容易的理解网络的内容。<br><img src="/../../../images/DeepLearning/pytorch/create_net/2.png" alt="Alt text">封装是封装好了，但是对于各个层内部表示采用序号标识，不容易做区分。</p>
+<h3 id="3-3-方法3"><a href="#3-3-方法3" class="headerlink" title="3.3 方法3"></a>3.3 方法3</h3><pre><code>class myNet3(torch.nn.Module):
+    def __init__(self):
+        super(myNet3,self).__init__()
+        self.conv_lay1 = torch.nn.Sequential()
+        self.conv_lay1.add_module(&quot;conv1&quot;,torch.nn.Conv2d(3, 32, (3,3),1))
+        self.conv_lay1.add_module(&quot;relu1&quot;,torch.nn.ReLU(inplace = True))
+        self.conv_lay1.add_module(&quot;max1&quot;,torch.nn.MaxPool2d((2,2)))
+        self.conv_lay1.add_module(&quot;nor1&quot;,torch.nn.BatchNorm2d(32))
+
+        self.conv_lay2 = torch.nn.Sequential()
+        self.conv_lay2.add_module(&quot;conv2&quot;,torch.nn.Conv2d(32, 64, (2,2),1))
+        self.conv_lay2.add_module(&quot;relu2&quot;,torch.nn.ReLU(inplace = True))
+        self.conv_lay2.add_module(&quot;avg2&quot;,torch.nn.AvgPool2d((2,2)))
+        self.conv_lay2.add_module(&quot;drop2&quot;,torch.nn.Dropout2d(inplace = True))
+        self.dense2 = torch.nn.Linear(64,2)
+
+    def forward(self,x):
+        x = self.conv_lay1(x)
+        x = self.conv_lay2(x)
+
+        x = x.view(x.size(0),-1)
+        x = self.dense2(x)
+        return x
+</code></pre><p>基于方法2的序列表示不清晰，因此可采用add_module()的方法来进行，对每个添加一个字符标识。<br><img src="/../../../images/DeepLearning/pytorch/create_net/3.png" alt="Alt text"></p>
+<h3 id="3-4-方法4"><a href="#3-4-方法4" class="headerlink" title="3.4 方法4"></a>3.4 方法4</h3><pre><code>import torch
+from collections import OrderedDict
+class myNet4(torch.nn.Module):
+    def __init__(self):
+        super(myNet4,self).__init__()
+        self.conv_lay1 = torch.nn.Sequential(
+            OrderedDict(
+                [
+                    (&quot;conv1&quot;,torch.nn.Conv2d(3, 32, (3,3),1)),
+                    (&quot;relu1&quot;,torch.nn.ReLU(inplace = True)),
+                    (&quot;pool1&quot;,torch.nn.MaxPool2d((2,2))),
+                    (&quot;nor1&quot;,torch.nn.BatchNorm2d(32))
+                ]
+        ))
+        self.conv_lay2 = torch.nn.Sequential(
+            OrderedDict(
+                [
+                    (&quot;conv2&quot;,torch.nn.Conv2d(32, 64, (2,2),1)),
+                    (&quot;relu2&quot;,torch.nn.ReLU(inplace = True)),
+                    (&quot;pool2&quot;,torch.nn.AvgPool2d((2,2))),
+                    (&quot;drop2&quot;,torch.nn.Dropout2d(inplace = True))
+                ]
+            ))
+        self.dense2 = torch.nn.Linear(64,2)
+    def forward(self,x):
+        x = self.conv_lay1(x)
+        x = self.conv_lay2(x)
+
+        x = x.view(x.size(0),-1)
+        x = self.dense2(x)
+        return x
+</code></pre><p>方法3虽然多了标识，但是在对于网络的构建上相当于是方法1的思路了，流程性的写，只是网络展示的时候多了序列标识，因此方法4采用OrderedDict字典的方式加入，单独设置层的名称。</p>
+<h2 id="4参考"><a href="#4参考" class="headerlink" title="4参考"></a>4参考</h2><p>1.<a href="https://www.cnblogs.com/denny402/p/7593301.html" target="_blank" rel="noopener">denny的学习专栏</a></p>
+<p>2.<a href="https://pytorch.org/docs/0.3.1/nn.html" target="_blank" rel="noopener">torch.nn</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/30/DeepLearning/Pytorch/pytorch Data Loading and Processing/" rel="next" title="Pytorch 数据导入和预处理">
+                <i class="fa fa-chevron-left"></i> Pytorch 数据导入和预处理
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/08/26/DeepLearning/Classficaition/AlexNet/" rel="prev" title="AlexNet">
+                AlexNet <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-torch-nn的了解"><span class="nav-number">2.</span> <span class="nav-text">2.torch.nn的了解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-Convolution-Layers"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Convolution Layers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Pooling-Layers"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 Pooling Layers</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-最大池化"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 最大池化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-平均池化"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 平均池化</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-Non-linear-Activations"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 Non-linear Activations</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-Normalization-layers"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 Normalization layers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-Linear-layers"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 Linear layers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-Dropout-layers"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 Dropout layers</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-构建网络的方法"><span class="nav-number">3.</span> <span class="nav-text">3.构建网络的方法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-方法1"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 方法1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-方法2"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 方法2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-方法3"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 方法3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-方法4"><span class="nav-number">3.4.</span> <span class="nav-text">3.4 方法4</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4参考"><span class="nav-number">4.</span> <span class="nav-text">4参考</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

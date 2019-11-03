@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Pytorch," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.PyTorch简介&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;pytorch 是一个基于python的计算包，其两大特点1)利用GPU来解决Numpy计算问题。2)一个深度学习的研究平台，非常灵活而且速度快。">
+<meta name="keywords" content="Pytorch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pytorch入门">
+<meta property="og:url" content="http://yoursite.com/2018/07/29/DeepLearning/Pytorch/pytorch Introduction/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.PyTorch简介&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;pytorch 是一个基于python的计算包，其两大特点1)利用GPU来解决Numpy计算问题。2)一个深度学习的研究平台，非常灵活而且速度快。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://yoursite.com/images/DeepLearning/pytorch/mnist.png">
+<meta property="og:updated_time" content="2019-10-15T13:19:05.912Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pytorch入门">
+<meta name="twitter:description" content="1.PyTorch简介&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;pytorch 是一个基于python的计算包，其两大特点1)利用GPU来解决Numpy计算问题。2)一个深度学习的研究平台，非常灵活而且速度快。">
+<meta name="twitter:image" content="http://yoursite.com/images/DeepLearning/pytorch/mnist.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/29/DeepLearning/Pytorch/pytorch Introduction/"/>
+
+
+
+
+
+  <title>pytorch入门 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/29/DeepLearning/Pytorch/pytorch Introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">pytorch入门</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-29T20:58:55+08:00">
+                2018-07-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/DeepingLearning/" itemprop="url" rel="index">
+                    <span itemprop="name">DeepingLearning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-PyTorch简介"><a href="#1-PyTorch简介" class="headerlink" title="1.PyTorch简介"></a>1.PyTorch简介</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;pytorch 是一个基于python的计算包，其两大特点1)利用GPU来解决Numpy计算问题。2)一个深度学习的研究平台，非常灵活而且速度快。<br><a id="more"></a></p>
+<h2 id="2-PyTorch的基本操作和概念"><a href="#2-PyTorch的基本操作和概念" class="headerlink" title="2.PyTorch的基本操作和概念"></a>2.PyTorch的基本操作和概念</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;PyTorch的主要操作库是torch.首先了解一下tensor,官方文档介绍的非常简洁，tensor跟ndarray是没有太大的区别，主要是tensor能够被用于gpu加速。</p>
+<h3 id="2-1创建tensor"><a href="#2-1创建tensor" class="headerlink" title="2.1创建tensor"></a>2.1创建tensor</h3><p>Torch创建tensor有以下几种方式：</p>
+<pre><code>torch.empty(5,3)                   #创建一个5x3的空tensor
+torch.rand(5,3)                    #创建一个5x3的随机初始化tensor
+torch.zeros(5,3,dtype=torch.long)  #创建一个5x3类型为long的空tensor，值为0
+torch.tensor([5.5,3])              #直接创建一个[5.5,3]的1x2的tensor
+</code></pre><p>当然，也可以根据已有的tensor来进行创建：</p>
+<pre><code>x = x.new_ones(5,3,dtype=torch.double)    #new_*的方法很多，可以是zeros等 
+x = torch.rand_like(x,dtype = torch.float)#如果不指定参数，相当于所有属性都拷贝
+</code></pre><p>如果想获取我们tensor的尺寸，利用其size属性就行。</p>
+<pre><code>print(x.size()) #其结果是一个tuple,支持tuple的所有操作。
+</code></pre><h3 id="2-2-操作tensor"><a href="#2-2-操作tensor" class="headerlink" title="2.2 操作tensor"></a>2.2 操作tensor</h3><p>对于tensor的操作有很多，以加法乘法为例子。</p>
+<pre><code>x = torch.rand(5,3)
+y = torch.rand(5,3)
+print(x+y)                  #直接相加
+result = torch.empty(5,3)
+print(torch.add(x,y,out = result))       #torch.add函数操作
+print(y.add_(x))           #这个y会被替换掉，变为结果。特别注意，有_的操作蕴含着    
+取代的意思,比如add和add_做一个区分。x.copy_(y)等都会改变x
+</code></pre><p>对于tensor的resize,pytorch提供了一些操作：</p>
+<pre><code>print(x[:,1]) #输出tensor矩阵的第一列的值
+x = torch.randn(4, 4)  #4x4 tensor
+y = x.view(16)         #16  tensor
+z = x.view(-1, 8)      #2x8 tensor 
+print(x.size(), y.size(), z.size())
+</code></pre><p>对于tensor的输出,其和numpy的操作没其他的差别,如果想得到某个元素，利用其item()的方法来获得</p>
+<pre><code>print(x[:,1]) #输出tensor矩阵的第一列的值
+x = torch.randn(1)
+print(x)         #输出tensor
+print(x.item())  #输出元素
+</code></pre><h3 id="2-3-tensor和numpy的转换"><a href="#2-3-tensor和numpy的转换" class="headerlink" title="2.3 tensor和numpy的转换"></a>2.3 tensor和numpy的转换</h3><p>Torcch张量和NumPy数组共享它们的底层内存位置，更改一个将更改另一个。<br><strong>tensor转为numpy:</strong></p>
+<pre><code>a = torch.ones(5)
+print(a)           #tensor([ 1.,  1.,  1.,  1.,  1.])
+b = a.numpy()      #.numpy()能将其变为numpy类型,[1. 1. 1. 1. 1.]
+a.add_(1)          #替换a变为a+1
+print(a)           #tensor([ 2.,  2.,  2.,  2.,  2.])
+print(b)           #[2. 2. 2. 2. 2.]
+</code></pre><p><strong>numpy转为tensor：</strong></p>
+<pre><code>import numpy as np
+a = np.ones(5)
+b = torch.from_numpy(a)  #torch.form_numpy()能将numpy变为tensor
+np.add(a,1,out =a)
+print(a)                #[2. 2. 2. 2. 2.]
+print(b)                #tensor([2.,2.,2.,2.,2.],dtype=torch.float64)
+</code></pre><p><strong>tensor能够通过.to的方式移动到任何的device：</strong></p>
+<pre><code>if torch.cuda.is_available():
+    device = torch.device(&quot;cuda&quot;)          # a CUDA device object
+    y = torch.ones_like(x, device=device)  #创建tensor在gpu
+    x = x.to(device)                       #利用.to(device)也可以导gpu
+    z = x + y                               
+    print(z)                            #tensor([2.3159], device=&#39;cuda:0&#39;)
+    print(z.to(&quot;cpu&quot;, torch.double))    #利用.to来改变设备同时还能改变类型 
+</code></pre><h2 id="3-PyTorch的Autograd"><a href="#3-PyTorch的Autograd" class="headerlink" title="3.PyTorch的Autograd"></a>3.PyTorch的Autograd</h2><p>PyTorch的核心就是Autograd包，其为张量上的所有操作提供了自动的微分(Automatic Differentiation),这种逐行定义的方式意味着我们的bp是由代码运行的方式定义，迭代都可以不同。<br>在0.4版本之前，变量(Variable) 它包装了张量(Tensor),支持几乎所有的张量上的操作。<br>在0.4版本以后，将其与tensor合到了一起，所以两者的很多属性都是一样的，共用的。这里以0.4版为例子。</p>
+<pre><code>from torch.autograd import Variable
+</code></pre><h3 id="3-1-tensor的属性"><a href="#3-1-tensor的属性" class="headerlink" title="3.1 tensor的属性"></a>3.1 tensor的属性</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;你可以通过.data属性来访问变量中的原始张量,关于这个变量的梯度被计算放入.grad属性中torch.Tensor中的一个 <strong>.requires_grad</strong>属性如果设置True,则会开始跟踪其所有操作。完成计算后,调用 <strong>.backward()</strong>并自动计算所有梯度。最后该张量的梯度将累积到 <strong>.grad</strong>属性之中。<br>&nbsp;&nbsp;&nbsp;&nbsp;如果不要张量的跟踪历史记录，可以调用 <strong>.detach()</strong>将其与历史分离，进行切断。还有一种方法是将代码块包装起来，比如在评估模型的时候。因为模型具有requires_grad=True使得整个模型可训练，但是我们不需要，因此可用：<strong>with torch.no_grad():</strong>还有一个很重要的类是Function,其与tensor进行交互的。每一个tensor(除了用户创建的之外)都有 <strong>.grad_fn</strong>属性。如果想计算张量的导数，可用调用 <strong>.backward()</strong>如果tensor是一个标量就不要指定，如果有其他很多元素，则需要指定gradient匹配形状的张量参数。</p>
+<pre><code>import torch
+x = torch.ones(2,2,require_grad=True)  #设置requires_grad=True来跟踪它的计算
+print(x)            #tensor([[ 1.,  1.],[ 1.,  1.]])
+y = x+2         
+print(y)            #tensor([[ 3.,  3.],[ 3.,  3.]])
+print(y.grad_fn)    #y是结果，所以有grad_fn的属性
+z = y * y * 3
+out = z.mean()
+print(z, out)       #tensor([[27.,27.],[27.,27.]])  tensor(27.)
+</code></pre><p>当然，<strong>.require_grad()</strong>能够改变张量的属性。</p>
+<h3 id="3-2-Gradients"><a href="#3-2-Gradients" class="headerlink" title="3.2 Gradients"></a>3.2 Gradients</h3><p>梯度是通过.backward()来实现的，执行:</p>
+<pre><code>out.backwark()
+print(x.grad)      #print d(out)/dx
+</code></pre><script type="math/tex; mode=display">o = \frac{1}{4}\sum_i z_i</script><script type="math/tex; mode=display">z_i = 3(x_i+2)^2 and z_i\bigr\rvert_{x_i=1} = 27</script><script type="math/tex; mode=display">\frac{\partial o}{\partial x_i} = \frac{3}{2}(x_i+2) and \frac{\partial o}{\partial x_i}\bigr\rvert_{x_i=1} = \frac{9}{2} = 4.5</script><p>当我们应用测试的时候，减少内存的消耗，不进行梯度的运算，因此采用with torch.no_grad():</p>
+<pre><code>print(x.requires_grad)
+print((x ** 2).requires_grad)
+with torch.no_grad():
+    print((x ** 2).requires_grad)
+</code></pre><h2 id="4-Neural-Networks"><a href="#4-Neural-Networks" class="headerlink" title="4.Neural Networks"></a>4.Neural Networks</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;pytorch里有一个专门建立神经网络的包交torch.nn，一个nn.Module包含里面的一些卷积层，同时包含forward(input)方法，以及最后返回output。<br><img src="/../../../images/DeepLearning/pytorch/mnist.png" alt="Alt text"><br>手写体识别的简单前馈神经网络，从他我们来看简单的一个神经网络该流程是如何：<br>1）定义神经网络网络架构(包括参数或者权重等）<br>2）初始化网络参数<br>3)循环输入数据到网络<br>4)计算损失函数<br>5)BP法计算并更新参数。</p>
+<h3 id="4-1-定义神经网络"><a href="#4-1-定义神经网络" class="headerlink" title="4.1 定义神经网络"></a>4.1 定义神经网络</h3><pre><code>import torch
+import torch.nn as nn 
+import torch.nn.functional as F 
+class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__() 
+        self.conv1 = nn.Conv2d(1,6,5)
+        self.conv2 = nn.Conv2d(6,16,5)
+        self.fc1 = nn.Linear(16*5*5,120)
+        self.fc2 = nn.Linear(120,84)
+        self.fc3 = nn.Linear(84,10)
+    def forward(self,x):
+        x = F.max_pool2d(F.relu(self.conv1(x)),(2,2))
+        x = F.max_pool2d(F.relu(self.conv2(x), 2))
+
+        x = x.view(-1,self.num_flat_features(x))
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc1(x))
+        x = self.fc3(x)
+        return x
+    def num_flat_features(self,x):
+        size = x.size()[1:]
+        num_features = 1
+        for s in size:
+            num_features*=s
+        return num_features
+net = Net()
+print(net)
+</code></pre><p>其中这里的super(Net, self).<strong>init</strong>()介绍一下，其是对类的继承。首先他先找到Net的父类nn.module，然后Net就转换为nn.module的对象，可以调用nn.module的函数。此处我们在初始化的时候定义了卷积层，同时写了forward()函数。</p>
+<h3 id="4-2-损失函数"><a href="#4-2-损失函数" class="headerlink" title="4.2 损失函数"></a>4.2 损失函数</h3><p>nn包中有很多的损失函数，可以参考官方链接，这里以nn.MSELOSS为例子。</p>
+<pre><code>output = net(input)
+target = torch.arange(1, 11) 
+target = target.view(1, -1) 
+criterion = nn.MSELoss()
+loss = criterion(output, target)
+print(loss)                   #tensor(38.7042)
+
+net.zero_grad()     # 0初始化梯中的所有参数
+print(&#39;conv1.bias.grad before backward&#39;)
+print(net.conv1.bias.grad)
+loss.backward()
+print(&#39;conv1.bias.grad after backward&#39;)
+print(net.conv1.bias.grad)
+</code></pre><p>上述定义的网络+损失函数就组成了一个前馈神经网络，整个程序的路径是<br>input -&gt; conv2d -&gt; relu -&gt; maxpool2d -&gt; conv2d -&gt; relu -&gt; maxpool2d<br>-&gt; view -&gt; linear -&gt; relu -&gt; linear -&gt; relu -&gt; linear-&gt; MSELoss-&gt; loss<br>而我们执行loss.backward的时候就是沿着整个路径反向执行。</p>
+<h3 id="4-3-优化算法"><a href="#4-3-优化算法" class="headerlink" title="4.3 优化算法"></a>4.3 优化算法</h3><p>所谓优化算法，就是进行我们的参数更新，这里torch里有一个torch.optim包，提供饿了许多算法，比如SGD,Nesterov-SGD等等。</p>
+<pre><code>import torch.optim as optim
+optimizer = optim.SGD(net.parameters(), lr=0.01)   #创建优化器并且设置学习率lr
+optimizer.zero_grad()                               #0初始化所有梯度
+output = net(input)                                 
+loss = criterion(output, target)                    
+loss.backward()                                     #计算梯度
+optimizer.step()    # Does the update               #参数更新
+</code></pre><h2 id="5总结"><a href="#5总结" class="headerlink" title="5总结"></a>5总结</h2><p>大概了解了这么几个部分，对于pytorch也算是有一点了解了。但是还是遗留下很多问题，比如如何做数据预处理，如何实现各种网络等等，这个还需要后面探索。接下来后面也会继续的深入学习</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html#sphx-glr-beginner-blitz-tensor-tutorial-py" target="_blank" rel="noopener">pytorch</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Pytorch/" rel="tag"># Pytorch</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/21/DeepLearning/Tensorflow/TFrecord/" rel="next" title="TFRecord创建">
+                <i class="fa fa-chevron-left"></i> TFRecord创建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/07/30/DeepLearning/Pytorch/pytorch Data Loading and Processing/" rel="prev" title="Pytorch 数据导入和预处理">
+                Pytorch 数据导入和预处理 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-PyTorch简介"><span class="nav-number">1.</span> <span class="nav-text">1.PyTorch简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-PyTorch的基本操作和概念"><span class="nav-number">2.</span> <span class="nav-text">2.PyTorch的基本操作和概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1创建tensor"><span class="nav-number">2.1.</span> <span class="nav-text">2.1创建tensor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-操作tensor"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 操作tensor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-tensor和numpy的转换"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 tensor和numpy的转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-PyTorch的Autograd"><span class="nav-number">3.</span> <span class="nav-text">3.PyTorch的Autograd</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-tensor的属性"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 tensor的属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Gradients"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Gradients</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Neural-Networks"><span class="nav-number">4.</span> <span class="nav-text">4.Neural Networks</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-定义神经网络"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 定义神经网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-损失函数"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-优化算法"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 优化算法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5总结"><span class="nav-number">5.</span> <span class="nav-text">5总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>

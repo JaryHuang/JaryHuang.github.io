@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python基础," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一些Python的数据类型，数据结构，数据间的转换等。主要包括  数据类型  数字 字符串   数据结构  元组 列表 集合 字典">
+<meta name="keywords" content="Python基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python数据类型与结构">
+<meta property="og:url" content="http://yoursite.com/2019/10/25/Python/2.python数据类型/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一些Python的数据类型，数据结构，数据间的转换等。主要包括  数据类型  数字 字符串   数据结构  元组 列表 集合 字典">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-25T10:50:37.444Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python数据类型与结构">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一些Python的数据类型，数据结构，数据间的转换等。主要包括  数据类型  数字 字符串   数据结构  元组 列表 集合 字典">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/10/25/Python/2.python数据类型/"/>
+
+
+
+
+
+  <title>Python数据类型与结构 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/25/Python/2.python数据类型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python数据类型与结构</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-25T18:00:55+08:00">
+                2019-10-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本部分主要介绍一些Python的数据类型，数据结构，数据间的转换等。主要包括</p>
+<ul>
+<li><p>数据类型</p>
+<ul>
+<li>数字</li>
+<li>字符串</li>
+</ul>
+</li>
+<li><p>数据结构</p>
+<ul>
+<li>元组</li>
+<li>列表</li>
+<li>集合</li>
+<li>字典</li>
+</ul>
+</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h2 id="2-数据类型"><a href="#2-数据类型" class="headerlink" title="2.数据类型"></a>2.数据类型</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;Python数据类型的话主要就是数字和字符串。本部分主要按照数字和整数来了解下性质以及互相转换的方式。</p>
+<h3 id="2-1-数字类型和相互转换"><a href="#2-1-数字类型和相互转换" class="headerlink" title="2.1 数字类型和相互转换"></a>2.1 数字类型和相互转换</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python中数字类型有四种：</p>
+<ul>
+<li><p><strong>整数</strong>：int，Python3都是长整数。模型情况下一个数字就表示10进制。如果要表示其他进制的话，得加上其他的符号。</p>
+<pre><code>  12          #整形
+  0b1100      #二进制
+  0O12        #八进制
+  0X0a        #十六进制
+</code></pre></li>
+<li><p><strong>浮点</strong>：float,主要是用于存小数，科学计数法表示的数据是浮点型。</p>
+<pre><code>  1.0         #浮点型
+  2.25e2      #浮点型225.0
+  1.34e-2     #浮点型0.0134
+</code></pre></li>
+<li><p><strong>复数</strong>：complex,Python支持复数类型</p>
+<pre><code>  2+3j            #复数
+  (2+3j)+(3+2j)   #复数
+</code></pre></li>
+<li><p><strong>布尔</strong>：bool,只有两个值True和False。只有空数据或者数字0会转换为False</p>
+<pre><code>  bool(0)         #False
+  bool(2)         #True
+  bool(&#39;&#39;)        #False
+  bool(&#39; &#39;)       #True
+  bool([])        #False
+  bool({})        #False
+  bool(())        #False
+</code></pre></li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;上述4中数据类型，除了复数之外，其余三种可以互相转换。首先，我们了解下在计算的时候，如果整数和浮点数相加得到的是什么型呢。</p>
+<p>输入：</p>
+<pre><code>print(type(1+1.0))
+print(type(1+True))
+print(type(1.0+False))
+</code></pre><p>输出：</p>
+<pre><code>&lt;class &#39;float&#39;&gt;
+&lt;class &#39;int&#39;&gt;
+&lt;class &#39;float&#39;&gt;
+</code></pre><p>通过上述的试验我们可以知道，在计算的时候，Python内部的数据类型转换为float&gt;int&gt;bool，最终的结果类型以出现类型的最高级别排序如“浮点+整型=浮点”。<br>除了Python内部计算时有一个数据转换，当我们得到一个数据之后，是否能主动将这个数据进行类型转换呢？这就得用到自己的转换函数了，分别为float(),int(),bool()</p>
+<p>测试：</p>
+<pre><code>print(type(float(True)))
+print(type(int(1.3)))
+print(type(bool(3)))
+</code></pre><p>输出：</p>
+<pre><code>&lt;class &#39;float&#39;&gt;
+&lt;class &#39;int&#39;&gt;
+&lt;class &#39;bool&#39;&gt;
+</code></pre><h3 id="2-2-字符串类型"><a href="#2-2-字符串类型" class="headerlink" title="2.2 字符串类型"></a>2.2 字符串类型</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python中字符串类型是str,是由一系列字符组成的。从左到右按顺序排序。</p>
+<h4 id="2-2-1-字符串的表示与转义字符串"><a href="#2-2-1-字符串的表示与转义字符串" class="headerlink" title="2.2.1 字符串的表示与转义字符串"></a>2.2.1 字符串的表示与转义字符串</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;字符串采用’xxxx’或者”xxxx”表示，有一些特殊的字符比如换行等，需要用到转义字符。</p>
+<ul>
+<li>\t：tab</li>
+<li>\n: 换行</li>
+<li>\r: 回车</li>
+<li>\\”：双引号</li>
+<li>\\’：单引号</li>
+<li>\\\：反斜杆</li>
+</ul>
+<p>测试：</p>
+<pre><code>a = &quot;1024 haha&quot;
+b = &#39;today\thaha&#39;
+c = &#39;today\nhuhu&#39;
+d = r&quot;today\tyiyi&quot;
+print(a)
+print(b)
+print(c)
+print(d)
+</code></pre><p>输出：</p>
+<pre><code>1024 haha
+today    haha
+today
+huhu
+today\tyiyi
+</code></pre><h4 id="2-2-2-字符串格式化"><a href="#2-2-2-字符串格式化" class="headerlink" title="2.2.2 字符串格式化"></a>2.2.2 字符串格式化</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;字符串的格式化主要是利用”{0:5d}{1:10.2f}{2:s}{3:e}{4:o}{6:x}”.format(A,B,C,D,E,F)形式来处理，其中{}表示占位符，站位符中的：前的数字代表这对应后面的哪个数。默认的形式是0,1,2,3…顺序排列，：后面的代表的是转换的数据类型。d，f，s比较数据，分别代表的是整数，浮点数，字符串。e，o，x代表的是科学家计数法，8进制和16进制。5d代表的是保留5个数字的长度。</p>
+<p>测试：</p>
+<pre><code>name = &quot;javierhuang&quot;
+age = 24
+weight=123.21
+
+print(&quot;姓名：{}，年龄：{}，体重：{}。&quot;.format(name,age,weight))
+print(&quot;姓名：{2}，年龄：{0}，体重：{1}。&quot;.format(age,weight,name))
+print(&quot;姓名：{0:3s}，年龄：{1:5d}，体重：{2:10.2f}。&quot;.format(name,age,weight))
+print(&quot;姓名：{0:3s}，年龄：{1:5d}，体重：{2:e}。&quot;.format(name,age,weight))
+print(&quot;年龄：{0:d}，年龄：{1:o}，年龄：{2:x}。&quot;.format(age,age,age))
+</code></pre><p>输出:</p>
+<pre><code>姓名：javierhuang，年龄：24，体重：123.21。
+姓名：javierhuang，年龄：24，体重：123.21。
+姓名：javierhuang，年龄：   24，体重：    123.21。
+姓名：javierhuang，年龄：   24，体重：1.232100e+02。
+年龄：24，年龄：30，年龄：18。
+</code></pre><h4 id="2-2-3-字符串查找与类型转换"><a href="#2-2-3-字符串查找与类型转换" class="headerlink" title="2.2.3 字符串查找与类型转换"></a>2.2.3 字符串查找与类型转换</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;字符串的查找主要是通过find(sub,start,end)和rfind(sub,start,end)方法，这两个都是字符串的功能函数。前者是从左向右查找，后者是从右向左查找。start和end是查找的起始位置和终点位置，默认是从最左到最右。</p>
+<p>测试：</p>
+<pre><code>introduction = &quot;javierhuang zju tencent&quot;
+
+print(introduction.find(&quot;e&quot;))
+print(introduction.rfind(&quot;e&quot;))
+</code></pre><p>输出:</p>
+<pre><code>4
+20
+</code></pre><p>上述find或者rfind函数一个左边找，一个右边找，而且找到一个符合就不找了。那如果要找到所有位置呢？那么这个不愁，只需要在每次找到位置之后，在以这个位置为起始位置继续查找即可。结束的条件是找到的位置值为-1（查找不到，返回的是-1）。</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;讲完了字符串的查找，那么继续看一下字符串的格式转换。Python数据类型有数字有字符串，他们之间的转换通过函数int(),float()和str()来实现。但是字符串要转为数字，首要前提是能转。比如”abcd”这种就会报错了。</p>
+<p>输入：</p>
+<pre><code>print(int(&quot;abcd&quot;))
+print(int(&#39;2.5&#39;))
+print(float(2.5))
+print(str(3.24))  
+print(&#39;{:.1f}&#39;.format(3.24)) #str不能格式化，采用format形式
+</code></pre><p>输出：</p>
+<pre><code>ValueError: invalid literal for int() with base 10: &#39;abcd&#39;
+ValueError: invalid literal for int() with base 10: &#39;2.5&#39;
+2.5
+3.24
+3.2
+</code></pre><h2 id="3-数据结构"><a href="#3-数据结构" class="headerlink" title="3. 数据结构"></a>3. 数据结构</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;Python的数据结构主要有三种：序列、集合和字典。Python中没有数组结构，因为Python动态语言的特性，它不限定数据类型，而数组这个数据结构是要求统一的数据类型的。如果要用数组这个数据类型，那么可以导入numpy库。</p>
+<h3 id="3-1-序列"><a href="#3-1-序列" class="headerlink" title="3.1 序列"></a>3.1 序列</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;序列这种数据结构，它具有可包含重复元素、元素有序、可以通过索引访问、可迭代（返回对象，具有方法）等特点。Python中序列的数据结构主要有元组(tuple)，列表(list)和字符串(str)。接下来简单介绍一些序列这种数据结构一些公共的特点。</p>
+<ul>
+<li><strong>索引操作</strong>  ：可通过序列的index来进行访问，比如(1,2,3),a[0]访问的是第一个元素。a[-1]访问的是最后一个元素。</li>
+<li><strong>加和乘</strong>   ：序列的加乘操作都是追加的效果，如a=”abc”,a+a=”abcabc”，a*3=”abcabcabc”。</li>
+<li><strong>切片</strong>    ：序列的切片操作是可以获得内部的sub子块的,形式为 <em>[start:end:step]</em>。主要通过索引,比如a=”abcdefghijklmn”。a[0:2]=”ab”，a[-2:]=”mn”，a[0:7:2]=”aceg”。</li>
+</ul>
+<h4 id="3-1-1-元组"><a href="#3-1-1-元组" class="headerlink" title="3.1.1 元组"></a>3.1.1 元组</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;元组是一种不可变序列，一旦创建就不能修改，和字符串一样。元组的创建方式可以直接使用(1,2,3)或者tuple([1,2,3])等方式创建。但是注意，如果是单元素的元组的话(1,)一定得加后面的逗号，否则就变为int数据了。<br>&nbsp;&nbsp;&nbsp;&nbsp;元组是序列，因此它具有切片、加乘和索引等操作。对于元组来讲，可以对元组进行解包和遍历。</p>
+<p>测试：</p>
+<pre><code>#解包
+a=(1,2,3,4,5)
+num1,num2,num3,num4,num5 = a
+print(num1,num2,num3,num4,num5)
+
+num1,num2,*num3 = a
+print(num1,num2,num3)
+
+num1, _, num3, *_= a
+print(num1,num3)
+#遍历
+for item in a:
+    print(item)
+</code></pre><p>输出：</p>
+<pre><code>1 2 3 4 5
+1 2 [3, 4, 5]
+1 3
+1
+2
+3
+4
+5
+</code></pre><h4 id="3-1-2-列表"><a href="#3-1-2-列表" class="headerlink" title="3.1.2 列表"></a>3.1.2 列表</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;列表的创建采用list((1,2,3))或者[1,2,3]方式。其和元组的一个区别就是列表具有可变性，可以对列表进行修改,主要是增删改插操作。</p>
+<ul>
+<li>增加：list.append(x)是增加一个元素。list.extend(X)是增加一个列表</li>
+<li>删除：list.remove(a)是删除一个匹配元素输入的是值。list.pop(index)删除指定的inde下的元素，并将元素返回。</li>
+<li>修改：这个操作不许要对应的函数，直接根据索引值来修改，比如a[0]=5就直接将a[0]修改为5了。</li>
+<li>插入：list.insert(index,value)插入一个数据，输入插入的index和插入的值。</li>
+</ul>
+<p>测试：</p>
+<pre><code>test=[5,8,9,12]
+x=6
+X=[1.3,2,6]
+
+#增
+test.append(x)
+print(test)         #[5, 8, 9, 12, 6]
+test.extend(X)
+print(test)         #[5, 8, 9, 12, 6, 1.3, 2, 6]
+
+#删
+test.remove(8)
+print(test)         #[5, 9, 12, 6, 1.3, 2, 6]
+print(test.pop())   # 6
+print(test)         #[5, 9, 12, 6, 1.3, 2]
+
+#改
+test[1]=100
+print(test)         #[5, 100, 12, 6, 1.3, 2]
+
+#插
+test.insert(2,1000)
+print(test)         #[5, 100, 1000, 12, 6, 1.3, 2]
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;列表中除了上述的增删改插操作外，还有一些其他常见的操作。</p>
+<ul>
+<li>list.reverse():倒置列表</li>
+<li>list.copy():复制列表</li>
+<li>list.clear():清除列表中所有元素</li>
+<li>list.index(value,start,end):查找value在list中的位置，start是起始，end是终止。</li>
+<li>list.count(value)：返回value在列表中出现的次数。</li>
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;产生一个列表，我们可以通过上述的[1,2,3]来写，但是如果我们要差生1000个数字，总不能通过写1000个数字来吧。因此这里介绍一种方法叫列表推导式。它是将一个数据结构作为数据，经过过滤和处理得到一个列表。</p>
+<p>输入：</p>
+<pre><code>a = [x**2 for x in range(20) if x%2==0]
+print(a)
+b = [x*y for x in range(5) for y in range(6) if (x+y)%3==0]
+print(b)
+</code></pre><p>输出：</p>
+<pre><code>[0, 4, 16, 36, 64, 100, 144, 196, 256, 324]
+[0, 0, 2, 5, 2, 8, 0, 9, 8, 20]
+</code></pre><p><strong>列表和元组的相互转化采用list()和tuple()的方式。list((1,2,3))=[1,2,3],tuple([1,2,3])=(1,2,3)</strong></p>
+<h3 id="3-2-集合"><a href="#3-2-集合" class="headerlink" title="3.2 集合"></a>3.2 集合</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;集合是一种可迭代的、无序、不能含有重复元素的数据结构。集合分为可变集合（set）和不可变结合（frozenset）<br>测试：</p>
+<h4 id="3-2-1-可变集合（set）"><a href="#3-2-1-可变集合（set）" class="headerlink" title="3.2.1 可变集合（set）"></a>3.2.1 可变集合（set）</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;可变集合的创建采取set({a,b,c})等形式来进行创建，创建的时候会剔除掉重复元素。可变集合是可以修改的，因此可变集合具有一些操作方法，增删等。</p>
+<ul>
+<li><strong>添加元素</strong>：add(elem)，如果元素存在，则不能添加</li>
+<li><strong>删除元素</strong>: remove(elem)，如果元素不存在会报错。discard(elem)，如果元素不存在不会报错。pop()删除返回集合中任一一个元素。</li>
+<li><strong>清除元素</strong>：clear(),清除集合。</li>
+</ul>
+<p>集合是无序的，因此无法通过索引来访问结合，但是对于集合的遍历，可以取出集合的每一个元素，但是取的顺序是不一定的。</p>
+<p>输入：</p>
+<pre><code>data_set = {&#39;12&#39;,&#39;34&#39;,&#39;56&#39;}
+print(type(data_set))
+for i,data in enumerate(data_set):
+print(i,data)
+</code></pre><p>输出：</p>
+<pre><code>&lt;class &#39;set&#39;&gt;
+0 56
+1 34
+2 12
+</code></pre><p>集合和列表一样具有推导式，除了[]改为{}之外，其他操作都一样，唯一一个区别就是集合推导式会将重复的元素直接过滤掉。</p>
+<h4 id="3-2-2-不可变集合（frozenset"><a href="#3-2-2-不可变集合（frozenset" class="headerlink" title="3.2.2 不可变集合（frozenset)"></a>3.2.2 不可变集合（frozenset)</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;不可变结合的创建直接采用frozenset({“12”,”34”,”56”}),因为其是不可变，因此无法对其进行修改。</p>
+<h3 id="3-3-字典"><a href="#3-3-字典" class="headerlink" title="3.3 字典"></a>3.3 字典</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;字典是一种可迭代的、可变的数据结构。键（key)不能有重复，而值（value)能够重复出现。一个键对应一个值，通过键来访问值。字典的数据类型是（dict），那么对于字典的创建采用dict()函数或者用{键1：值1，键2：值2，键3：值3，…}将“键：值”对括号起来。</p>
+<p>输入：</p>
+<pre><code>dict1={1:&quot;haha&quot;,2:&quot;hehe&quot;,3:&quot;heihei&quot;,4:&quot;xixi&quot;}
+print(type(dict1))
+
+dict2=dict([(1,&#39;haha&#39;),(2,&#39;haha&#39;),(3,&#39;heihei&#39;),(4,&#39;xixi&#39;)])
+print(dict2)
+
+dict3 = dict(zip([1,2],[&#39;haha&#39;,&#39;haha&#39;])) 
+print(dict3)
+</code></pre><p>输出：</p>
+<pre><code>&lt;class &#39;dict&#39;&gt;
+{1: &#39;haha&#39;, 2: &#39;haha&#39;, 3: &#39;heihei&#39;, 4: &#39;xixi&#39;}
+{1: &#39;haha&#39;, 2: &#39;haha&#39;}
+</code></pre><h4 id="3-3-1-字典的修改"><a href="#3-3-1-字典的修改" class="headerlink" title="3.3.1 字典的修改"></a>3.3.1 字典的修改</h4><p>&nbsp;&nbsp;&nbsp;&nbsp;字典可以被修改，主要针对键和值同时操作。字典的修改操作主要包括增、删除、修改。</p>
+<p>输入：</p>
+<pre><code>dict1={1:&quot;haha&quot;,2:&quot;hehe&quot;,3:&quot;heihei&quot;,4:&quot;xixi&quot;}
+dict1[5]=&quot;huhu&quot;                         #增加
+print(dict1)
+
+del dict1[2]                            #删除
+print(dict1)
+print(dict1.popitem())                  #删除
+
+dict1[1]=&#39;lala&#39;                         #修改
+print(dict1)
+</code></pre><p>输出：</p>
+<pre><code>{1: &#39;haha&#39;, 2: &#39;hehe&#39;, 3: &#39;heihei&#39;, 4: &#39;xixi&#39;, 5: &#39;huhu&#39;}
+{1: &#39;haha&#39;, 3: &#39;heihei&#39;, 4: &#39;xixi&#39;, 5: &#39;huhu&#39;}
+(5, &#39;huhu&#39;)
+{1: &#39;lala&#39;, 3: &#39;heihei&#39;, 4: &#39;xixi&#39;}
+</code></pre><h4 id="3-3-2-字典的访问与遍历"><a href="#3-3-2-字典的访问与遍历" class="headerlink" title="3.3.2 字典的访问与遍历"></a>3.3.2 字典的访问与遍历</h4><ul>
+<li>get(key):通过键返回值</li>
+<li>items():返回字典的所有键值对</li>
+<li>keys():返回字典的所有键</li>
+<li>values():返回字典的所有值</li>
+</ul>
+<p>那么可以根据上述的访问方式来遍历字典。</p>
+<p>输入：</p>
+<pre><code>dict1={1:&quot;haha&quot;,2:&quot;hehe&quot;,3:&quot;heihei&quot;,4:&quot;xixi&quot;}
+
+#遍历键
+for k in dict1.keys():
+    print(k)
+
+#遍历值
+for v in dict1.values():
+    print(v)
+
+#遍历键和值
+for k,v in dict1.items():
+    print(k,v)
+</code></pre><p>输出：</p>
+<pre><code>1
+2
+3
+4
+haha
+hehe
+heihei
+xixi
+1 haha
+2 hehe
+3 heihei
+4 xixi
+</code></pre><p><strong>字典的推导式：</strong></p>
+<pre><code>dict1={1:&quot;haha&quot;,2:&quot;hehe&quot;,3:&quot;heihei&quot;,4:&quot;xixi&quot;}
+out_dict = {k:v for k,v in dict1.items() if k%2==0}
+print(out_dict)          #{2: &#39;hehe&#39;, 4: &#39;xixi&#39;}
+</code></pre><h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4.总结"></a>4.总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;第二部分主要介绍了Python的数据类型包括数字类型和字符类型。数字类型中重点介绍了4中不同的数字类型，以及他们的转换关系。在字符类型中主要讲了字符的创建、查找和格式化。第三部分主要讲了Python中的数据结构。主要为列表、集合和字典。列表中分为元组和列表，前者不可变，后者可变。重点介绍了列表的增删改插以及列表推导式。在集合中主要讲解了可变集合和不可变结合。介绍了可变集合的增删改方法和遍历。在字典这部分主要讲解了字典的创建、访问与遍历，以及字典推导式。希望这块的学习能更加理解Python的数据类型和存储方式。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python基础/" rel="tag"># Python基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/23/Python/1.python语法基础/" rel="next" title="Python语法基础(关键字、标识符、模块等)">
+                <i class="fa fa-chevron-left"></i> Python语法基础(关键字、标识符、模块等)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/10/30/Python/3.python函数/" rel="prev" title="Python函数与装饰器">
+                Python函数与装饰器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">12</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-数据类型"><span class="nav-number">2.</span> <span class="nav-text">2.数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-数字类型和相互转换"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 数字类型和相互转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-字符串类型"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 字符串类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-字符串的表示与转义字符串"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 字符串的表示与转义字符串</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-字符串格式化"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 字符串格式化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-3-字符串查找与类型转换"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.3 字符串查找与类型转换</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-数据结构"><span class="nav-number">3.</span> <span class="nav-text">3. 数据结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-序列"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 序列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-1-元组"><span class="nav-number">3.1.1.</span> <span class="nav-text">3.1.1 元组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-2-列表"><span class="nav-number">3.1.2.</span> <span class="nav-text">3.1.2 列表</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-集合"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 集合</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-可变集合（set）"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 可变集合（set）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-不可变集合（frozenset"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2 不可变集合（frozenset)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-字典"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 字典</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-1-字典的修改"><span class="nav-number">3.3.1.</span> <span class="nav-text">3.3.1 字典的修改</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-2-字典的访问与遍历"><span class="nav-number">3.3.2.</span> <span class="nav-text">3.3.2 字典的访问与遍历</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-总结"><span class="nav-number">4.</span> <span class="nav-text">4.总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
