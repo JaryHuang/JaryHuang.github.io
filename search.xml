@@ -1384,11 +1384,11 @@ s_i\cdot (1-iou(M,b_i))     &      & {iou(M,b_i)\geq N_t}\\
       </tags>
   </entry>
   <entry>
-    <title>Loss</title>
-    <url>/2019/03/05/DeepLearning/Basic/Loss/</url>
-    <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络的学习目标是使得损失函数最小化,不同的损失函数有不同的效果。对于损失函数的整理，可以是通过学习任务来划分：分类和回归。也可以根据应用的场景来划分。由于损失函数的分支非常的多，对于不同的学习任务其都会有不同的改进。因此本文主要对pytorch中主要应用的几个损失函数进行整理:L1,L2,SmoothL2,MSE,CrossEntropy,KLDivLoss,NLLLoss,DistanceLoss和CenterLoss。<br><a id="more"></a></p>
-<h2 id="2-Loss思维导图"><a href="#2-Loss思维导图" class="headerlink" title="2.Loss思维导图"></a>2.Loss思维导图</h2><p><img src="/../../../images/DeepLearning/Basic/Loss/pytorch损失函数.png" alt="Normalization思维导图"></p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://pytorch.org/docs/stable/nn.html?highlight=loss#torch.nn.functional.cosine_embedding_loss" target="_blank" rel="noopener">pytorch的损失函数官方文档</a><br>2.<a href="https://ydwen.github.io/papers/WenECCV16.pdf" target="_blank" rel="noopener">Center Loss</a></p>
+    <title>Optimization</title>
+    <url>/2019/03/05/DeepLearning/Basic/Optimization/</url>
+    <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络的学习目标是使得损失函数最小化。数据+网络+损失函数构成了损失平面，如何找到损失平面的最小值(或者局部最优值)是我们的重点。因此许许多多的研究者重点都在研究如何优化。因此本文主要针对深度学习中一些优化方法做了一个简单的介绍，基本是基于SGD进行的改进：前进方向和学习率大小两个方面。<br><a id="more"></a></p>
+<h2 id="2-Optimization思维导图"><a href="#2-Optimization思维导图" class="headerlink" title="2.Optimization思维导图"></a>2.Optimization思维导图</h2><p><img src="/../../../images/DeepLearning/Basic/Optimization/Optimization.png" alt="Optimization思维导图"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://blog.csdn.net/u010089444/article/details/76725843" target="_blank" rel="noopener">优化方法总结：SGD，Momentum，AdaGrad，RMSProp，Adam</a><br>2.<a href="https://blog.csdn.net/qsczse943062710/article/details/76763739" target="_blank" rel="noopener">最全的机器学习中的优化算法介绍</a><br>3.<a href="https://blog.csdn.net/chenchunyue11/article/details/51290638" target="_blank" rel="noopener">机器学习常见的优化算法</a></p>
 ]]></content>
       <categories>
         <category>DeepingLearning</category>
@@ -1398,11 +1398,11 @@ s_i\cdot (1-iou(M,b_i))     &      & {iou(M,b_i)\geq N_t}\\
       </tags>
   </entry>
   <entry>
-    <title>Optimization</title>
-    <url>/2019/03/05/DeepLearning/Basic/Optimization/</url>
-    <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络的学习目标是使得损失函数最小化。数据+网络+损失函数构成了损失平面，如何找到损失平面的最小值(或者局部最优值)是我们的重点。因此许许多多的研究者重点都在研究如何优化。因此本文主要针对深度学习中一些优化方法做了一个简单的介绍，基本是基于SGD进行的改进：前进方向和学习率大小两个方面。<br><a id="more"></a></p>
-<h2 id="2-Optimization思维导图"><a href="#2-Optimization思维导图" class="headerlink" title="2.Optimization思维导图"></a>2.Optimization思维导图</h2><p><img src="/../../../images/DeepLearning/Basic/Optimization/Optimization.png" alt="Optimization思维导图"></p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://blog.csdn.net/u010089444/article/details/76725843" target="_blank" rel="noopener">优化方法总结：SGD，Momentum，AdaGrad，RMSProp，Adam</a><br>2.<a href="https://blog.csdn.net/qsczse943062710/article/details/76763739" target="_blank" rel="noopener">最全的机器学习中的优化算法介绍</a><br>3.<a href="https://blog.csdn.net/chenchunyue11/article/details/51290638" target="_blank" rel="noopener">机器学习常见的优化算法</a></p>
+    <title>Loss</title>
+    <url>/2019/03/05/DeepLearning/Basic/Loss/</url>
+    <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络的学习目标是使得损失函数最小化,不同的损失函数有不同的效果。对于损失函数的整理，可以是通过学习任务来划分：分类和回归。也可以根据应用的场景来划分。由于损失函数的分支非常的多，对于不同的学习任务其都会有不同的改进。因此本文主要对pytorch中主要应用的几个损失函数进行整理:L1,L2,SmoothL2,MSE,CrossEntropy,KLDivLoss,NLLLoss,DistanceLoss和CenterLoss。<br><a id="more"></a></p>
+<h2 id="2-Loss思维导图"><a href="#2-Loss思维导图" class="headerlink" title="2.Loss思维导图"></a>2.Loss思维导图</h2><p><img src="/../../../images/DeepLearning/Basic/Loss/pytorch损失函数.png" alt="Normalization思维导图"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://pytorch.org/docs/stable/nn.html?highlight=loss#torch.nn.functional.cosine_embedding_loss" target="_blank" rel="noopener">pytorch的损失函数官方文档</a><br>2.<a href="https://ydwen.github.io/papers/WenECCV16.pdf" target="_blank" rel="noopener">Center Loss</a></p>
 ]]></content>
       <categories>
         <category>DeepingLearning</category>
