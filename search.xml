@@ -2,32 +2,31 @@
 <search>
   <entry>
     <title>Ubuntu磁盘挂载</title>
-    <url>/2019/12/30/Tools/Ubuntu/Ubuntu%E7%A3%81%E7%9B%98%E6%8C%82%E8%BD%BD/</url>
+    <url>/2019/12/30/Tools/Ubuntu_disk_mount/</url>
     <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;很多人在使用ubuntu的时候，可能由于之前没有仔细考虑需要多大的存储空间，因此在分区的时候设置的不大合理。到后续使用的时候，发现自己的/home路径下的存储空间不大足了。特别是大量的数据如果需要存储的时候，根本没办法进行处理研究了。当然卸载软件和重装系统是可以的，但是这带来了很多的麻烦。因此如果能将多余的空间直接挂在到我们的/home目录下那就好了。因此这里介绍下如何在不重装系统下将我们的其他空间挂载到指定的目录下。<br><a id="more"></a></p>
 <h2 id="2-磁盘挂载"><a href="#2-磁盘挂载" class="headerlink" title="2. 磁盘挂载"></a>2. 磁盘挂载</h2><h3 id="2-1-创建分区"><a href="#2-1-创建分区" class="headerlink" title="2.1 创建分区"></a>2.1 创建分区</h3><p>&nbsp;&nbsp;&nbsp;&nbsp; 在进行分区挂载的时候，首先要创建分区。输入如下指令，第一句是安装gparted，如果已经安装了的话，执行这句它也会提示你已经安装了,如下图我就是已经安装了。如果没安装的话，输入命令，会自动安装。</p>
 <pre><code>sudo apt-get install gparted
-</code></pre><p><img src="/../../../images/Tools/Ubuntu/Ubuntu_Disk_mount/gparted.png" alt="gparted"></p>
-<p>然后启动gparted会显示磁盘空间信息：</p>
+</code></pre><p><img src="/../../images/Tools/Ubuntu_Disk_mount/gparted.png" alt="gparted"><br><img src="/../../images/DeepLearning/Classfication/DenseNet/DenseBlock.png" alt="gparted"><br>然后启动gparted会显示磁盘空间信息：</p>
 <pre><code>sudo gparted
-</code></pre><p><img src="/../../../images/Tools/Ubuntu/Ubuntu_Disk_mount/Disk.png" alt="磁盘情况"><br>上图中我已经分好了磁盘空间。如果未分配好空间的，可以在未分配磁盘上开辟空间。接下来就是要选择到底挂载那个磁盘空间了，比如上图中我们知道我们的系统是在sda2中了，我们想要挂载sda3这个磁盘。</p>
+</code></pre><p><img src="../../images/Tools/Ubuntu_Disk_mount/Disk.png" alt="磁盘情况"><br>上图中我已经分好了磁盘空间。如果未分配好空间的，可以在未分配磁盘上开辟空间。接下来就是要选择到底挂载那个磁盘空间了，比如上图中我们知道我们的系统是在sda2中了，我们想要挂载sda3这个磁盘。</p>
 <h3 id="2-2-创建挂载点"><a href="#2-2-创建挂载点" class="headerlink" title="2.2 创建挂载点"></a>2.2 创建挂载点</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;在目录中，/home/hzw是我的当前登录用户，也是我的主文件夹。我要将磁盘挂载到我的目录下，因此在/home/hzw/下创建一个新的空间,我命名为data：</p>
 <pre><code>cd /home/hzw
 mkdir data
 </code></pre><h3 id="2-3-卸载原磁盘挂载点"><a href="#2-3-卸载原磁盘挂载点" class="headerlink" title="2.3 卸载原磁盘挂载点"></a>2.3 卸载原磁盘挂载点</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;因为不知道你要挂载的磁盘是否已经挂载在别的地方了，因此需要考虑查询一下挂载点。</p>
 <pre><code>df -kh
-</code></pre><p><img src="/../../../images/Tools/Ubuntu/Ubuntu_Disk_mount/mount1.png" alt="挂载情况"><br>像上图所示，我的sda3是已经挂载了，且挂载在/home/sec_disk这个目录下。如果再重复挂载会出现错误，因此要首先对其进行取消挂载：</p>
+</code></pre><p><img src="../../images/Tools/Ubuntu_Disk_mount/mount1.png" alt="挂载情况"><br>像上图所示，我的sda3是已经挂载了，且挂载在/home/sec_disk这个目录下。如果再重复挂载会出现错误，因此要首先对其进行取消挂载：</p>
 <pre><code>sudo umount /dev/sda3
 df -kh
-</code></pre><p><img src="/../../../images/Tools/Ubuntu/Ubuntu_Disk_mount/mount2.png" alt="卸载情况"><br>卸载后在查看挂载的情况，我们看到sda3现在没有挂载在其他磁盘下了。</p>
+</code></pre><p><img src="../../images/Tools/Ubuntu_Disk_mount/mount2.png" alt="卸载情况"><br>卸载后在查看挂载的情况，我们看到sda3现在没有挂载在其他磁盘下了。</p>
 <h3 id="2-4-挂载分区"><a href="#2-4-挂载分区" class="headerlink" title="2.4 挂载分区"></a>2.4 挂载分区</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;挂载分区，主要是要修改分区文件/etc/fstab,所以采用gedit进行编辑：</p>
 <pre><code>sudo gedit /etc/fstab
-</code></pre><p>执行后会看到文件内容如下：<br><img src="/../../../images/Tools/Ubuntu/Ubuntu_Disk_mount/mount_disk1.png" alt="挂载分区1"><br>我们看到文件里面要填写的内容主要为6列。第一列为UUID，第二列为挂载的目录，第三列为文件系统类型，第四列为参数，第五列参数选择是否备份，0表示不备份。最后一个参数必须为0或者2，除了原先的我们引导分区是1。所以，我们要查询下挂载盘sda3的UUID和文件类型等：</p>
+</code></pre><p>执行后会看到文件内容如下：<br><img src="../../images/Tools/Ubuntu_Disk_mount/mount_disk1.png" alt="挂载分区1"><br>我们看到文件里面要填写的内容主要为6列。第一列为UUID，第二列为挂载的目录，第三列为文件系统类型，第四列为参数，第五列参数选择是否备份，0表示不备份。最后一个参数必须为0或者2，除了原先的我们引导分区是1。所以，我们要查询下挂载盘sda3的UUID和文件类型等：</p>
 <pre><code>sudo blkid #查询所有的
 sudo blkid /dev/sda3  #只查询sda3的
-</code></pre><p><img src="/../../../images/Tools/Ubuntu/Ubuntu_Disk_mount/UUID.png" alt="UUID获取"><br>上述两个方式都可以，那么我们就能获得UUID和TYPE了，将其填入刚刚的/etc/fstab中：<br><img src="/../../../images/Tools/Ubuntu/Ubuntu_Disk_mount/mount_disk2.png" alt="挂载分区2"><br>接下来保存退出就好，但是在保存的时候可能会出现如下警告 <strong>gedit 10303：Warning: Set the documemt metadata failed: Setting attribute metadata::gedot-spell-enabled not supported</strong><br>这个是关于gedit编辑的一个警告，可以不对它进行处理。如果你换成vim就不会有这个问题了。<br>&nbsp;&nbsp;&nbsp;&nbsp;接下来执行挂载指令</p>
+</code></pre><p><img src="../../images/Tools/Ubuntu_Disk_mount/UUID.png" alt="UUID获取"><br>上述两个方式都可以，那么我们就能获得UUID和TYPE了，将其填入刚刚的/etc/fstab中：<br><img src="../../images/Tools/Ubuntu_Disk_mount/mount_disk2.png" alt="挂载分区2"><br>接下来保存退出就好，但是在保存的时候可能会出现如下警告 <strong>gedit 10303：Warning: Set the documemt metadata failed: Setting attribute metadata::gedot-spell-enabled not supported</strong><br>这个是关于gedit编辑的一个警告，可以不对它进行处理。如果你换成vim就不会有这个问题了。<br>&nbsp;&nbsp;&nbsp;&nbsp;接下来执行挂载指令</p>
 <pre><code>sudo mount -a
 df -kh
-</code></pre><p>执行后如图所示：<br><img src="/../../../images/Tools/Ubuntu/Ubuntu_Disk_mount/mount_finish.png" alt="挂载完成">我们可以看到sda3已经挂载完成，它的目录就在home/hzw/data中。以上我们就完成了挂载，那么在home下可以将一些数据等资料放在这个磁盘下面了。</p>
+</code></pre><p>执行后如图所示：<br><img src="../../images/Tools/Ubuntu_Disk_mount/mount_finish.png" alt="挂载完成">我们可以看到sda3已经挂载完成，它的目录就在home/hzw/data中。以上我们就完成了挂载，那么在home下可以将一些数据等资料放在这个磁盘下面了。</p>
 ]]></content>
       <categories>
         <category>Ubuntu</category>
@@ -1728,11 +1727,11 @@ s_i\cdot (1-iou(M,b_i))     &      & {iou(M,b_i)\geq N_t}\\
       </tags>
   </entry>
   <entry>
-    <title>Optimization</title>
-    <url>/2019/03/05/DeepLearning/Basic/Optimization/</url>
-    <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络的学习目标是使得损失函数最小化。数据+网络+损失函数构成了损失平面，如何找到损失平面的最小值(或者局部最优值)是我们的重点。因此许许多多的研究者重点都在研究如何优化。因此本文主要针对深度学习中一些优化方法做了一个简单的介绍，基本是基于SGD进行的改进：前进方向和学习率大小两个方面。<br><a id="more"></a></p>
-<h2 id="2-Optimization思维导图"><a href="#2-Optimization思维导图" class="headerlink" title="2.Optimization思维导图"></a>2.Optimization思维导图</h2><p><img src="/../../../images/DeepLearning/Basic/Optimization/Optimization.png" alt="Optimization思维导图"></p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://blog.csdn.net/u010089444/article/details/76725843" target="_blank" rel="noopener">优化方法总结：SGD，Momentum，AdaGrad，RMSProp，Adam</a><br>2.<a href="https://blog.csdn.net/qsczse943062710/article/details/76763739" target="_blank" rel="noopener">最全的机器学习中的优化算法介绍</a><br>3.<a href="https://blog.csdn.net/chenchunyue11/article/details/51290638" target="_blank" rel="noopener">机器学习常见的优化算法</a></p>
+    <title>Loss</title>
+    <url>/2019/03/05/DeepLearning/Basic/Loss/</url>
+    <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络的学习目标是使得损失函数最小化,不同的损失函数有不同的效果。对于损失函数的整理，可以是通过学习任务来划分：分类和回归。也可以根据应用的场景来划分。由于损失函数的分支非常的多，对于不同的学习任务其都会有不同的改进。因此本文主要对pytorch中主要应用的几个损失函数进行整理:L1,L2,SmoothL2,MSE,CrossEntropy,KLDivLoss,NLLLoss,DistanceLoss和CenterLoss。<br><a id="more"></a></p>
+<h2 id="2-Loss思维导图"><a href="#2-Loss思维导图" class="headerlink" title="2.Loss思维导图"></a>2.Loss思维导图</h2><p><img src="/../../../images/DeepLearning/Basic/Loss/pytorch损失函数.png" alt="Normalization思维导图"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://pytorch.org/docs/stable/nn.html?highlight=loss#torch.nn.functional.cosine_embedding_loss" target="_blank" rel="noopener">pytorch的损失函数官方文档</a><br>2.<a href="https://ydwen.github.io/papers/WenECCV16.pdf" target="_blank" rel="noopener">Center Loss</a></p>
 ]]></content>
       <categories>
         <category>DeepingLearning</category>
@@ -1742,11 +1741,11 @@ s_i\cdot (1-iou(M,b_i))     &      & {iou(M,b_i)\geq N_t}\\
       </tags>
   </entry>
   <entry>
-    <title>Loss</title>
-    <url>/2019/03/05/DeepLearning/Basic/Loss/</url>
-    <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络的学习目标是使得损失函数最小化,不同的损失函数有不同的效果。对于损失函数的整理，可以是通过学习任务来划分：分类和回归。也可以根据应用的场景来划分。由于损失函数的分支非常的多，对于不同的学习任务其都会有不同的改进。因此本文主要对pytorch中主要应用的几个损失函数进行整理:L1,L2,SmoothL2,MSE,CrossEntropy,KLDivLoss,NLLLoss,DistanceLoss和CenterLoss。<br><a id="more"></a></p>
-<h2 id="2-Loss思维导图"><a href="#2-Loss思维导图" class="headerlink" title="2.Loss思维导图"></a>2.Loss思维导图</h2><p><img src="/../../../images/DeepLearning/Basic/Loss/pytorch损失函数.png" alt="Normalization思维导图"></p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://pytorch.org/docs/stable/nn.html?highlight=loss#torch.nn.functional.cosine_embedding_loss" target="_blank" rel="noopener">pytorch的损失函数官方文档</a><br>2.<a href="https://ydwen.github.io/papers/WenECCV16.pdf" target="_blank" rel="noopener">Center Loss</a></p>
+    <title>Optimization</title>
+    <url>/2019/03/05/DeepLearning/Basic/Optimization/</url>
+    <content><![CDATA[<h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;神经网络的学习目标是使得损失函数最小化。数据+网络+损失函数构成了损失平面，如何找到损失平面的最小值(或者局部最优值)是我们的重点。因此许许多多的研究者重点都在研究如何优化。因此本文主要针对深度学习中一些优化方法做了一个简单的介绍，基本是基于SGD进行的改进：前进方向和学习率大小两个方面。<br><a id="more"></a></p>
+<h2 id="2-Optimization思维导图"><a href="#2-Optimization思维导图" class="headerlink" title="2.Optimization思维导图"></a>2.Optimization思维导图</h2><p><img src="/../../../images/DeepLearning/Basic/Optimization/Optimization.png" alt="Optimization思维导图"></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>1.<a href="https://blog.csdn.net/u010089444/article/details/76725843" target="_blank" rel="noopener">优化方法总结：SGD，Momentum，AdaGrad，RMSProp，Adam</a><br>2.<a href="https://blog.csdn.net/qsczse943062710/article/details/76763739" target="_blank" rel="noopener">最全的机器学习中的优化算法介绍</a><br>3.<a href="https://blog.csdn.net/chenchunyue11/article/details/51290638" target="_blank" rel="noopener">机器学习常见的优化算法</a></p>
 ]]></content>
       <categories>
         <category>DeepingLearning</category>
