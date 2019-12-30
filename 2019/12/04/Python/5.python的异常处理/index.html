@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8"/>
+<link rel="dns-prefetch" href="//cdn.bootcss.com" />
+<link rel="dns-prefetch" href="//cdn.mathjax.org" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python基础," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一下Python的异常处理和日志管理。首先这里简单介绍下异常处理：工程师按照问题设计程序，但程序并不一定按照它的设计进行处理，会有一些突发异常出现。针对这些异常，工程师在设计之初就建立了异常处理机制，那么程序的稳定性就会提高了很多。Python中提供了异常处理功能，方便调用。而日志管理的作用，主要在程序开发中，输出一些调试信息。">
+<meta name="keywords" content="Python基础">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python异常处理和日志管理">
+<meta property="og:url" content="http://yoursite.com/2019/12/04/Python/5.python的异常处理/index.html">
+<meta property="og:site_name" content="一只向上爬的虫之学习历程">
+<meta property="og:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一下Python的异常处理和日志管理。首先这里简单介绍下异常处理：工程师按照问题设计程序，但程序并不一定按照它的设计进行处理，会有一些突发异常出现。针对这些异常，工程师在设计之初就建立了异常处理机制，那么程序的稳定性就会提高了很多。Python中提供了异常处理功能，方便调用。而日志管理的作用，主要在程序开发中，输出一些调试信息。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-12T03:29:37.154Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python异常处理和日志管理">
+<meta name="twitter:description" content="1.引言&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;本部分主要介绍一下Python的异常处理和日志管理。首先这里简单介绍下异常处理：工程师按照问题设计程序，但程序并不一定按照它的设计进行处理，会有一些突发异常出现。针对这些异常，工程师在设计之初就建立了异常处理机制，那么程序的稳定性就会提高了很多。Python中提供了异常处理功能，方便调用。而日志管理的作用，主要在程序开发中，输出一些调试信息。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/04/Python/5.python的异常处理/"/>
+
+
+
+
+
+  <title>Python异常处理和日志管理 | 一只向上爬的虫之学习历程</title><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">一只向上爬的虫之学习历程</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">欲戴皇冠，必承其重</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/Python/5.python的异常处理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JavierHuang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一只向上爬的虫之学习历程">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python异常处理和日志管理</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-04T18:00:55+08:00">
+                2019-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python/" itemprop="url" rel="index">
+                    <span itemprop="name">Python</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv"><i class="fa fa-file-o"></i>
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-引言"><a href="#1-引言" class="headerlink" title="1.引言"></a>1.引言</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本部分主要介绍一下Python的异常处理和日志管理。首先这里简单介绍下异常处理：工程师按照问题设计程序，但程序并不一定按照它的设计进行处理，会有一些突发异常出现。针对这些异常，工程师在设计之初就建立了异常处理机制，那么程序的稳定性就会提高了很多。Python中提供了异常处理功能，方便调用。而日志管理的作用，主要在程序开发中，输出一些调试信息。在程序发布后，将中途一些具体需要记录或者监控的数据进行保存记录，方便日后进行问题分析。实际上在最开始学程序语言的时候，通常都是用print函数来进行问题分析，但是print如果同时输出所在的时间，函数，线程以及信息等相对比较困难，Python中提供了logging日志模块，方便大家的使用。</p>
+<ul>
+<li>异常处理</li>
+<li>日志管理</li>
+</ul>
+<a id="more"></a>
+<hr>
+<h2 id="2-异常处理"><a href="#2-异常处理" class="headerlink" title="2.异常处理"></a>2.异常处理</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;Python中对于所有的异常，都有一个异常类。而异常类的根类是BaseException，其它的异常都是继承这个类。下图描述了各个异常之间的继承关系。</p>
+<ul>
+<li>BaseException——基类<ul>
+<li>SystemExit—————————————-解释器请求退出</li>
+<li>KeyboardInterrupt—————————用户中断执行(通常是输入^C)</li>
+<li>GeneratorExit————————————生成器(generator)发生异常来通知退出</li>
+<li>Exception———————————————常规错误的基类<ul>
+<li>StopIteration——————————-迭代器没有更多的值</li>
+<li>ArithmeticError—————————所有数值计算错误的基类<ul>
+<li>FloatingPointError————浮点计算错误</li>
+<li>OverflowError———————数值运算超出最大限制</li>
+<li>ZeroDivisionError————-除(或取模)零 (所有数据类型)</li>
+</ul>
+</li>
+<li>AssertionError—————————-断言语句失败</li>
+<li>AttributeError——————————-对象没有这个属性</li>
+<li>EOFError—————————————没有内建输入,到达EOF 标记</li>
+<li>ImportError————————————导入模块/对象失败</li>
+<li>LookupError———————————无效数据查询的基类<ul>
+<li>IndexError—————————序列中没有没有此索引(index)</li>
+<li>KeyError——————————映射中没有这个键</li>
+</ul>
+</li>
+<li>MemoryError——————————-内存溢出错误</li>
+<li>NameError————————————未声明/初始化对象 (没有属性)<ul>
+<li>UnboundLocalError———-访问未初始化的本地变量</li>
+</ul>
+</li>
+<li>OSError——————————————操作系统错误</li>
+<li>ReferenceError—————————试图访问已经垃圾回收了的对象</li>
+<li>RuntimeError——————————一般的运行时错误<ul>
+<li>NotImplementedError——尚未实现的方法</li>
+</ul>
+</li>
+<li>SyntaxError———————————-Python 语法错误<ul>
+<li>IndentationError—————-缩进错误<ul>
+<li>TabError———————-Tab 和空格混用</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SystemError——————————-一般的解释器系统错误</li>
+<li>TypeError————————————-对类型无效的操作</li>
+<li>ValueError————————————传入无效的参数<ul>
+<li>UnicodeError    Unicode————相关的错误<ul>
+<li>UnicodeDecodeError    Unicode 解码时的错误</li>
+<li>UnicodeEncodeError    Unicode 编码时错误</li>
+<li>UnicodeTranslateError    Unicode 转换时错误</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Warning——————————————警告的基类<ul>
+<li>DeprecationWarning——————关于被弃用的特征的警告</li>
+<li>FutureWarning——————————关于构造将来语义会有改变的警告</li>
+<li>OverflowWarning————————自动提升为长整型(long)的警告</li>
+<li>PendingDeprecationWarning——关于特性将会被废弃的警告</li>
+<li>RuntimeWarning————————-可疑的运行时行为的警告</li>
+<li>SyntaxWarning—————————可疑的语法的警告</li>
+<li>UserWarning——————————用户代码生成的警告</li>
+<li>EnvironmentError———————-操作系统错误的基类</li>
+<li>IOError——————————————-输入/输出操作失败</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-常见的异常"><a href="#2-1-常见的异常" class="headerlink" title="2.1 常见的异常"></a>2.1 常见的异常</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;上述罗列了Python各个出现的异常，不需要记忆，只需要了解即可，可以查询。但是对于一些常见的异常，可以熟悉下。这不仅能让你了解一些异常，程序出bug的时候快速调试。也会让你在写程序的时候重点考虑下是否会出现一些常见的异常，尽可能避免一些低级的错误。</p>
+<ol>
+<li><strong>AttributeError</strong>:这个是属性异常，常出现在类的操作中。当你试图访问一个类中 <strong><em>不存在的成员属性或者方法</em></strong> 时，就会报错。</li>
+<li><strong>OSError</strong>:这个一般是和操作系统有关系的错误，常见的就是 <strong><em>输入输出</em></strong> 错误了，比如利用open函数打开一个不存在的文件，就会报错。</li>
+<li><strong>IndexError</strong>:这个异常根据名字也可以知道，是序列异常。通常是访问序列（列表和元组）时，<strong><em>下标超出取值范围</em></strong> 导致的。</li>
+<li><strong>keyError</strong>:这个错误主要试图访问 <strong><em>字典中不存在的键值</em></strong> 而引发的异常。</li>
+<li><strong>NameError</strong>:这个错误发生主要是使用一个 <strong><em>不存在的变量</em></strong> 。</li>
+<li><strong>TypeError</strong>:这个错误发生主要是不同类型的数据的处理。比如数字和字符相处，两者的数据 <strong><em>类型不同</em></strong> ，会引发这个错误。</li>
+<li><strong>ValueError</strong>:传入一个 <strong><em>无效的参数</em></strong> 会引发异常。比如int(“abc”)就会引发这个异常。</li>
+</ol>
+<h3 id="2-2-捕获异常"><a href="#2-2-捕获异常" class="headerlink" title="2.2 捕获异常"></a>2.2 捕获异常</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python遇到异常时，若当前函数能处理异常，则在当前函数处理，如果当前函数无法处理，则抛给上层函数，一直向上传递。如果最终还是无法处理，则Python解释器会停止程序。因此，如果在程序设计之初能够对本函数出现的一些异常进行捕获处理，那么程序能够尽可能的避免宕机。异常的捕获主要用到try-except语句。同时，如果可能跑出的异常种类有很多，那么在try后面可以跟着很多个except语句。<strong>当捕获的多个异常存在父类子类关系的时候，捕获异常的顺序按照except的代码的顺序，从上到下先捕获。如果父类在子类之前，那么这个子类就捕获不到了</strong></p>
+<pre><code>try:
+    可能抛出的异常
+except [异常的类型]:
+    处理异常的代码(1)
+except [异常的类型]:
+    处理异常的代码(2)
+
+import datatime as dt
+
+def read_date_from_file(filename):
+    try:
+        file = open(filename)
+        in_date = file.read()
+        in_date = in_date.strip()
+        date = dt.datetime.strptime(in_date, &#39;%Y-%m-%d&#39;)
+        return date
+    except ValueError as e:
+        print(&quot;处理value异常&quot;)
+        print(e)
+    except FileNotFoundError as e:
+        print(&#39;处理FileNotFoundError异常&#39;)
+        print(e)
+    except OSError as e:
+        print(&quot;处理OSError异常&quot;)
+        print(e)
+
+date = read_date_from_file(&#39;readme.txt&#39;)
+print(&#39;日期 = {0}&#39;.format(date))
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;FileNotFoundError是OSError的一个子类，上述代码中，open函数可能会发生FileNotFoundError异常等，代码会捕获异常。如果交换OSError和FileNotFoundError的位置，那么FileNotFoundError肯定不会被捕获，因为有一个父类在前面已经包含了这个异常。<br>&nbsp;&nbsp;&nbsp;&nbsp;多个except捕获能够提高程序对异常的捕获，但是看起来显得复杂，如果三个不同的异常，但是我们的处理方法如果是相同的，那么将这些异常放到一个元组里来一起捕获，这个就是<strong>多重异常捕获</strong>,如下面代码中（ValueError, OSError)就是多重异常捕获。</p>
+<pre><code>import datetime as dt
+
+def read_date_from_file(filename):
+    try:
+        file = open(filename)
+        in_date = file.read()
+        in_date = in_date.strip()
+        date = dt.datetime.strptime(in_date, &#39;%Y-%m-%d&#39;)
+        return date
+    except (ValueError, OSError) as e:
+        print(&#39;调用方法method处理&#39;)
+        print(e)
+</code></pre><h3 id="2-3-异常堆栈跟踪"><a href="#2-3-异常堆栈跟踪" class="headerlink" title="2.3 异常堆栈跟踪"></a>2.3 异常堆栈跟踪</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;打印堆栈异常跟踪信息往往是用于调试，提示信息给工程师具体错误发生的地方。堆栈跟踪可以通过Python的内置模块traceback提供的print_exc()函数实现，语法格式：<br>traceback.print_exc(limit=None, file=None, chain = True)<br><em>参数limit</em> : 限制了堆栈跟踪的个数，默认None是不限制。<br><em>参数file</em> : 是否输出堆栈跟踪信息到文件，默认None是不输出到文件。<br><em>参数chain</em> : 将<strong>cause</strong>和<strong>context</strong>等属性串联在一起，就像解释器本身打印未处理异常一样。</p>
+<pre><code>import datetime as dt  
+import traceback as tb
+
+def read_date_from_file(filename):
+    try:
+        file = open(filename)
+        in_date = file.read()
+        in_date = in_date.strip()
+        date = dt.datetime.strptime(in_date, &#39;%Y-%m-%d&#39;)
+        return date
+    except(ValueError, OSError) as e:
+        print(&quot;调用方法处理&quot;)
+        tb.print_exc()
+date = read_date_from_file(&#39;readme.txt&#39;)
+print(&quot; 日期 = {0}&quot;.format(date))
+</code></pre><p>输出：</p>
+<pre><code>Traceback (most recent call last):
+File &quot;c:\Users\Administrator\Desktop\test_al.py&quot;, line 151, in read_date_from_file
+    file = open(filename)
+FileNotFoundError: [Errno 2] No such file or directory: &#39;readme.txt&#39;
+日期 = None
+</code></pre><h3 id="2-4-资源释放"><a href="#2-4-资源释放" class="headerlink" title="2.4 资源释放"></a>2.4 资源释放</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;使用try-except的时候会占用一些资源，如打开文件，网络连接，打开数据库连接和使用结果数据集等，这些资源不能通过Python的垃圾回收机制回收，需要主动释放，可以采用finally语句或者with…as…的自动资源管理。结合的语法如下：<br><strong>finally:</strong>  </p>
+<pre><code>try:
+    XXX
+except ValueError as e:
+    xxx
+finally:
+    资源释放
+</code></pre><p><strong>with  as :</strong></p>
+<pre><code>try:
+    with open(filename) as file:
+        in_date = file.read()
+    .....
+except OSError as e:
+    xxxx
+</code></pre><h3 id="2-5-自定义异常类"><a href="#2-5-自定义异常类" class="headerlink" title="2.5 自定义异常类"></a>2.5 自定义异常类</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;有时候为了提高代码的重用性，需要自己写一写类和库，比如编写自己的异常类。自定义异常类的实现需要继承Exception或其子类。</p>
+<pre><code>class MyException(Exception):
+    def __init__(self,message):
+        super().__init__(message)
+</code></pre><p>参数message传入异常信息，super().<strong>init\</strong>(message)调用父类的构造函数。</p>
+<h3 id="2-6-显式抛出异常"><a href="#2-6-显式抛出异常" class="headerlink" title="2.6 显式抛出异常"></a>2.6 显式抛出异常</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;系统会获取代码的异常，然后输出异常信息。因为捕获的缘故，我们可以捕获带异常信息，然后可以打印。但是如果想要显式的抛出异常，可以采用raise语句。</p>
+<pre><code>raise BaseException或子类
+raise OSError(&quot;输入输出错误&quot;)
+</code></pre><h2 id="3-logging日志模块"><a href="#3-logging日志模块" class="headerlink" title="3. logging日志模块"></a>3. logging日志模块</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;面向对象思想中有三个基本特性，它们分别是：封装性，继承性和多态性。</p>
+<h3 id="3-1-封装性"><a href="#3-1-封装性" class="headerlink" title="3.1 封装性"></a>3.1 封装性</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;由于Python语言的动态特性，因此没有关于封装性的关键字，主要通过特定的命名方式对对象和方法进行了封装。在前面讲私有变量和私有方法中已经提到了如何创建和调用他们。这里特别的提一下属性的定义，这也是为封装性而作的一个功能。面向对象的特性理论上应该是没有公有的属性，应该所有都设计成私有的，然后通过公有的属性方法来进行调用。<br>例子：</p>
+<pre><code>class Person(object):
+    def __init__(self, name, age, weight):
+        self.name = name
+        self.age = age
+        self.__weight = weight
+
+    @property
+    def weight(self):
+        return self.__weight
+
+    @weight.setter
+    def weight(self,weight):
+        self.__weight = weight
+
+A = Person(&quot;javierhuang&quot;, 24, 120)
+print(A.weight)
+A.weight = 118
+print(A.weight)
+</code></pre><p>输出：</p>
+<pre><code>120
+118
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;上述中通过@property装饰器相当于定义了一个getter的访问器，直接可以通过属性名来取值了。而通过@weight.setter直接定义了setter访问器，这样就能直接设定值了。如上述代码所示通过A.weight之后能直接访问，就相当于把私有变量公有化了。</p>
+<h3 id="3-2-继承性"><a href="#3-2-继承性" class="headerlink" title="3.2 继承性"></a>3.2 继承性</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;类的一个很重要的特性就是继承性，比如你有一个类为Person,然后未来你要建造一个类是Student类，那么这两个类的Student类肯定有一部分是和Person类相同的，为了避免重复写所有的东西，因此可以采用继承的方式。<br>测试：</p>
+<pre><code>class Person(object):
+    def __init__(self, name, age, weight):
+        self.name = name
+        self.age = age
+        self.__weight = weight
+
+    def run(self,distance):
+        self.__weight-= 1 if distance&gt;10 else 0
+        print(&quot;running&quot;)
+
+class Student(Person):
+    def __init__(self, name, age, weight, school):
+        super().__init__(name, age, weight)
+        self.school = school
+
+    def run(self):
+        print(&quot;I&#39;m running&quot;)
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;<strong>集成的构造</strong>上述Student类通过继承了Person类，采用super().<strong>init</strong>()的方式调用了父类的构造方法，super()函数返回父类的引用，通过它可以调用父类中的实例变量和方法。<br>&nbsp;&nbsp;&nbsp;&nbsp;<strong>重写方法</strong>除了继承方法，新的类还可以重写方法，上述Student类的run和父类的方法同名，因此相当于对方法进行了重写，Student调用run时调用的是自己的run。<br>&nbsp;&nbsp;&nbsp;&nbsp;<strong>多继承</strong>多继承的含义就是一个子类有多个父类，大多数语言不支持多集成，主要是由于多继承发生的方法冲突。例如公共汽车是汽车也是交通工具，它有两个父类分别是汽车和交通工具，如果两个父类都定义了stop功能，那么该继承哪个方法呢。在Python中是支持多继承，它解决一个冲突的思路是：子类调用方法，首先从子类中找，若子类中没有，按照子类声明的父类顺序从左到右从父类中找，如果没找到再找父类的父类。</p>
+<h3 id="3-3-多态性"><a href="#3-3-多态性" class="headerlink" title="3.3 多态性"></a>3.3 多态性</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python发生多态性的前提是1.继承，多态一定发生在父类和子类之间。2.重写，子类重写了父类的方法。</p>
+<pre><code>class Figure:
+    def draw(self):
+        print(&quot;draw Figure&quot;)
+
+class Ellipse(Figure):
+    def draw(self):
+        print(&#39;draw Ellipse&#39;)
+
+class Triangle(Figure):
+    def draw(self):
+        print(&quot;draw Triangle&quot;)
+
+f1 = Figure()
+f1.draw()
+
+f2 = Ellipse()
+f2.draw()
+
+f3 = Triangle()
+f3.draw()
+
+print(isinstance(f1,Figure))
+print(isinstance(f2,Ellipse))
+print(isinstance(f3,Ellipse))
+
+print(issubclass(Triangle,Figure))
+print(issubclass(Ellipse,Triangle))
+</code></pre><p>输出：</p>
+<pre><code>draw Figure
+draw Ellipse
+draw Triangle
+True
+True
+False
+True
+False
+</code></pre><p>上述代码中可以看到f2和f3符合多态的要求，他会去指定调用实例的方法。通过isinstance函数我们可以看到，f2因为继承了Figure,所以它也是Figure类型的。而f3和f2是一个平行关系，所以两者不相同。通过issubclass这个子类也可以看得出来其特点。</p>
+<h2 id="4-Python的基本类"><a href="#4-Python的基本类" class="headerlink" title="4. Python的基本类"></a>4. Python的基本类</h2><h3 id="4-1-根类——object"><a href="#4-1-根类——object" class="headerlink" title="4.1 根类——object"></a>4.1 根类——object</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;Python的所有类都是直接或者间接的继承object类，是所有类的“祖先”，Object类有很多方法，可以通过print(object.__dict__)来进行查看，这里重点介绍介绍一下<br>__str<strong>():返回该对象的字符串<br>\</strong>eq__(other):和other对象是否相等</p>
+<pre><code>class Person(object):
+    def __init__(self, name, age, weight):
+        self.name = name
+        self.age = age
+        self.__weight = weight
+
+    def __str__(self):
+        return &quot;this is Person class&quot;
+
+    def __eq__(self,other):
+        if self.name == other.name and self.age == other.age:
+            return True
+        else:
+            return False
+
+A = Person(&quot;javierhuang&quot;, 24, 120)
+print(A)
+
+B = Person(&quot;javierhuang&quot;, 24, 120)
+print(A == B)
+
+#没有重写__str__()时候返回的是：&lt;__main__.Person object at 0x00000229E2FBB588&gt;
+#重写了__str__()之后返回的是：this is Person class
+
+#重写了__eq__()之后是True,因为定义了名字和年龄相同就是对的
+#没重写就是False
+</code></pre><p>所以上述当我们定义好了一个类之后，如果对于一些特殊的功能需要重新定义或者重新输出信息，可以采用上述的方法进行重写，输出我们想要的有用信息。</p>
+<h3 id="4-2-枚举类——enum"><a href="#4-2-枚举类——enum" class="headerlink" title="4.2 枚举类——enum"></a>4.2 枚举类——enum</h3><p>&nbsp;&nbsp;&nbsp;&nbsp;枚举的目的是将我们用的一些变量变的更加的有意义，并且同一类的全部都存储到一起。Python中枚举主要通过enmu这个类来实现。我们通过一段代码来看看这个类的建立和使用。</p>
+<pre><code>import enum
+
+@enum.unique
+class WeekDays(enum.Enum): #enum.IntEnum
+    MONDAY = 1
+    TUESDAY = 2
+    WEDNESDAY = 3
+    THURSDAY = 4
+    FRIDAY = 5
+
+day = WeekDays.WEDNESDAY
+print(day)
+print(day.name,day.value)
+</code></pre><p>&nbsp;&nbsp;&nbsp;&nbsp;枚举类的定义如上述所示，也是采取class 枚举类名（enum.Enum）：的方式进行。枚举类定义好后，day是进行实例化对象，其像字典一样有name和value。为了防止枚举成员值重复，可以加一个装饰器@enum.unique，如果想要限定枚举类的类型，比如可以继承enum.IntEnum。</p>
+<h2 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. 总结</h2><p>&nbsp;&nbsp;&nbsp;&nbsp;本篇第2部分主要介绍了Python中类的定义，变量和方法。第3部分主要针对类的封装性、继承性、多态性三个方面来对类的一些特性做了介绍，第4部分着重介绍了Python中的基本类以及方法的重写。希望通过这部分能对Python的类有一个全面的了解，为后续代码的书写增添一些内容。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python基础/" rel="tag"># Python基础</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/01/Python/4.python类和对象/" rel="next" title="Python类和对象">
+                <i class="fa fa-chevron-left"></i> Python类和对象
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/30/Tools/Ubuntu/Ubuntu磁盘挂载/" rel="prev" title="Ubuntu磁盘挂载">
+                Ubuntu磁盘挂载 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="JavierHuang" />
+            
+              <p class="site-author-name" itemprop="name">JavierHuang</p>
+              <p class="site-description motion-element" itemprop="description">这是一个专注技术的博客，每块内容都会系统分块的整理</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">34</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/JaryHuang/JaryHuang.github.io" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-引言"><span class="nav-number">1.</span> <span class="nav-text">1.引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-异常处理"><span class="nav-number">2.</span> <span class="nav-text">2.异常处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-常见的异常"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 常见的异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-捕获异常"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 捕获异常</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-异常堆栈跟踪"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 异常堆栈跟踪</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-资源释放"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 资源释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-自定义异常类"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 自定义异常类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-6-显式抛出异常"><span class="nav-number">2.6.</span> <span class="nav-text">2.6 显式抛出异常</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-logging日志模块"><span class="nav-number">3.</span> <span class="nav-text">3. logging日志模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-封装性"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 封装性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-继承性"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 继承性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-多态性"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 多态性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Python的基本类"><span class="nav-number">4.</span> <span class="nav-text">4. Python的基本类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-根类——object"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 根类——object</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-枚举类——enum"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 枚举类——enum</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-总结"><span class="nav-number">5.</span> <span class="nav-text">5. 总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">JavierHuang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      <i class="fa fa-user"></i>总访客
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人
+    </span>
+  
+
+  
+    <span class="site-pv">
+      <i class="fa fa-eye"></i>总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]]}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
+  
+
+
+  
+
+  
+
+</body>
+</html>
